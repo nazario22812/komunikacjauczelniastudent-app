@@ -28,15 +28,23 @@ class Student extends Model
     }
     public function kierunek()
     {
-        return $this->belongsToMany(Kierunek::class, 'Kierunek_idKierunek', 'idKierunek');
+        return $this->belongsTo(Kierunek::class, 'Kierunek_idKierunek', 'idKierunek');
     }
 
 
     public function grupastudenta(){
-        return $this->belongsToMany(Grupastudenta::class, 'grupastudenta_has_student', 'Student_idStudent', 'GrupaStudenta_idGrupaStudenta');
+        return $this->belongsToMany(Grupastudenta::class, 'grupastudenta_has_student', 'GrupaStudenta_idGrupaStudenta', 'Student_idStudent');
     }
 
     public function platnosc(){
         return $this->hasMany(Platnosc::class, 'Student_idStudent', 'idStudent');
+    }
+
+    public function ocena(){
+        return $this->hasMany(Ocena::class, 'idStudent', 'idStudent');
+    }
+
+    public function zadanie(){
+        return $this->belongsToMany(Zadanie::class, 'student_has_zadanie', 'Student_idStudent', 'Zadanie_idZadanie');
     }
 }

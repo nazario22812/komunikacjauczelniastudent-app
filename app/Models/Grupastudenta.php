@@ -23,4 +23,8 @@ class Grupastudenta extends Model
     public function nadgrupa(){
         return $this->belongsTo(Grupastudenta::class, 'id_nadgrupy', 'idGrupaStudenta');
     }
+
+    public function planzajec(){
+        return $this->hasOne(Planzajec::class, 'GrupaStudenta_idGrupaStudenta', 'idGrupaStudenta');
+    }
 }

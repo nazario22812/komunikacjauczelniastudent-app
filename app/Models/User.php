@@ -20,8 +20,8 @@ class User extends Model implements \Illuminate\Contracts\Auth\Authenticatable
         'password',
         'numerTelefonu',
         'kontoBankowe',
-        'dataUrodzenia',
-        'ustawienia',
+        'DataUrodzenia',
+        'Ustawienia',
     ];
 
     protected $hidden = [

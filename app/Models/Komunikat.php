@@ -19,7 +19,7 @@ class Komunikat extends Model
     ];
 
     public function user(){
-        return $this->belongsToMany(User::class, 'user_has_komunikat', 'Komunikat_idKomunikat', 'User_idUser');
+        return $this->belongsToMany(User::class, 'user_has_komunikat', 'User_idUser', 'Komunikat_idKomunikat');
     }
 
 }

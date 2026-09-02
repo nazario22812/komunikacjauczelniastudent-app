@@ -15,7 +15,7 @@ class Platnosc extends Model
         'termin',
         'data',
         'tytul',
-        'czyOplacona',
+        'czyOplacone',
         'Student_idStudent',
         'PracownikDziekanatu_idPracownikDziekanatu'
     ];
