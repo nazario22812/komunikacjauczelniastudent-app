@@ -18,6 +18,11 @@ return Application::configure(basePath: dirname(__DIR__))
         HandleInertiaRequests::class,
     ]);
     })
+    ->withMiddleware(function (Middleware $middleware): void{
+        alias: [
+            'roles' => App\Http\Middleware\Roles::class,
+        ];
+    })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
