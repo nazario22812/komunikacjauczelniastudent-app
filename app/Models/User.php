@@ -12,6 +12,7 @@ class User extends Model implements \Illuminate\Contracts\Auth\Authenticatable
 
     protected $table = 'user';
     protected $primaryKey = 'idUser';
+    public $timestamps = false;
 
     protected $fillable = [
         'name',

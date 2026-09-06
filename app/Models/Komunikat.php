@@ -9,6 +9,7 @@ class Komunikat extends Model
     //
     protected $table = 'komunikat';
     protected $primaryKey = 'idKomunikat';
+    public $timestamps = false;
 
 
     protected $fillable = [

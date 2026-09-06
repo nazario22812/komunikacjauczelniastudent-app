@@ -9,6 +9,7 @@ class Platnosc extends Model
     //
     protected $table = 'platnosc';
     protected $primaryKey = 'idPlatnosc';
+    public $timestamps = false;
 
     protected $fillable = [
         'kwota',

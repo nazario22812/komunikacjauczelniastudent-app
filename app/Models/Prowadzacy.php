@@ -9,6 +9,7 @@ class Prowadzacy extends Model
     //
     protected $table = 'prowadzacy';
     protected $primaryKey = 'idProwadzacy';
+    public $timestamps = false;
 
 
     protected $fillable = [

@@ -9,6 +9,7 @@ class Zadanie extends Model
     //
     protected $table = 'zadanie';
     protected $primaryKey = 'idZadanie';
+    public $timestamps = false;
 
     protected $fillable = [
         'tresc',

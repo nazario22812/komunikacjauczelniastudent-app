@@ -9,6 +9,7 @@ class Zajecie extends Model
     //
     protected $table = 'zajęcie';
     protected $primaryKey = 'idZajęcie';
+    public $timestamps = false;
 
     protected $fillable = [
         'DzienTygodnia',

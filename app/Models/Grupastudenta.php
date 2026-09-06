@@ -9,6 +9,8 @@ class Grupastudenta extends Model
     //
     protected $table = 'grupastudenta';
     protected $primaryKey = 'idGrupaStudenta';
+    public $timestamps = false;
+
 
     protected $fillable = [
         'nazwaGrupy',

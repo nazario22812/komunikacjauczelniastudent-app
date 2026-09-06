@@ -10,6 +10,7 @@ class Rezerwacja extends Model
 
     protected $table = 'rezerwacja';
     protected $primaryKey = 'idRezerwacja';
+    public $timestamps = false;
 
     protected $fillable = [
         'data',

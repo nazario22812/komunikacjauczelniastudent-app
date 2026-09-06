@@ -10,7 +10,7 @@ class Ankieta extends Model
 
     protected $table = 'ankieta';
     protected $primaryKey = 'idAnkieta';
-
+    public $timestamps = false;
 
     protected $fillable = [
         'temat',

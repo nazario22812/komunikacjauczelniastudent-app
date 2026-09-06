@@ -10,6 +10,8 @@ class Kierunek extends Model
 
     protected $table = 'kierunek';
     protected $primaryKey = 'idKierunek';
+    public $timestamps = false;
+
 
     protected $fillable = [
         'nazwa',

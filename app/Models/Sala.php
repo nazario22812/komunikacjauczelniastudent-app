@@ -10,6 +10,7 @@ class Sala extends Model
 
     protected $table = 'sala';
     protected $primaryKey = 'idSala';
+    public $timestamps = false;
 
     protected $fillable = [
         'numerSali',

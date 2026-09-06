@@ -8,6 +8,7 @@ class Student extends Model
 {
     protected $table  = 'student';
     protected $primaryKey = 'idStudent';
+    public $timestamps = false;
 
     protected $fillable = [
         'index',

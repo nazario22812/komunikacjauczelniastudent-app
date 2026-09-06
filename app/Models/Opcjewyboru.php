@@ -9,6 +9,7 @@ class Opcjewyboru extends Model
     //
     protected $table = 'opcjewyboru';
     protected $primaryKey = 'idOpcjeWyboru';
+    public $timestamps = false;
 
     protected $fillable = [
         'tresc',

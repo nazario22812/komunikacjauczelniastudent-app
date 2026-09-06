@@ -22,7 +22,7 @@ export default function Login({ status }){
     const submit = (e) => {
         e.preventDefault();
 
-        post(route('login'), {
+        post('/login', {
             onFinish: () => reset('password') 
         });
     }
@@ -54,18 +54,18 @@ export default function Login({ status }){
 
                         />
 
-                        <p>{errors.email}</p>
+                        {/* <p>{errors.email}</p> */}
                     </div>
 
 
                     {/* password input and label  */}
                     <div className="w-3/4 mx-auto h-[35] flex border-[0.1px] border-white m-1 rounded-lg">
-                        <label htmlFor="passwd" className="w-1/4 h-full "><img src={haslo} alt="haslo" className="w-[24px] h-[24px] mx-auto m-1 fill-white"/></label>
+                        <label htmlFor="password" className="w-1/4 h-full "><img src={haslo} alt="haslo" className="w-[24px] h-[24px] mx-auto m-1 fill-white"/></label>
                         
                         <input
-                            id="passwd"
+                            id="password"
                             type="password"
-                            name="passwd"
+                            name="password"
                             value={data.password}
                             className="w-3/4 bg-white px-2 rounded-r-lg"
                             autoComplete="current-password"
@@ -73,7 +73,7 @@ export default function Login({ status }){
                             onChange={(e) => setData('password', e.target.value)}
                         />
 
-                        <p>{errors.password}</p>
+                        {/* <p>{errors.password}</p> */}
                     </div>
 
                     <div  className=" w-3/4 mx-auto pt-5">

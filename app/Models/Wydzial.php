@@ -8,6 +8,7 @@ class Wydzial extends Model
 {
     protected $table = 'wydzial';
     protected $primaryKey = 'idWydzial';
+    public $timestamps = false;
 
     protected $fillable = [
         'nazwa',

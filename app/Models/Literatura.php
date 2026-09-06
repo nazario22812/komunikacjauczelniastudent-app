@@ -9,6 +9,7 @@ class Literatura extends Model
     //
     protected $table = 'literatura';
     protected $primaryKey = 'idLiteratura';
+    public $timestamps = false;
 
     protected $fillable = [
         'nazwa',

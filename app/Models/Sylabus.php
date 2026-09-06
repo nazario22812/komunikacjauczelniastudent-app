@@ -9,6 +9,7 @@ class Sylabus extends Model
     //
     protected $table = 'sylabus';
     protected $primaryKey = 'idSylabus';
+    public $timestamps = false;
 
     protected $fillable = [
         'iloscGodzin',

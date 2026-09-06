@@ -9,6 +9,7 @@ class Ocena extends Model
     //
     protected $table = 'ocena';
     protected $primaryKey = 'idOcena';
+    public $timestamps = false;
 
     protected $fillable = [
         'Semester',

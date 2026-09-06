@@ -9,6 +9,7 @@ class Pytania extends Model
     //
     protected $table = 'pytania';
     protected $primaryKey = 'idPytania';
+    public $timestamps = false;
 
     protected $fillable = [
         'tresc',

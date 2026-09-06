@@ -9,6 +9,7 @@ class Planzajec extends Model
     //
     protected $table = 'planzajec';
     protected $primaryKey = 'idPlanZajec';
+    public $timestamps = false;
 
     protected $fillable = [
         'rok',

@@ -9,6 +9,7 @@ class Podanie extends Model
     //
     protected $table = 'podanie';
     protected $primaryKey = 'idPodanie';
+    public $timestamps = false;
 
     protected $fillable = [
         'temat',

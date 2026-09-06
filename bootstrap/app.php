@@ -5,7 +5,8 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 use App\Http\Middleware\HandleInertiaRequests;
-
+use Inertia\View\Components\App;
+use App\Http\Middleware\Role;
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
@@ -15,13 +16,12 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         //
         $middleware->web(append: [
-        HandleInertiaRequests::class,
-    ]);
-    })
-    ->withMiddleware(function (Middleware $middleware): void{
-        alias: [
-            'roles' => App\Http\Middleware\Roles::class,
-        ];
+            HandleInertiaRequests::class,
+        ]);
+
+        $middleware->alias([
+            'role' => Role::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

@@ -10,6 +10,7 @@ class Plik extends Model
 
     protected $table = 'plik';
     protected $primaryKey = 'idPlik';
+    public $timestamps = false;
 
     protected $fillable = [
         'nazwa',

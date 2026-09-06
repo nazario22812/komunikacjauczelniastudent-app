@@ -9,7 +9,8 @@ class Budynek extends Model
     //
     protected $table = 'budynek';
     protected $primaryKey = 'idBudynek';
-    
+    public $timestamps = false;
+
     protected $fillable = [
         'nazwa',
         'nrBudynku',

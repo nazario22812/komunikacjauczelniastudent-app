@@ -9,6 +9,7 @@ class Przedmiot extends Model
     //
     protected $table = 'przedmiot';
     protected $primaryKey = 'idPrzedmiot';
+    public $timestamps = false;
 
     protected $fillable = [
         'nazwa',

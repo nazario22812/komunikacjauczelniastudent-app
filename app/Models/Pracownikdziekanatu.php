@@ -9,6 +9,7 @@ class Pracownikdziekanatu extends Model
     //
     protected $table = 'pracownikdziekanatu';
     protected $primaryKey = 'idPracownikDziekanatu';
+    public $timestamps = false;
 
     protected $fillable = [
         'Odpowiedzialnosc',
