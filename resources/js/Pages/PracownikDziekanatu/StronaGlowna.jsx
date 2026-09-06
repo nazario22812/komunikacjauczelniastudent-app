@@ -1,7 +1,7 @@
 export default function Main({ auth }){
     return (
         <div>
-            <p>ja student</p>
+            <p>ja dziekan</p>
         </div>
     );
 }

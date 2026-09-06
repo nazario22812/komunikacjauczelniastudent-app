@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -13,10 +14,8 @@ Route::get('/', function () {
 })->name('main');
 
 Route::middleware('guest')->group(function() {
-    // Route::get('/login', function() {
-    //     return Inertia::render('Login');
-    // });
-
+    Route::get('/login', [LoginController::class, 'create'])->name('login');
+    Route::post('/login', [LoginController::class, 'store']);
 });
 Route::middleware(['auth', 'role:student'])->group(function (){
 
