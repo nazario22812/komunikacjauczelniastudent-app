@@ -1,7 +1,16 @@
-export default function Main({ auth }){
+import React from "react";
+import MenuStudenta from "../../Components/MenuStudenta";
+
+
+export default function StudentGlowna({ auth }) {
     return (
+        // <div>
+        //     <p>ja student</p>
+        // </div>
+
+        // 
         <div>
-            <p>ja student</p>
+            <MenuStudenta/>
         </div>
     );
 }
