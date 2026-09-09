@@ -1,8 +1,8 @@
 import React from "react";
-import MenuStudenta from "../../Components/MenuStudenta";
+import MenuStudenta from "../Components/MenuStudenta";
 import { Head } from "@inertiajs/react";
 
-export default function MojeZadania({ auth }) {
+export default function EDziekanat({ auth }) {
     return (
         // <div>
         //     <p>ja student</p>
@@ -10,7 +10,7 @@ export default function MojeZadania({ auth }) {
 
         // 
         <div>
-            <Head title="Moje zadania"/>
+            <Head title="E-Dziekanat"/>
             <MenuStudenta/>
         </div>
     );

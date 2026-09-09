@@ -23,6 +23,7 @@ class User extends Model implements \Illuminate\Contracts\Auth\Authenticatable
         'kontoBankowe',
         'DataUrodzenia',
         'Ustawienia',
+        'photo'
     ];
 
     protected $hidden = [

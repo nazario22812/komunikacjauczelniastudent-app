@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -35,6 +36,7 @@ Route::middleware('guest')->group(function() {
 
 Route::middleware(['auth'])->group(function(){
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
+    Route::get('/mojedane', [UserController::class, 'main']);
 });
 
 //trasy dla studenta 
