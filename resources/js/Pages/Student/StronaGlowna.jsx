@@ -1,6 +1,6 @@
 import React from "react";
 import MenuStudenta from "../../Components/MenuStudenta";
-
+import { Head } from "@inertiajs/react";
 
 export default function StudentGlowna({ auth }) {
     return (
@@ -10,6 +10,7 @@ export default function StudentGlowna({ auth }) {
 
         // 
         <div>
+            <Head title="Strona główna"/>
             <MenuStudenta/>
         </div>
     );

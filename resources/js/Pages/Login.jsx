@@ -37,7 +37,7 @@ export default function Login({ status }){
                 <form onSubmit={submit} className="">
                     
                     {/* email input and label  */}
-                    <div className="w-3/4 mx-auto h-[35] flex border-[0.1px] border-white m-1 rounded-lg mb-5">   
+                    <div className="w-3/4 mx-auto h-[35] flex border-[0.1px] border-white m-1 rounded-lg mb-2">   
                         <label htmlFor="email" className="w-1/4"><img src={login} alt="login" className="w-[24px] h-[24px] mx-auto m-1 fill-white"/></label>
 
                         <input 
@@ -54,8 +54,8 @@ export default function Login({ status }){
 
                         />
 
-                        {/* <p>{errors.email}</p> */}
                     </div>
+                    <p className="text-white text-[12px] mx-auto text-center ">{errors.email}</p>
 
 
                     {/* password input and label  */}
@@ -73,8 +73,9 @@ export default function Login({ status }){
                             onChange={(e) => setData('password', e.target.value)}
                         />
 
-                        {/* <p>{errors.password}</p> */}
                     </div>
+                    <p className="text-white text-[12px] mx-auto text-center ">{errors.password}</p>
+
 
                     <div  className=" w-3/4 mx-auto pt-5">
                         <button className="w-full h-[35] mt-5 bg-white rounded-lg text-[08083B] font-bold hover:bg-gray-300 hover:cursor-pointer active:bg-gray-500" disabled={processing}>

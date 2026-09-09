@@ -22,8 +22,8 @@ class LoginController extends Controller
     public function store(Request $request): RedirectResponse {
 
         $validation = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required']
+            'email' => ['required', 'email', 'max:45'],
+            'password' => ['required', 'max:255']
         ]);
 
         if(Auth::attempt($validation)){
@@ -47,7 +47,15 @@ class LoginController extends Controller
         }
 
 
-        return redirect('/login')->withErrors(['email' => 'Podany zły email']);
+        return redirect('/login')->withErrors(['email' => 'Podany zły email', 'password' => 'Podane złe hasło']);
 
+    }
+
+    public function destroy(Request $request): RedirectResponse{
+        Auth::guard('web')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/login');
     }
 }
