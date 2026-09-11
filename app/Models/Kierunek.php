@@ -27,5 +27,9 @@ class Kierunek extends Model
 
     }
 
+    public function grupastudenta(){
+        return $this->hasMany(Grupastudenta::class,  ['Kierunek_idKierunek', 'idKierunek'],['Kierunek_Wydzial_idWydzial', 'Wydzial_idWydzial']);
+    }
+
     
 }

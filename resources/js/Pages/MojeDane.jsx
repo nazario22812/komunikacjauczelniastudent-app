@@ -1,5 +1,6 @@
 import React from "react";
 import MenuStudenta from "../Components/MenuStudenta";
+import BackButton from "../Components/BackButton";
 import { Head } from "@inertiajs/react";
 
 
@@ -10,9 +11,10 @@ function Content({ rol, name, surname, email, numerTelefonu, kontoBankowe, DataU
     return(
         <div className="bg-[#04041D] w-full p-[10px] h-screen flex flex-col box-border">
             {/* <p className="text-white">{rol}</p> */}
-
-            <div className="bg-[#08083b] w-full shrink-0 h-[40px] mx-auto text-center border-[0.3px] border-white p-[10px] rounded-t-[10px]">
-                <span className="font-bold text-[16px] text-white">Moje dane</span>
+            
+            <div className="bg-[#08083b] w-full flex shrink-0 h-[40px] mx-auto text-center border-[0.3px] border-white p-[10px] rounded-t-[10px]">
+                <BackButton back={ () => window.history.back()} />
+                <span className="font-bold text-[16px] text-white w-full">Moje dane</span>
             </div>
 
             <div className="bg-[#08083b] w-full h-full flex-1 border-[0.3px] border-white py-10 rounded-b-[10px]">

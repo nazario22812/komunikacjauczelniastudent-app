@@ -10,7 +10,11 @@ use Inertia\Inertia;
 class UserController extends Controller
 {
     //
-    public function main(Request $request){
+    public function planzajec(Request $request){
+        return Inertia::render('PlanZajec');
+    }
+
+    public function mojedane(Request $request){
         $user = $request->user();
         $role = '';
 

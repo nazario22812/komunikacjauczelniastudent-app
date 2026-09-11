@@ -36,7 +36,8 @@ Route::middleware('guest')->group(function() {
 
 Route::middleware(['auth'])->group(function(){
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
-    Route::get('/mojedane', [UserController::class, 'main']);
+    Route::get('/mojedane', [UserController::class, 'mojedane']);
+    Route::get('/planzajec', [UserController::class, 'planzajec']);
 });
 
 //trasy dla studenta 

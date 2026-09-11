@@ -16,6 +16,8 @@ class Grupastudenta extends Model
         'nazwaGrupy',
         'typGrupy',
         'id_nadgrupy',
+        'Kierunek_idKierunek',
+        'Kierunek_Wydzial_idWydzial'
     ];
 
 
@@ -33,5 +35,9 @@ class Grupastudenta extends Model
 
     public function planzajec(){
         return $this->hasOne(Planzajec::class, 'GrupaStudenta_idGrupaStudenta', 'idGrupaStudenta');
+    }
+
+    public function kierunek(){
+        return $this->belongsTo(Kierunek::class, ['Kierunek_idKierunek', 'idKierunek'],['Kierunek_Wydzial_idWydzial', 'Wydzial_idWydzial']);
     }
 }

@@ -43,7 +43,7 @@ export default function MenuStudenta(){
 
                     </div>
                 </Link>
-                <Link>    
+                <Link href='/planzajec' method="get" as="button" className="hover:cursor-pointer w-full">    
                     <div className="border-b-1 border-[#73768C] flex h-[30px] gap-x-[10px] items-center fustify-start">
                         <img src={Calendar} alt="planzajec" />
                         <span className="text-[12px]">Plan Zajęć</span>
