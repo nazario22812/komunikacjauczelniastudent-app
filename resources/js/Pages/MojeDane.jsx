@@ -3,7 +3,10 @@ import MenuStudenta from "../Components/MenuStudenta";
 import { Head } from "@inertiajs/react";
 
 
-function Content({ rol, name, surname, email, numerTelefonu, kontoBankowe, DataUrodzenia, photo, index, semester, stopien, trybStudiow, rok, Specjalnosc, kierunek, wydzial, TytulNaukowy, katedra, Odpowiedzialnosc }){
+function Content({ rol, name, surname, email, numerTelefonu, kontoBankowe, DataUrodzenia, photo, index, 
+    semester, stopien, trybStudiow, rok, Specjalnosc, kierunek, wydzial, 
+    TytulNaukowy, katedra, Odpowiedzialnosc,
+    grupaLaboratoryjna, grupaCwiczeniowa, grupaWykladowa }){
     return(
         <div className="bg-[#04041D] w-full p-[10px] h-screen flex flex-col box-border">
             {/* <p className="text-white">{rol}</p> */}
@@ -85,6 +88,27 @@ function Content({ rol, name, surname, email, numerTelefonu, kontoBankowe, DataU
                                         <p className="w-1/2 text-white text-[12px]">{Specjalnosc}</p>
                                     </div>
                                 )}
+
+                                {grupaLaboratoryjna != null &&(
+                                    <div className="flex gap-5 mb-3 ">
+                                        <p className="font-bold text-white text-[14px] w-1/2">Grupa laboratoryjna: </p>
+                                        <p className="w-1/2 text-white text-[12px]">{grupaLaboratoryjna}</p>
+                                    </div>
+                                )}
+
+                                {grupaCwiczeniowa != null &&(
+                                   <div className="flex gap-5 mb-3 ">
+                                        <p className="font-bold text-white text-[14px] w-1/2">Grupa ćwiczeniowa: </p>
+                                        <p className="w-1/2 text-white text-[12px]">{grupaCwiczeniowa}</p>
+                                    </div> 
+                                )}
+
+                                {grupaWykladowa != null &&(
+                                    <div className="flex gap-5 mb-3 ">
+                                        <p className="font-bold text-white text-[14px] w-1/2">Grupa wykładowa: </p>
+                                        <p className="w-1/2 text-white text-[12px]">{grupaWykladowa}</p>
+                                    </div>
+                                )}
                             </div>
                         )}
 
@@ -121,7 +145,11 @@ function Content({ rol, name, surname, email, numerTelefonu, kontoBankowe, DataU
     );
 } 
 
-export default function MojeDane({ auth, rol, name, surname, email, numerTelefonu, kontoBankowe, DataUrodzenia, photo, index, semester, stopien, trybStudiow, rok, Specjalnosc, kierunek, wydzial, TytulNaukowy, katedra, Odpowiedzialnosc }) {
+export default function MojeDane({ auth, rol, name, surname, email, numerTelefonu, kontoBankowe, DataUrodzenia,
+    photo, index, semester, stopien, trybStudiow, rok, Specjalnosc, 
+    kierunek, wydzial, TytulNaukowy, katedra, Odpowiedzialnosc,
+     grupaLaboratoryjna, grupaCwiczeniowa, grupaWykladowa }) {
+
     return (
         // <div>
         //     <p>ja student</p>
@@ -131,7 +159,13 @@ export default function MojeDane({ auth, rol, name, surname, email, numerTelefon
         <div className="flex">
             <Head title="Moje dane"/>
             <MenuStudenta/>
-            <Content rol={rol} name={name} surname={surname} email={email} numerTelefonu={numerTelefonu} kontoBankowe={kontoBankowe} DataUrodzenia={DataUrodzenia} photo={photo} index={index} semester={semester} stopien={stopien} trybStudiow={trybStudiow} rok={rok} Specjalnosc={Specjalnosc} kierunek={kierunek} wydzial={wydzial} TytulNaukowy={TytulNaukowy} katedra={katedra} Odpowiedzialnosc={Odpowiedzialnosc}/>
+            
+            <Content rol={rol} name={name} surname={surname} email={email} numerTelefonu={numerTelefonu} 
+            kontoBankowe={kontoBankowe} DataUrodzenia={DataUrodzenia} photo={photo} 
+            index={index} semester={semester} stopien={stopien} trybStudiow={trybStudiow} rok={rok} 
+            Specjalnosc={Specjalnosc} kierunek={kierunek} wydzial={wydzial} TytulNaukowy={TytulNaukowy} katedra={katedra} 
+            Odpowiedzialnosc={Odpowiedzialnosc} 
+            grupaLaboratoryjna={grupaLaboratoryjna} grupaCwiczeniowa={grupaCwiczeniowa} grupaWykladowa={grupaWykladowa} />
         </div>
     );
 }

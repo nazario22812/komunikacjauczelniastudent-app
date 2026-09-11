@@ -19,8 +19,13 @@ class Grupastudenta extends Model
     ];
 
 
-    public function student(){
-        return $this->belongsToMany(Student::class, 'grupastudenta_has_student', 'GrupaStudenta_idGrupaStudenta', 'Student_idStudent');
+    public function grupastudenta(){
+        return $this->belongsToMany(
+            Student::class, 
+            'grupastudenta_has_student', 
+            'GrupaStudenta_idGrupaStudenta', 
+            'Student_idStudent'
+        );
     }
     public function nadgrupa(){
         return $this->belongsTo(Grupastudenta::class, 'id_nadgrupy', 'idGrupaStudenta');

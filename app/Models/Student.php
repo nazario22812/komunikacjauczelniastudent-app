@@ -34,7 +34,12 @@ class Student extends Model
 
 
     public function grupastudenta(){
-        return $this->belongsToMany(Grupastudenta::class, 'grupastudenta_has_student', 'GrupaStudenta_idGrupaStudenta', 'Student_idStudent');
+        return $this->belongsToMany(
+            Grupastudenta::class,
+            'grupastudenta_has_student', 
+            'Student_idStudent',
+            'GrupaStudenta_idGrupaStudenta', 
+        );
     }
 
     public function platnosc(){
@@ -48,4 +53,6 @@ class Student extends Model
     public function zadanie(){
         return $this->belongsToMany(Zadanie::class, 'student_has_zadanie', 'Student_idStudent', 'Zadanie_idZadanie');
     }
+
+
 }
