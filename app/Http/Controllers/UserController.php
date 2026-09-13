@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Grupastudenta;
+use App\Models\Kierunek;
 use App\Models\Planzajec;
 use App\Models\Rezerwacja;
 use App\Models\Student;
@@ -13,16 +14,10 @@ use Inertia\Inertia;
 class UserController extends Controller
 {
     //
-    public function planzajec(Request $request){
 
-    
-    
-
-        $user = $request->user();
-        $student = Student::with('grupastudenta')->where('User_idUser', $user->idUser)->first();
-        $grupa = $student->grupastudenta()->first();
-        $planzajec = Planzajec::where('GrupaStudenta_idGrupaStudenta', $grupa->idGrupaStudenta)->first();
-        // $rezerwacje = Rezerwacja::with('zajecie.przedmiot')->where('Zajęcie_PlanZajec_idPlanZajec', $planzajec->idPlanZajec)->get();
+    public function planzajecpost($grpa){
+        $planzajec = Planzajec::where('GrupaStudenta_idGrupaStudenta', $grpa)->first();
+        // dd($grpa);
         $rezerwacje = Rezerwacja::select(
             'rezerwacja.*',
             'zajęcie.DzienTygodnia',
@@ -48,11 +43,67 @@ class UserController extends Controller
                 'parzystosc' => $item->Parzystosc,
             ];
         })->sortBy('godzina_rozpoczecia')->values()->toArray();
+
+        $listaKierunkow = Kierunek::get()->values()->toArray();
+        $listaGrup = Grupastudenta::where('typGrupy', 'Laboratoryjna')->get()->values()->toArray();     
+
+        return Inertia::render('PlanZajec',[
+            'plan' => $gotowyplan,
+            'listagrup' => $listaGrup,
+            'listakierunkow' => $listaKierunkow
+        ]);
+    }
+
+    public function planzajec(Request $request){
+
+    
+    
+
+        $user = $request->user();
+        $gotowyplan = null;
+        if($user->isStudent()){
+            $student = Student::with('grupastudenta')->where('User_idUser', $user->idUser)->first();
+            $grupa = $student->grupastudenta()->first();
+            $planzajec = Planzajec::where('GrupaStudenta_idGrupaStudenta', $grupa->idGrupaStudenta)->first();
+            // $rezerwacje = Rezerwacja::with('zajecie.przedmiot')->where('Zajęcie_PlanZajec_idPlanZajec', $planzajec->idPlanZajec)->get();
+            $rezerwacje = Rezerwacja::select(
+                'rezerwacja.*',
+                'zajęcie.DzienTygodnia',
+                'zajęcie.TypZajec',
+                'zajęcie.Parzystosc',
+                'przedmiot.nazwa as nazwa_przedmiotu'
+            )
+            ->join('zajęcie', function($join){
+                $join->on('rezerwacja.Zajęcie_idZajęcie', '=', 'zajęcie.idZajęcie')
+                    ->on('rezerwacja.Zajęcie_PlanZajec_idPlanZajec', '=', 'zajęcie.PlanZajec_idPlanZajec');
+            })
+            ->leftJoin('przedmiot', 'zajęcie.Przedmiot_idPrzedmiot', '=', 'przedmiot.idPrzedmiot')
+            ->where('rezerwacja.Zajęcie_PlanZajec_idPlanZajec', $planzajec->idPlanZajec)
+            ->get();
+            $gotowyplan = $rezerwacje->map(function ($item) {
+                return[
+                    'id' => $item->idRezerwacja,
+                    'dzien' => $item->DzienTygodnia,
+                    'godzina_rozpoczecia' => $item->GodzinaRozpoczecia,
+                    'godzina_zakonczenia' => $item->GodzinaZakonczenia,
+                    'tytul' => $item->nazwa_przedmiotu,
+                    'typ' => $item->TypZajec,
+                    'parzystosc' => $item->Parzystosc,
+                ];
+            })->sortBy('godzina_rozpoczecia')->values()->toArray();
+        }
+        
         // dd($gotowyplan);
        
-
+        $listaKierunkow = Kierunek::get()->values()->toArray();
+        $listaGrup = Grupastudenta::where('typGrupy', 'Laboratoryjna')->get()->values()->toArray();                       
+ 
+        // dd($listaGrup);
+        // dd($listaKierunkow);
         return Inertia::render('PlanZajec', [
             'plan' => $gotowyplan,
+            'listagrup' => $listaGrup,
+            'listakierunkow' => $listaKierunkow
         ]);
     }
 

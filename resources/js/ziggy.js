@@ -1,0 +1,5 @@
+const Ziggy = {"url":"http:\/\/localhost:8000","port":8000,"defaults":{},"routes":{"sanctum.csrf-cookie":{"uri":"sanctum\/csrf-cookie","methods":["GET","HEAD"]},"main":{"uri":"\/","methods":["GET","HEAD"]},"login":{"uri":"login","methods":["GET","HEAD"]},"logout":{"uri":"logout","methods":["POST"]},"planzajec":{"uri":"planzajec","methods":["GET","HEAD"]},"planzajec.szukaniegrupy":{"uri":"planzajec\/{grupa}","methods":["POST"],"parameters":["grupa"]},"stronaglownastudent":{"uri":"stronaglowna\/student","methods":["GET","HEAD"]},"stronaglownaprowadzacy":{"uri":"stronaglowna\/prowadzacy","methods":["GET","HEAD"]},"stronaglownapracownikdziekanatu":{"uri":"stronaglowna\/pracownikdziekanatu","methods":["GET","HEAD"]},"storage.local":{"uri":"storage\/{path}","methods":["GET","HEAD"],"wheres":{"path":".*"},"parameters":["path"]},"storage.local.upload":{"uri":"storage\/{path}","methods":["PUT"],"wheres":{"path":".*"},"parameters":["path"]}}};
+if (typeof window !== 'undefined' && typeof window.Ziggy !== 'undefined') {
+  Object.assign(Ziggy.routes, window.Ziggy.routes);
+}
+export { Ziggy };

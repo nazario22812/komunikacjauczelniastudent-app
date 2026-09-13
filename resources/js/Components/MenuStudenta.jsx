@@ -19,7 +19,7 @@ import Task from '@/../images/task-outline-sharp.png';
 
 export default function MenuStudenta(){
     const [isOpen, setIsOpen] = useState(false);
-    const [isOpen2, setIsOpen2] = useState(false)
+    const [isOpen2, setIsOpen2] = useState(false);
     return(
         <nav className="bg-[#04041D] border border-[000000] w-[20%] h-screen">
             {/* top menu z logo i td */}

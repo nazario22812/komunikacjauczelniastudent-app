@@ -1,8 +1,9 @@
 import React from "react";
 import MenuStudenta from "../Components/MenuStudenta";
 import BackButton from "../Components/BackButton";
-import { Head } from "@inertiajs/react";
+import { Head, router, useForm } from "@inertiajs/react";
 import Form from 'react-bootstrap/Form';
+import { useState } from "react";
 
 function Zajecie({ zajecia }){
     const typZajecia = (typ) => {
@@ -46,7 +47,25 @@ function Zajecie({ zajecia }){
     );
 }
 
-function Content({ plan }){
+function Content({ plan = null, listagrup, listakierunkow}){
+    const [wybranyKierunek, setwybranyKierunek] = useState('');
+    const [wybranaGrupa, setwybranaGrupa] = useState('');
+    const filtergrup = listagrup?.filter(
+        (g) => String(g.Kierunek_idKierunek) === String(wybranyKierunek)
+    )
+    const { data, setData, post, processing, errors, reset } = useForm({
+        kierunk: '',
+        grpa: '',
+        
+    });
+    const wyszukajGrupe = (e) => {
+        e.preventDefault();
+
+        post(`/planzajec/${data.grpa}`);
+        // post(route.post('planzajec.szukaniegrupy', data.grpa));
+    };
+
+
     const godziny = [
         '08:00-09:00', '09:00-10:00', '10:00-11:00', '11:00-12:00',
         '12:00-13:00', '13:00-14:00', '14:00-15:00', '15:00-16:00',
@@ -83,7 +102,7 @@ function Content({ plan }){
                     <div className="grid grid-cols-6 border h-full border-slate-700/80 rounded-b-xl overflow-y-auto bg-[#676c98]">
                         <div className="flex flex-col">
                             {godziny.map((hour) => (
-                                <div key={hour} style={{ height: '60px' }} className="text-xs text-white border-b border-r border-white flex items-center justify-center bg-[#73768c] shrink-0">
+                                <div key={hour} style={{ height: '60px' }} className="text-xs text-white border-b border-r border-white flex items-center justify-center bg-[#73768c] shrink-0 last:border-b-0">
                                     {hour}
                                 </div>
                             ))}
@@ -107,36 +126,50 @@ function Content({ plan }){
                 </div>
 
                 <div className="w-[20%] rounded-r-[10px] bg-[#06062c] px-[20px] py-[33px]">
-                    <div className="px-[10px] py-[10px]">
-                        <div className="mx-auto w-full text-center text-[16px] text-white">
-                            Wybierz grupę
+                    <form onSubmit={wyszukajGrupe}>
+                        <div className="px-[10px] py-[10px]">
+                            <div className="mx-auto w-full text-center text-[16px] text-white">
+                                Wybierz grupę
+                            </div>
+                            <div className="w-full px-[29px] pt-[40px]">
+                                <span className="text-[13px] text-white">Kierunek</span>
+                                <Form.Select value={wybranyKierunek} onChange={(e) =>{ setwybranyKierunek(e.target.value); setwybranaGrupa(''); setData('kierunk', e.target.value)}} className="w-full border border-white rounded-[15px] bg-[#1e293b] text-white h-[22px]">
+                                    <option>Wybierz kierunek</option>
+                                    {listakierunkow && listakierunkow.map((kierunek) => (
+                                        <option key={kierunek.idKierunek} value={kierunek.idKierunek}>{kierunek.nazwa}</option>
+
+                                    )) }
+                                </Form.Select>
+                            </div>
+                            <div className="w-full px-[29px] pt-[40px]">
+                                <span className="text-[13px] text-white">Grupa</span>
+                                <Form.Select value={wybranaGrupa} onChange={(e) => {setwybranaGrupa(e.target.value); setData('grpa', e.target.value)}} disabled={!wybranyKierunek}  className="w-full border border-white rounded-[15px] bg-[#1e293b] text-white h-[22px]">
+                                    <option>Wybierz grupę</option>
+                                    {filtergrup.map((grupa) => (
+                                        <option key={grupa.idGrupaStudenta} value={grupa.idGrupaStudenta}>{grupa.nazwaGrupy}</option>
+
+                                    ))}
+                                </Form.Select>
+                            </div>
+                            <div className="w-full mx-auto h-[28px] px-[18px] my-3 flex items-center mt-10">
+                                <button disabled={processing} type="submit" className="text-[13px] mx-auto w-3/4 h-full text-white bg-[#f97316] rounded-[15px] hover:cursor-pointer active:bg-[#c55b11]">
+                                    Wyszukaj
+                                </button>
+                            </div>
                         </div>
-                        <div className="w-full px-[29px] pt-[40px]">
-                            <span className="text-[13px] text-white">Kierunek</span>
-                            <Form.Select className="w-full border border-white rounded-[15px] bg-[#1e293b] text-white h-[22px]"></Form.Select>
-                        </div>
-                        <div className="w-full px-[29px] pt-[40px]">
-                            <span className="text-[13px] text-white">Grupa</span>
-                            <Form.Select className="w-full border border-white rounded-[15px] bg-[#1e293b] text-white h-[22px]"></Form.Select>
-                        </div>
-                        <div className="w-full mx-auto h-[28px] px-[18px] my-3 flex items-center mt-10">
-                            <button className="text-[13px] mx-auto w-3/4 h-full text-white bg-[#f97316] rounded-[15px] hover:cursor-pointer active:bg-[#c55b11]">
-                                Wyszukaj
-                            </button>
-                        </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
     );
 }
 
-export default function PlanZajec({ auth, plan }) {
+export default function PlanZajec({ auth, plan = null, listagrup, listakierunkow }) {
     return (
         <div className="flex">
             <Head title="Plan zajęć"/>
             <MenuStudenta/>
-            <Content plan={plan}/>
+            <Content plan={plan} listagrup={listagrup} listakierunkow={listakierunkow}/>
         </div>
     );
 }
