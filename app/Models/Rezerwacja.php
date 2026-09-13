@@ -32,4 +32,8 @@ class Rezerwacja extends Model
     public function sala(){
         return $this->belongsTo(Sala::class, 'Sala_idSala', 'idSala');
     }
+
+    public function zajecie(){
+        return $this->hasMany(Zajecie::class, 'Zajęcie_idZajęcie', 'idZajęcie');
+    }
 }

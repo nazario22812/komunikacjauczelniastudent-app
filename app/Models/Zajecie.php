@@ -39,4 +39,9 @@ class Zajecie extends Model
     public function zadanie(){
         return $this->hasMany(Zadanie::class, 'Zajęcie_idZajęcie', 'idZajęcie');
     }
+
+    public function rezerwacja(){
+        return $this->hasMany(Rezerwacja::class, 'Zajęcie_idZajęcie', 'idZajęcie');
+
+    }
 }

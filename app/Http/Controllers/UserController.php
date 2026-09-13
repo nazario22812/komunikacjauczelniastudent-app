@@ -16,48 +16,43 @@ class UserController extends Controller
     public function planzajec(Request $request){
 
     
-    // SELECT
-    //     z.DzienTygodnia,
-    //     r.GodzinaRozpoczecia,
-    //     r.GodzinaZakonczenia,
-    //     p.nazwa AS Przedmiot,
-    //     z.TypZajec,
-    //     s.numerSali,
-    //     pro.idProwadzacy
-    // FROM zajęcie z
-    // JOIN przedmiot p
-    //     ON z.Przedmiot_idPrzedmiot = p.idPrzedmiot
-    // JOIN sala s
-    //     ON z.Sala_idSala = s.idSala
-    // JOIN prowadzacy pro
-    //     ON pro.Zajęcie_idZajęcie = z.idZajęcie
-    //     AND pro.Zajęcie_PlanZajec_idPlanZajec = z.PlanZajec_idPlanZajec
-    // JOIN rezerwacja r
-    //     ON z.idZajęcie = r.Zajęcie_idZajęcie
-    //     AND z.PlanZajec_idPlanZajec = r.Zajęcie_PlanZajec_idPlanZajec
-    // WHERE z.PlanZajec_idPlanZajec = 1
-    // ORDER BY
-    //     FIELD(
-    //         z.DzienTygodnia,
-    //         'Poniedziałek',
-    //         'Wtorek',
-    //         'Środa',
-    //         'Czwartek',
-    //         'Piątek'
-    //     ),
-    //     r.GodzinaRozpoczecia
+    
 
         $user = $request->user();
         $student = Student::with('grupastudenta')->where('User_idUser', $user->idUser)->first();
-        $planzajec = Planzajec::where('GrupaStudenta_idGrupaStudenta', $student->grupastudenta->first()?->idGrupaStudenta)->first();
-        $zajecia = Zajecie::where('PlanZajec_idPlanZajec', $planzajec->idPlanZajec)->get();
-        $rezerwowanezajecia = Rezerwacja::where('Zajęcie_PlanZajec_idPlanZajec', $planzajec->idPlanZajec)->get();
-
-        $gotowyplan = $zajecia->concat($rezerwowanezajecia)->sortBy('GodzinaRozpoczecia');
-        dd($gotowyplan->toArray());
+        $grupa = $student->grupastudenta()->first();
+        $planzajec = Planzajec::where('GrupaStudenta_idGrupaStudenta', $grupa->idGrupaStudenta)->first();
+        // $rezerwacje = Rezerwacja::with('zajecie.przedmiot')->where('Zajęcie_PlanZajec_idPlanZajec', $planzajec->idPlanZajec)->get();
+        $rezerwacje = Rezerwacja::select(
+            'rezerwacja.*',
+            'zajęcie.DzienTygodnia',
+            'zajęcie.TypZajec',
+            'zajęcie.Parzystosc',
+            'przedmiot.nazwa as nazwa_przedmiotu'
+        )
+        ->join('zajęcie', function($join){
+            $join->on('rezerwacja.Zajęcie_idZajęcie', '=', 'zajęcie.idZajęcie')
+                ->on('rezerwacja.Zajęcie_PlanZajec_idPlanZajec', '=', 'zajęcie.PlanZajec_idPlanZajec');
+        })
+        ->leftJoin('przedmiot', 'zajęcie.Przedmiot_idPrzedmiot', '=', 'przedmiot.idPrzedmiot')
+        ->where('rezerwacja.Zajęcie_PlanZajec_idPlanZajec', $planzajec->idPlanZajec)
+        ->get();
+        $gotowyplan = $rezerwacje->map(function ($item) {
+            return[
+                'id' => $item->idRezerwacja,
+                'dzien' => $item->DzienTygodnia,
+                'godzina_rozpoczecia' => $item->GodzinaRozpoczecia,
+                'godzina_zakonczenia' => $item->GodzinaZakonczenia,
+                'tytul' => $item->nazwa_przedmiotu,
+                'typ' => $item->TypZajec,
+                'parzystosc' => $item->Parzystosc,
+            ];
+        })->sortBy('godzina_rozpoczecia')->values()->toArray();
+        // dd($gotowyplan);
+       
 
         return Inertia::render('PlanZajec', [
-            'paln' => $gotowyplan->values()->toArray(),
+            'plan' => $gotowyplan,
         ]);
     }
 

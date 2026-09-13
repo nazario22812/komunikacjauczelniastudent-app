@@ -25,5 +25,6 @@ class Pytania extends Model
 
     public function opcjewybory(){
         return $this->hasMany(OpcjeWyboru::class, ['Pytania_idPytania', 'Pytania_Ankieta_idAnkieta'], ['idPytania', 'Ankieta_idAnkieta']);
+    
     }
 }
