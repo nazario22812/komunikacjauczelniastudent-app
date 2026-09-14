@@ -34,12 +34,17 @@ function Zajecie({ zajecia }){
     const durationMinuty = koniecMinuty - poczatekMinuty;
     const blockHeight = (durationMinuty / 60) * wartoscminuty;
 
+    // 'imie' =>$item->name,
+    //             'nazwisko' => $item->surname,
+    //             'tytulNaukowy' => $item->TytulNaukowy
+
     return(
-        // ПРИБРАНО h-full, залишено лише абсолютне позиціонування та розраховану висоту
         <div style={{ top: `${topOffset}px`, height: `${blockHeight - 4}px` }} className={`absolute left-1 right-1 p-2 flex flex-col justify-center ${bgColors[zajecia.typ] || ''} z-10 transition-colors hover:opacity-95 rounded-lg shadow-md`}>
             <div className="text-white text-center overflow-hidden">
-                <span>{zajecia.tytul},<br /> 
-                    {typZajecia(zajecia.typ)},<br />
+                <span className="text-[12px]">{zajecia.tytul},  
+                    {typZajecia(zajecia.typ)}<br />
+                    {zajecia.tytulNaukowy} {zajecia.imie}. {zajecia.nazwisko} <br />
+                    {zajecia.numersali}<br />
                     {zajecia.godzina_rozpoczecia} - {zajecia.godzina_zakonczenia}
                 </span>
             </div>
@@ -56,7 +61,6 @@ function Content({ plan = null, listagrup, listakierunkow}){
     const { data, setData, post, processing, errors, reset } = useForm({
         kierunk: '',
         grpa: '',
-        
     });
     const wyszukajGrupe = (e) => {
         e.preventDefault();
@@ -86,7 +90,6 @@ function Content({ plan = null, listagrup, listakierunkow}){
             <div className="bg-[#08083b] w-full h-full flex border-[0.3px] border-white pt-3 pb-5 px-1 rounded-b-[10px]">
                 <div className="w-[80%] h-full border border-white rounded-l-xl rounded-r-xl flex flex-col">
                     
-                    {/* Шапка днів фіксована зверху */}
                     <div className="flex w-full shrink-0">
                         <div className="bg-[#73768c] rounded-tl-xl w-full text-white text-center font-semibold border-b border-r border-white flex items-center justify-center text-xs py-1.5">
                             Dzień
@@ -98,7 +101,6 @@ function Content({ plan = null, listagrup, listakierunkow}){
                         ))}
                     </div>
 
-                    {/* Додано overflow-y-auto сюди, щоб з'явився скрол і можна було гортати нижчі години */}
                     <div className="grid grid-cols-6 border h-full border-slate-700/80 rounded-b-xl overflow-y-auto bg-[#676c98]">
                         <div className="flex flex-col">
                             {godziny.map((hour) => (

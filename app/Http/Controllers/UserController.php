@@ -23,24 +23,40 @@ class UserController extends Controller
             'zajęcie.DzienTygodnia',
             'zajęcie.TypZajec',
             'zajęcie.Parzystosc',
-            'przedmiot.nazwa as nazwa_przedmiotu'
+            'przedmiot.nazwa as nazwa_przedmiotu',
+            'sala.numerSali',
+            'user.name',
+            'user.surname',
+            'prowadzacy.TytulNaukowy',
         )
         ->join('zajęcie', function($join){
             $join->on('rezerwacja.Zajęcie_idZajęcie', '=', 'zajęcie.idZajęcie')
                 ->on('rezerwacja.Zajęcie_PlanZajec_idPlanZajec', '=', 'zajęcie.PlanZajec_idPlanZajec');
         })
+        ->join('sala', function($join){
+            $join->on('rezerwacja.Sala_idSala', '=', 'sala.idSala');
+        })
+        ->join('prowadzacy', function($join){
+            $join->on('rezerwacja.Prowadzacy_idProwadzacy', '=', 'prowadzacy.idProwadzacy');    
+        })
         ->leftJoin('przedmiot', 'zajęcie.Przedmiot_idPrzedmiot', '=', 'przedmiot.idPrzedmiot')
+        ->leftJoin('user', 'prowadzacy.User_idUser' , '=' , 'user.idUser')
         ->where('rezerwacja.Zajęcie_PlanZajec_idPlanZajec', $planzajec->idPlanZajec)
         ->get();
         $gotowyplan = $rezerwacje->map(function ($item) {
             return[
                 'id' => $item->idRezerwacja,
                 'dzien' => $item->DzienTygodnia,
-                'godzina_rozpoczecia' => $item->GodzinaRozpoczecia,
-                'godzina_zakonczenia' => $item->GodzinaZakonczenia,
+                'godzina_rozpoczecia' => substr($item->GodzinaRozpoczecia, 0 , 5),
+                'godzina_zakonczenia' => substr($item->GodzinaZakonczenia, 0, 5) ,
                 'tytul' => $item->nazwa_przedmiotu,
                 'typ' => $item->TypZajec,
                 'parzystosc' => $item->Parzystosc,
+                'numersali' => $item->numerSali,
+                'imie' =>substr($item->name, 0, 1) ,
+                'nazwisko' => $item->surname,
+                'tytulNaukowy' => $item->TytulNaukowy
+
             ];
         })->sortBy('godzina_rozpoczecia')->values()->toArray();
 
@@ -71,24 +87,40 @@ class UserController extends Controller
                 'zajęcie.DzienTygodnia',
                 'zajęcie.TypZajec',
                 'zajęcie.Parzystosc',
-                'przedmiot.nazwa as nazwa_przedmiotu'
+                'przedmiot.nazwa as nazwa_przedmiotu',
+                'sala.numerSali',
+                'user.name',
+                'user.surname',
+                'prowadzacy.TytulNaukowy',
             )
             ->join('zajęcie', function($join){
                 $join->on('rezerwacja.Zajęcie_idZajęcie', '=', 'zajęcie.idZajęcie')
                     ->on('rezerwacja.Zajęcie_PlanZajec_idPlanZajec', '=', 'zajęcie.PlanZajec_idPlanZajec');
             })
+            ->join('sala', function($join){
+                $join->on('rezerwacja.Sala_idSala', '=', 'sala.idSala');
+            })
+            ->join('prowadzacy', function($join){
+                $join->on('rezerwacja.Prowadzacy_idProwadzacy', '=', 'prowadzacy.idProwadzacy');    
+            })
             ->leftJoin('przedmiot', 'zajęcie.Przedmiot_idPrzedmiot', '=', 'przedmiot.idPrzedmiot')
+            ->leftJoin('user', 'prowadzacy.User_idUser' , '=' , 'user.idUser')
+
             ->where('rezerwacja.Zajęcie_PlanZajec_idPlanZajec', $planzajec->idPlanZajec)
             ->get();
             $gotowyplan = $rezerwacje->map(function ($item) {
                 return[
                     'id' => $item->idRezerwacja,
                     'dzien' => $item->DzienTygodnia,
-                    'godzina_rozpoczecia' => $item->GodzinaRozpoczecia,
-                    'godzina_zakonczenia' => $item->GodzinaZakonczenia,
+                    'godzina_rozpoczecia' => substr($item->GodzinaRozpoczecia, 0 , 5),
+                    'godzina_zakonczenia' => substr($item->GodzinaZakonczenia, 0, 5) ,
                     'tytul' => $item->nazwa_przedmiotu,
                     'typ' => $item->TypZajec,
                     'parzystosc' => $item->Parzystosc,
+                    'numersali' => $item->numerSali,
+                    'imie' =>substr($item->name, 0, 1) ,
+                    'nazwisko' => $item->surname,
+                    'tytulNaukowy' => $item->TytulNaukowy
                 ];
             })->sortBy('godzina_rozpoczecia')->values()->toArray();
         }
