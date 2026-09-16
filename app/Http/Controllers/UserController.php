@@ -7,10 +7,13 @@ use App\Models\Grupastudenta;
 use App\Models\Kierunek;
 use App\Models\Planzajec;
 use App\Models\Rezerwacja;
+use App\Models\Sala;
 use App\Models\Student;
 use App\Models\Zajecie;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+
+use function PHPSTORM_META\map;
 
 class UserController extends Controller
 {
@@ -19,11 +22,30 @@ class UserController extends Controller
     public function mapaKampusu(){
 
 
+        $sali = Sala::select(
+            'budynek.*',
+            'sala.numerSali'
+        )
+        ->join('budynek', function($join){
+            $join->on('budynek.idBudynek', '=', 'sala.Budynek_idBudynek');
+        })
+        ->get();
+
+        $salimapped = $sali->map(function ($item){
+            return[
+                'id' => $item->idBudynek,
+                'nazwa' => $item->nazwa,
+                'godzinaOtwarcia' => $item->GodzinaOtwarcia,
+                'numerSali' => $item->numerSali,
+            ];
+        })->values()->toArray();
+
         $listaBudynkow = Budynek::get()->values()->toArray();
-        // dd($listaBudynkow);
+        // dd($salimapped);
 
         return Inertia::render('MapaKampusu', [
             'listaBudynkow' => $listaBudynkow,
+            'sale' => $salimapped
         ]);
     }
 
