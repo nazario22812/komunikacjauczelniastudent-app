@@ -39,6 +39,7 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/mojedane', [UserController::class, 'mojedane']);
     Route::get('/planzajec', [UserController::class, 'planzajec'])->name('planzajec');
     Route::post('/planzajec/{grupa}', [UserController::class, 'planzajecpost'])->name('planzajec.szukaniegrupy');
+    Route::get('/mapa', [UserController::class, 'mapaKampusu']);
 });
 
 //trasy dla studenta 

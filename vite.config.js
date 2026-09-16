@@ -16,9 +16,17 @@ export default defineConfig({
         }),
         tailwindcss(),
     ],
+    optimizeDeps: {
+        include : ['react', 'react-dom', 'scheduler']
+    },
     server: {
         watch: {
             ignored: ['**/storage/framework/views/**'],
         },
     },
+    build: {
+        commonjsOptions: {
+            transformMixedEsModules: true,
+        }
+    }
 });

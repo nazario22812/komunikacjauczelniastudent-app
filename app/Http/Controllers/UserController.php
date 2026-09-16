@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Budynek;
 use App\Models\Grupastudenta;
 use App\Models\Kierunek;
 use App\Models\Planzajec;
@@ -14,6 +15,17 @@ use Inertia\Inertia;
 class UserController extends Controller
 {
     //
+
+    public function mapaKampusu(){
+
+
+        $listaBudynkow = Budynek::get()->values()->toArray();
+        // dd($listaBudynkow);
+
+        return Inertia::render('MapaKampusu', [
+            'listaBudynkow' => $listaBudynkow,
+        ]);
+    }
 
     public function planzajecpost($grpa){
         $planzajec = Planzajec::where('GrupaStudenta_idGrupaStudenta', $grpa)->first();

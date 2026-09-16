@@ -80,7 +80,7 @@ export default function MenuStudenta(){
                         </Link>
 
 
-                        <Link>
+                        <Link href='/mapa' method="get" as="button" className="hover:cursor-pointer w-full">
                             <div className="flex p-1 gap-x-[10px]">
                                 <img src={Map} alt="mapakampusu" />
                                 <span>Mapa kampusu</span>
