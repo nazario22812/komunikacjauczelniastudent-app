@@ -57,7 +57,7 @@ export default function MenuStudenta(){
                     </div>
                 </Link>
 
-                <Link>    
+                <Link href='/student/mojefinanse' method="get" as="button" className="hover:cursor-pointer w-full">    
                     <div className="border-b-1 border-[#73768C] flex h-[30px] gap-x-[10px] items-center fustify-start">
                         <img src={Wallet} alt="finanse" />
                         <span className="text-[12px]">Moje Finanse</span>

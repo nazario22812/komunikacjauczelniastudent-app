@@ -228,11 +228,11 @@ function Content({listaBudynkow, sale}){
         // <div className="w-full">
         // </div>
         <div className="bg-[#04041D] w-full p-[10px] h-screen flex flex-col box-border">
-            <div className="bg-[#08083b] w-full flex shrink-0 h-[40px] mx-auto text-center border-[0.3px] border-white p-[10px] rounded-t-[10px]">
+            <div className="bg-[#04041d] w-full flex shrink-0 h-[40px] mx-auto text-center border-b-[0.3px] border-white p-[10px] rounded-t-[10px]">
                 <BackButton back={ () => window.history.back()} />
                 <span className="font-bold text-[16px] text-white w-full">Mapa kampusu</span>
             </div>
-            <div className="w-full flex-1 min-h-0 border border-white pt-3 pb-2 px-1 rounded-b-[10px] flex flex-col relative ">
+            <div className="w-full flex-1 min-h-0 pt-3 pb-2 px-1 rounded-b-[10px] flex flex-col relative ">
                 <MapContainer center={[51.235581, 22.549308]} zoom={17} scrollWheelZoom={true} className="w-full h-full rounded-[10px] z-0">
                     <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

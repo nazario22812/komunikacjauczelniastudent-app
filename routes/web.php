@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -47,6 +48,8 @@ Route::middleware(['auth', 'role:student'])->group(function (){
     Route::get('/stronaglowna/student', function () {
         return Inertia::render('Student/StronaGlowna');
     })->name('stronaglownastudent');
+
+    Route::get('/student/mojefinanse', [StudentController::class, 'finanse']);
 });
 
 
