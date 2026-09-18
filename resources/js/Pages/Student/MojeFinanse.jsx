@@ -4,9 +4,28 @@ import BackButton from "../../Components/BackButton";
 import { Head } from "@inertiajs/react";
 
 
-
+function Platnoscrow({ platnosc }){
+    return(
+        <>
+            <tr className="text-white font-bold h-[40px] text-left text-[24px] hover:bg-[#08083b]">
+                <td className="py-[20px]">{platnosc.tytul}</td>
+                <td className="py-[20px]">{platnosc.data}</td>
+                <td className="py-[20px]">{platnosc.termin}</td>
+                <td className="py-[20px]">{platnosc.kwota}</td>
+                <td className="py-[20px]">
+                    {platnosc.czyOplacone === 1 ? (
+                        <span className="text-[24px] text-[#0DFF00]">Opłacone</span>
+                    ) : (
+                        <span className="text-[24px] text-[#852221]">Nie opłacone</span>
+                    )}
+                </td>
+            </tr>
+        </>
+    );
+}
 
 function Content({ platnosci, suma, najblizszytermin}){
+    console.log(platnosci)
     return (
         <div className="bg-[#04041D] w-full p-[10px] h-screen flex flex-col box-border">
             <div className="bg-[#04041d] w-full flex shrink-0 h-[40px] mx-auto text-center border-b-[0.3px] border-white p-[10px] rounded-t-[10px]">
@@ -31,8 +50,27 @@ function Content({ platnosci, suma, najblizszytermin}){
                             
                         </div>
                     </div>
-                    <div className="h-[80%]">
-
+                    <div className=" bg-[#06062c] h-[77%] mt-5 px-[37px] py-[22px] rounded-[15px] overflow-y-auto pr-2 custom-scrollbar">
+                        <span className="text-white font-bold text-[40px]">Historia Płatności</span>
+                        
+                        <table className="w-full ">
+                            <thead>
+                                <tr className="h-[52px] text-[#73768C] text-[24px] border-b border-[#73768C] px-[61px] py-[10px] text-left ">
+                                    <th className="py-[10px]">Tytuł</th>
+                                    <th className="py-[10px]">Data wystawienia</th>
+                                    <th className="py-[10px]">Termin</th>
+                                    <th className="py-[10px]">Kwota</th>
+                                    <th className="py-[10px]">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-[#73768C] ">
+                                {platnosci.map((platnosc) => (
+                                    <Platnoscrow key={platnosc.id} platnosc={platnosc}/>
+                                ))}
+                            </tbody>
+                        </table>
+                        
+                        
                     </div>
                 </div> 
             </div>        

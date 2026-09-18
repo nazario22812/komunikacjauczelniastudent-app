@@ -58,14 +58,14 @@ function Content({ plan = null, listagrup, listakierunkow}){
     const filtergrup = listagrup?.filter(
         (g) => String(g.Kierunek_idKierunek) === String(wybranyKierunek)
     )
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const { data, setData, get, post, processing, errors, reset } = useForm({
         kierunk: '',
         grpa: '',
     });
     const wyszukajGrupe = (e) => {
         e.preventDefault();
 
-        post(`/planzajec/${data.grpa}`);
+        get(`/planzajec/${data.grpa}`);
         // post(route.post('planzajec.szukaniegrupy', data.grpa));
     };
 

@@ -16,6 +16,9 @@ class Budynek extends Model
         'nrBudynku',
         'ulica',
         'GodzinaOtwarcia',
+        'GodzinaZamkniecia',
+        'szerokosc',
+        'dlugosc',
         'Wydzial_idWydzial'
     ];
 
