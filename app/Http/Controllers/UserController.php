@@ -35,16 +35,20 @@ class UserController extends Controller
             return[
                 'id' => $item->idBudynek,
                 'nazwa' => $item->nazwa,
+                'ulica' => $item->ulica,
+                'nrBudynku' => $item->nrBudynku,
                 'godzinaOtwarcia' => $item->GodzinaOtwarcia,
+                'godzinaZamkniecia' =>$item->GodzinaZamkniecia,
                 'numerSali' => $item->numerSali,
+                'szerokosc' => $item->szerokosc,
+                'dlugosc' => $item->dlugosc
             ];
         })->values()->toArray();
 
-        $listaBudynkow = Budynek::get()->values()->toArray();
+        // $listaBudynkow = Budynek::get()->values()->toArray();
         // dd($salimapped);
 
         return Inertia::render('MapaKampusu', [
-            'listaBudynkow' => $listaBudynkow,
             'sale' => $salimapped
         ]);
     }
