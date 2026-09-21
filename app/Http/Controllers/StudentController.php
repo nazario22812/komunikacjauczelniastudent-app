@@ -44,7 +44,6 @@ class StudentController extends Controller
                 $suma += $kwota;
             }
         }
-        
         $najblizszytermin = Platnosc::select(
             'termin',
             
@@ -56,7 +55,7 @@ class StudentController extends Controller
         return Inertia::render('Student/MojeFinanse',[
             'platnosci' => $platnosci,
             'suma' => $suma,
-            'najblizszytermin' => substr($najblizszytermin->termin, 0, 16)
+            'najblizszytermin' => substr($najblizszytermin?->termin, 0, 16) ?: null,
         ]);
     }
 }

@@ -44,8 +44,8 @@ function Zajecie({ zajecia }){
                 <span className="text-[12px]">{zajecia.tytul},  
                     {typZajecia(zajecia.typ)}<br />
                     {zajecia.tytulNaukowy} {zajecia.imie}. {zajecia.nazwisko} <br />
-                    {zajecia.numersali}<br />
-                    {zajecia.godzina_rozpoczecia} - {zajecia.godzina_zakonczenia}
+                    {zajecia.parzystosc} {zajecia.numersali}<br />
+                    {zajecia.godzina_rozpoczecia} - {zajecia.godzina_zakonczenia} 
                 </span>
             </div>
         </div>

@@ -6,6 +6,7 @@ use App\Models\Budynek;
 use App\Models\Grupastudenta;
 use App\Models\Kierunek;
 use App\Models\Planzajec;
+use App\Models\Podanie;
 use App\Models\Rezerwacja;
 use App\Models\Sala;
 use App\Models\Student;
@@ -18,6 +19,36 @@ use function PHPSTORM_META\map;
 class UserController extends Controller
 {
     //
+
+    public function podanieinfo($podanie){
+        $szczegolypodania = Podanie::where('idPodanie', $podanie)->first();
+        return Inertia::render('Podanieinfo',[
+            'szczegoly' => $szczegolypodania
+        ]);
+    }
+
+    public function edziekanat(Request $request){
+        $user = $request->user();
+
+
+        $podania = Podanie::select(
+            'podanie.*',
+            'plik.*'
+        )
+        ->join('plik', function($join){
+            $join->on('idPodanie', '=', 'plik.Podanie_idPodanie');
+        })
+        ->where('podanie.autor', $user->idUser)
+        ->get()
+        ->values()
+        ->toArray();
+
+        // dd($podania);
+
+        return Inertia::render('EDziekanat', [
+            'podania' => $podania,
+        ]);
+    }
 
     public function mapaKampusu(){
 
@@ -79,7 +110,7 @@ class UserController extends Controller
         })
         ->leftJoin('przedmiot', 'zajęcie.Przedmiot_idPrzedmiot', '=', 'przedmiot.idPrzedmiot')
         ->leftJoin('user', 'prowadzacy.User_idUser' , '=' , 'user.idUser')
-        ->where('rezerwacja.Zajęcie_PlanZajec_idPlanZajec', $planzajec->idPlanZajec)
+        ->where([['rezerwacja.Zajęcie_PlanZajec_idPlanZajec', $planzajec->idPlanZajec], ['rezerwacja.typWydarzenia', 'Zajęcia']])
         ->get();
         $gotowyplan = $rezerwacje->map(function ($item) {
             return[
@@ -144,7 +175,7 @@ class UserController extends Controller
             ->leftJoin('przedmiot', 'zajęcie.Przedmiot_idPrzedmiot', '=', 'przedmiot.idPrzedmiot')
             ->leftJoin('user', 'prowadzacy.User_idUser' , '=' , 'user.idUser')
 
-            ->where('rezerwacja.Zajęcie_PlanZajec_idPlanZajec', $planzajec->idPlanZajec)
+            ->where([['rezerwacja.Zajęcie_PlanZajec_idPlanZajec', $planzajec->idPlanZajec], ['rezerwacja.typWydarzenia', 'Zajęcia']])
             ->get();
             $gotowyplan = $rezerwacje->map(function ($item) {
                 return[

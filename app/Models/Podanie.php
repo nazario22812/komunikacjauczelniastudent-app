@@ -23,4 +23,9 @@ class Podanie extends Model
     public function user(){
         return $this->belongsTo(User::class, 'autor', 'idUser');
     }
+
+    public function plik(){
+        return $this->hasMany(Plik::class, 'Podanie_idPodanie', 'idPodanie');
+
+    }
 }

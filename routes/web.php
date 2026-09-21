@@ -41,6 +41,8 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/planzajec', [UserController::class, 'planzajec'])->name('planzajec');
     Route::get('/planzajec/{grupa}', [UserController::class, 'planzajecpost'])->name('planzajec.szukaniegrupy');
     Route::get('/mapa', [UserController::class, 'mapaKampusu']);
+    Route::get('/edziekanat', [UserController::class, 'edziekanat']);
+    Route::get('/edziekanat/{podanie}', [UserController::class, 'podanieinfo']);
 });
 
 //trasy dla studenta 
