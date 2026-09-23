@@ -20,6 +20,10 @@ class UserController extends Controller
 {
     //
 
+    public function zlozpodanie(){
+        return Inertia::render('Podanieform');
+    }
+
     public function podanieinfo($podanie){
         $szczegolypodania = Podanie::where('idPodanie', $podanie)->first();
         return Inertia::render('Podanieinfo',[

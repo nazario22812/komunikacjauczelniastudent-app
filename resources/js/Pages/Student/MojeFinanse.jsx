@@ -34,7 +34,7 @@ function Content({ platnosci, suma, najblizszytermin}){
             </div>
             <div className="w-full flex-1 min-h-0 pt-3 pb-2 px-4 rounded-b-[10px] flex flex-col relative ">
                         
-                <div className="bg-[#1e293b] w-full h-full mx-auto p-5">
+                <div className="bg-[#1e293b] w-full h-full mx-auto p-5 rounded-[15px]">
                     <div className=" grid  grid-cols-[1fr_1fr_1.5fr]  w-full  gap-2 h-[20%] ">
                         <div className="w-full mx-auto bg-[#06062c] rounded-[15px] text-left px-[37px] py-[26px]">
                             <span className="text-[24px] text-[#73768C]">Suma do zapłaty</span><br />

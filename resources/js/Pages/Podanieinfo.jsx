@@ -12,7 +12,7 @@ function Content({ szczegoly }){
                 <span className="font-bold text-[16px] text-white w-full">Szczegóły podania</span>
             </div>
             <div className="w-full flex-1 min-h-0 pt-3 pb-2 px-1 rounded-b-[10px] flex flex-col relative ">
-                <div className="bg-[#1e293b] w-full h-full mx-auto p-5">
+                <div className="bg-[#1e293b] w-full h-full mx-auto p-5 rounded-[15px]">
                 
                     <div className=" bg-[#06062c] h-full px-[20px] py-[22px] rounded-[15px] overflow-y-auto pr-2 custom-scrollbar">
                         <div className="w-full flex">

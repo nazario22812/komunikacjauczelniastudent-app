@@ -43,6 +43,7 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/mapa', [UserController::class, 'mapaKampusu']);
     Route::get('/edziekanat', [UserController::class, 'edziekanat']);
     Route::get('/edziekanat/{podanie}', [UserController::class, 'podanieinfo']);
+    Route::get('/zlozpodanie', [UserController::class, 'zlozpodanie']);
 });
 
 //trasy dla studenta 
