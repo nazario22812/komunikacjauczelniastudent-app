@@ -11,6 +11,7 @@ use App\Models\Rezerwacja;
 use App\Models\Sala;
 use App\Models\Student;
 use App\Models\Zajecie;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -18,7 +19,23 @@ use function PHPSTORM_META\map;
 
 class UserController extends Controller
 {
-    //
+    
+    public function zlozpodaniepost(Request $request): RedirectResponse {
+        if(empty($request->temat) || empty($request->tresc)){
+            return redirect('/zlozpodanie')->withErrors(['temat' => 'Wybierz temat', 'tresc' => 'Podaj treść podania']);
+        }  
+        $user = $request->user();
+        Podanie::create([
+            'temat' => $request->temat,
+            'tresc' => $request->tresc,
+            'data' => date("d-m-y H:i"),
+            'autor' => $user->idUser,
+            'status' => 'Wysłano',
+            'odpowiedz' => null
+        ]);
+        
+        return redirect('/edziekanat'); 
+    }
 
     public function zlozpodanie(){
         return Inertia::render('Podanieform');
@@ -35,18 +52,18 @@ class UserController extends Controller
         $user = $request->user();
 
 
-        $podania = Podanie::select(
-            'podanie.*',
-            'plik.*'
-        )
-        ->join('plik', function($join){
-            $join->on('idPodanie', '=', 'plik.Podanie_idPodanie');
-        })
-        ->where('podanie.autor', $user->idUser)
-        ->get()
-        ->values()
-        ->toArray();
-
+        // $podania = Podanie::select(
+        //     'podanie.*',
+        //     'plik.*'
+        // )
+        // ->join('plik', function($join){
+        //     $join->on('idPodanie', '=', 'plik.Podanie_idPodanie');
+        // })
+        // ->where('podanie.autor', $user->idUser)
+        // ->get()
+        // ->values()
+        // ->toArray();
+        $podania = Podanie::with('plik')->where('autor', $user->idUser)->get();
         // dd($podania);
 
         return Inertia::render('EDziekanat', [

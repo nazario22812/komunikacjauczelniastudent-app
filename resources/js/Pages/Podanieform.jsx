@@ -27,16 +27,29 @@ function Content({}){
         'Wniosek o wydanie duplikatu legitymacji studenckiej',
         'Wnioski o stypendia'
     ];
+
+    const [listaplikow, setlistaplikow] = useState([]);
+
     const { data, setData, get, post, processing, errors, reset } = useForm({
         temat:'',
         tresc:'',
-        pliki: []
+        plik: []
     });
+
+    const addPlik = (e) => {
+        const nowyplik = Array.from(e.target.files);
+        const aktulizacjalistyplikow = [...listaplikow, ...nowyplik];
+        setlistaplikow(aktulizacjalistyplikow);
+        setData('plik', aktulizacjalistyplikow);
+        e.target.value = null;
+    }
 
     const wyslijpodanie = (e) => {
         e.preventDefault();
 
-    
+        post('/zlozpodanie', {
+            forceFormData: true,
+        });
     }
     return (
        
@@ -60,31 +73,35 @@ function Content({}){
                                 ))}
                             
                             </Form.Select>
+                            <p className="text-white text-[12px] mx-auto text-center ">{errors.temat}</p>
+
                         </div>
-                        <div className="px-[40px] py-[16px] w-full mt-2">
+                        <div className="px-[40px] py-[16px] w-full mt-1">
                             <span  className="w-[60%] block mx-auto text-[24px] text-[white] text-left">Treść podania</span>
                             <textarea className="w-[60%] block mx-auto bg-[#06062c] rounded-[15px] text-[16px] h-[300px] px-3 py-2 text-[#73768C] border border-white" placeholder="podaj treść podania" value={data.tresc} onChange={(e) => {setData('tresc', e.target.value)}}/>
+                            <p className="text-white text-[12px] mx-auto text-center ">{errors.tresc}</p>
                         </div>
-                        <div className="px-[40px] py-[16px] w-full mt-2">
+                        <div className="px-[40px] py-[16px] w-full mt-1">
                             <span  className="w-[60%] block mx-auto text-[24px] text-[white] text-left">Załączniki</span>
                             <input
                                 type="file"
-                                multiple={true}
+                                multiple
+                                
                                 className="w-[60%] block mx-auto bg-[#06062c] rounded-[15px] text-[16px] h-[50px] px-3 py-3 text-[#73768C] border border-white file:text-black file:bg-white file:w-[30%]"
-                                onChange={(e) => {setData('pliki', e.target.files)}}
+                                onChange={addPlik}
                             />
-                            {data.pliki && data.pliki.length > 0  && ( 
-                                <div className="flex gap-1 w-full">
-                                    {Array.from(data.pliki).map((plik,index) => {
-                                        <div>
-                                            <span key={index}>{plik.name}</span>
-
+                            {listaplikow && listaplikow.length > 0  && ( 
+                                <div className="flex gap-1 w-full pt-2">
+                                    {Array.from(listaplikow).map((plik,index) => (
+                                        <div key={index}>
+                                            <span className="text-[17px] text-[#73768C]">{plik.name}, </span>
                                         </div>
-                                    })}
+                                    ))}
                                 </div>
                             )}
+                            
                         </div>
-                        <div className="px-[40px] py-[16px] w-full mt-5">
+                        <div className="px-[40px] py-[16px] w-full ">
                             <button disabled={processing} type="submit" className="w-[20%] h-[60px] text-[32px] block mx-auto text-white bg-[#f97316] rounded-[15px] hover:cursor-pointer active:bg-[#c55b11]">
                                 Wyślij
                             </button>

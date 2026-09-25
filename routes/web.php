@@ -44,6 +44,7 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/edziekanat', [UserController::class, 'edziekanat']);
     Route::get('/edziekanat/{podanie}', [UserController::class, 'podanieinfo']);
     Route::get('/zlozpodanie', [UserController::class, 'zlozpodanie']);
+    Route::post('/zlozpodanie', [UserController::class, 'zlozpodaniepost']);
 });
 
 //trasy dla studenta 

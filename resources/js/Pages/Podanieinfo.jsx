@@ -20,7 +20,7 @@ function Content({ szczegoly }){
                                 <span className="text-[#73768c] font-bold text-[20px]">Temat podania</span><br />
                                 <span className="font-bold text-white  text-[24px]">{szczegoly.temat}</span>
                             </div>
-                            <div className="w-full text-center text-white  text-[24px]">
+                            <div className="w-full text-right text-white  text-[30px]">
                                 <span className="p-5">{szczegoly.status}</span>
                             </div>
                         </div>
@@ -36,6 +36,11 @@ function Content({ szczegoly }){
                             <span className="text-[#73768c] font-bold text-[20px]">Odpowiedź</span><br />
                             <span className="font-bold text-white  text-[24px] ">{szczegoly.odpowiedz}</span>                           
                         </div>
+
+                        {/* <div className="mt-5 w-full border border-white p-5 rounded-[10px]">
+                            <span className="text-[#73768c] font-bold text-[20px]">Odpowiedź</span><br />
+                            <span className="font-bold text-white  text-[24px] ">{szczegoly.odpowiedz}</span>                           
+                        </div> */}
                     </div>
                 
                 </div>
