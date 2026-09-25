@@ -94,7 +94,7 @@ function Content({}){
                                 <div className="flex gap-1 w-full pt-2">
                                     {Array.from(listaplikow).map((plik,index) => (
                                         <div key={index}>
-                                            <span className="text-[17px] text-[#73768C]">{plik.name}, </span>
+                                            <span className="text-[17px] text-[#73768C]">🗒️{plik.name}, </span>
                                         </div>
                                     ))}
                                 </div>

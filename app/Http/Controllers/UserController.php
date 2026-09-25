@@ -6,6 +6,7 @@ use App\Models\Budynek;
 use App\Models\Grupastudenta;
 use App\Models\Kierunek;
 use App\Models\Planzajec;
+use App\Models\Plik;
 use App\Models\Podanie;
 use App\Models\Rezerwacja;
 use App\Models\Sala;
@@ -25,7 +26,7 @@ class UserController extends Controller
             return redirect('/zlozpodanie')->withErrors(['temat' => 'Wybierz temat', 'tresc' => 'Podaj treść podania']);
         }  
         $user = $request->user();
-        Podanie::create([
+        $nowePodanieid = Podanie::create([
             'temat' => $request->temat,
             'tresc' => $request->tresc,
             'data' => date("d-m-y H:i"),
@@ -33,6 +34,32 @@ class UserController extends Controller
             'status' => 'Wysłano',
             'odpowiedz' => null
         ]);
+
+        
+        // dd($nowePodanieid->idPodanie);
+        $listaplikow = ($request->file('plik'));
+        if($listaplikow != null){
+
+            $listaplikow = is_array($listaplikow) ? $listaplikow : [$listaplikow];
+            foreach ($listaplikow as $plik){
+                $nazwa = $plik->getClientOriginalName();
+                $sciezka = $plik->storeAs('podania', $nazwa, 'public');
+                $typ = $plik->getMimeType();
+                $size = $plik->getSize();
+                $data = date("Y-m-d H:i:s");
+
+                // dd($typ);
+
+                Plik::create([
+                    'nazwa' => $sciezka,
+                    'typ' => $typ,
+                    'rozmiar' => $size,
+                    'dataTworzenia' => $data,
+                    'Podanie_idPodanie' => $nowePodanieid->idPodanie
+                ]);
+
+            };
+        }
         
         return redirect('/edziekanat'); 
     }
