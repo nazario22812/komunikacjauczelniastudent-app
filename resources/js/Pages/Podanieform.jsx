@@ -58,8 +58,8 @@ function Content({}){
                 <BackButton back={ () => window.history.back()} />
                 <span className="font-bold text-[16px] text-white w-full ">E-Podanie</span>
             </div>
-            <div className="w-full flex-1 min-h-0 pt-3 pb-2 px-1 rounded-b-[10px] flex flex-col relative ">
-                <div className="bg-[#1e293b] w-full h-full mx-auto pt-[35px] pb-[10px] px-[75px] rounded-[15px] ">
+            <div className="w-full flex-1 min-h-0 pt-3 pb-2 px-1 rounded-b-[10px] flex flex-col relative overflow-y-auto pr-2 custom-scrollbar">
+                <div className="bg-[#1e293b] w-full min-h-0 mx-auto pt-[35px] pb-[10px] px-[75px] rounded-[15px] ">
                     <div className="w-full text-center text-white font-bold text-[58px]">
                         <span >Nowe podanie</span>
                     </div>
@@ -91,7 +91,7 @@ function Content({}){
                                 onChange={addPlik}
                             />
                             {listaplikow && listaplikow.length > 0  && ( 
-                                <div className="flex gap-1 w-full pt-2">
+                                <div className="flex flex-wrap gap-1 w-full pt-2">
                                     {Array.from(listaplikow).map((plik,index) => (
                                         <div key={index}>
                                             <span className="text-[17px] text-[#73768C]">🗒️{plik.name}, </span>

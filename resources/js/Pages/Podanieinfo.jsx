@@ -1,9 +1,9 @@
 import React from "react";
 import MenuStudenta from "../Components/MenuStudenta";
 import BackButton from "../Components/BackButton";
-import { Head, router } from "@inertiajs/react";
+import { Head, Link, router } from "@inertiajs/react";
 
-function Content({ szczegoly }){
+function Content({ szczegoly, listaplikow }){
     return (
        
         <div className="bg-[#04041D] w-full p-[10px] h-screen flex flex-col box-border">
@@ -37,10 +37,15 @@ function Content({ szczegoly }){
                             <span className="font-bold text-white  text-[24px] ">{szczegoly.odpowiedz}</span>                           
                         </div>
 
-                        {/* <div className="mt-5 w-full border border-white p-5 rounded-[10px]">
-                            <span className="text-[#73768c] font-bold text-[20px]">Odpowiedź</span><br />
-                            <span className="font-bold text-white  text-[24px] ">{szczegoly.odpowiedz}</span>                           
-                        </div> */}
+                        <div className="mt-5 w-full border border-white p-5 rounded-[10px]">
+                            <span className="text-[#73768c] font-bold text-[20px]">Załączniki</span><br />
+                            {listaplikow.map((plik, index) => (
+                                <div key={index}>
+                                    <a href={`/storage/${plik.nazwa}`} target="_blank" className="text-[17px] text-[#73768C]">🗒️{plik.nazwa}, </a>
+                                </div>
+                            ))}
+                                                    
+                        </div>
                     </div>
                 
                 </div>
@@ -50,13 +55,13 @@ function Content({ szczegoly }){
     );
 }
 
-export default function Podanieinfo({ auth, szczegoly }) {
+export default function Podanieinfo({ auth, szczegoly, listaplikow }) {
     return (
       
         <div className="flex">
             <Head title="E-Dziekanat"/>
             <MenuStudenta/>
-            <Content szczegoly={szczegoly}/>
+            <Content szczegoly={szczegoly} listaplikow={listaplikow}/>
         </div>
     );
 }

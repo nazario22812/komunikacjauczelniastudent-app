@@ -14,6 +14,7 @@ use App\Models\Student;
 use App\Models\Zajecie;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 use function PHPSTORM_META\map;
@@ -69,9 +70,23 @@ class UserController extends Controller
     }
 
     public function podanieinfo($podanie){
+        
         $szczegolypodania = Podanie::where('idPodanie', $podanie)->first();
+        $pliki = Plik::where('Podanie_idPodanie', $podanie)->get()->toArray();
+        // dd($pliki);
+
+        $listaplikow = [];
+
+        foreach ($pliki as $plik){
+            if(Storage::disk('public')->exists($plik['nazwa'])){
+                array_push($listaplikow, $plik);
+            }
+        }
+        // dd($listaplikow);
+
         return Inertia::render('Podanieinfo',[
-            'szczegoly' => $szczegolypodania
+            'szczegoly' => $szczegolypodania,
+            'listaplikow' => $listaplikow
         ]);
     }
 
