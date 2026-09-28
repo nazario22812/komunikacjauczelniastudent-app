@@ -72,7 +72,7 @@ export default function MenuStudenta(){
                         </button>
                     </div>
                     <div className={`text-[13px] pl-[15px] overflow-hidden transition-all duration-400 ease-in-out ${isOpen ? 'max-h-[150px] opacity-100' : 'max-h-0 opacity-0'}`}>
-                        <Link>
+                        <Link href='/student/konsultacje' method="get" as="button" className="hover:cursor-pointer w-full">
                             <div className="flex p-1 gap-x-[10px]">
                                 <img src={Chat} alt="konsultacje" />
                                 <span> Konsultacje</span>    

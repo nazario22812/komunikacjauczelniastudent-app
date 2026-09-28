@@ -30,7 +30,7 @@ class UserController extends Controller
         $nowePodanieid = Podanie::create([
             'temat' => $request->temat,
             'tresc' => $request->tresc,
-            'data' => date("d-m-y H:i"),
+            'data' => date("y-m-d H:i"),
             'autor' => $user->idUser,
             'status' => 'Wysłano',
             'odpowiedz' => null

@@ -54,6 +54,7 @@ Route::middleware(['auth', 'role:student'])->group(function (){
     })->name('stronaglownastudent');
 
     Route::get('/student/mojefinanse', [StudentController::class, 'finanse']);
+    Route::get('/student/konsultacje', [StudentController::class, 'konsultacje']);
 });
 
 
