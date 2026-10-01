@@ -21,107 +21,28 @@ use App\Models\User;
 use function PHPSTORM_META\map;
 
 class UserController extends Controller
-{
+{   
+
+
+    public function ogloszniaiankiety(Request $request){
+        $user = $request->user();
+        $ogloszenia = $user->komunikat()->where('czyOgloszenie', 1)->orderby('idKomunikat', 'desc')->get()->toArray();
+
+        return Inertia::render('Ogloszenia',[
+            'ogloszenia' => $ogloszenia
+        ]);
+    }
 
     public function powiadomienia(Request $request){
         $user = $request->user();
         // $powiadomienia = User::with('komunikat')->where('User_idUser', $user->idUser)->get();
-        $powiadomienia = $user->komunikat()->get()->toArray();
+        $powiadomienia = $user->komunikat()->where('czyOgloszenie', 0)->get()->toArray();
         return Inertia::render('Powiadomienia',[
             'powiadomienia' => $powiadomienia
         ]);
     }
     
-    public function zlozpodaniepost(Request $request): RedirectResponse {
-        if(empty($request->temat) || empty($request->tresc)){
-            return redirect('/zlozpodanie')->withErrors(['temat' => 'Wybierz temat', 'tresc' => 'Podaj treść podania']);
-        }  
-        $user = $request->user();
-        $nowePodanieid = Podanie::create([
-            'temat' => $request->temat,
-            'tresc' => $request->tresc,
-            'data' => date("y-m-d H:i"),
-            'autor' => $user->idUser,
-            'status' => 'Wysłano',
-            'odpowiedz' => null
-        ]);
-
-        
-        // dd($nowePodanieid->idPodanie);
-        $listaplikow = ($request->file('plik'));
-        if($listaplikow != null){
-
-            $listaplikow = is_array($listaplikow) ? $listaplikow : [$listaplikow];
-            foreach ($listaplikow as $plik){
-                $nazwa = $plik->getClientOriginalName();
-                $sciezka = $plik->storeAs('podania', $nazwa, 'public');
-                $typ = $plik->getMimeType();
-                $size = $plik->getSize();
-                $data = date("Y-m-d H:i:s");
-
-                // dd($typ);
-
-                Plik::create([
-                    'nazwa' => $sciezka,
-                    'typ' => $typ,
-                    'rozmiar' => $size,
-                    'dataTworzenia' => $data,
-                    'Podanie_idPodanie' => $nowePodanieid->idPodanie
-                ]);
-
-            };
-        }
-        
-        return redirect('/edziekanat'); 
-    }
-
-    public function zlozpodanie(){
-        return Inertia::render('Podanieform');
-    }
-
-    public function podanieinfo($podanie){
-        
-        $szczegolypodania = Podanie::where('idPodanie', $podanie)->first();
-        $pliki = Plik::where('Podanie_idPodanie', $podanie)->get()->toArray();
-        // dd($pliki);
-
-        $listaplikow = [];
-
-        foreach ($pliki as $plik){
-            if(Storage::disk('public')->exists($plik['nazwa'])){
-                array_push($listaplikow, $plik);
-            }
-        }
-        // dd($listaplikow);
-
-        return Inertia::render('Podanieinfo',[
-            'szczegoly' => $szczegolypodania,
-            'listaplikow' => $listaplikow
-        ]);
-    }
-
-    public function edziekanat(Request $request){
-        $user = $request->user();
-
-
-        // $podania = Podanie::select(
-        //     'podanie.*',
-        //     'plik.*'
-        // )
-        // ->join('plik', function($join){
-        //     $join->on('idPodanie', '=', 'plik.Podanie_idPodanie');
-        // })
-        // ->where('podanie.autor', $user->idUser)
-        // ->get()
-        // ->values()
-        // ->toArray();
-        $podania = Podanie::with('plik')->where('autor', $user->idUser)->get();
-        // dd($podania);
-
-        return Inertia::render('EDziekanat', [
-            'podania' => $podania,
-        ]);
-    }
+    
 
     public function mapaKampusu(){
 

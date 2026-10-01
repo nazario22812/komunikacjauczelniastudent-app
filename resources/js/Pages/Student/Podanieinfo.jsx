@@ -1,6 +1,6 @@
 import React from "react";
-import MenuStudenta from "../Components/MenuStudenta";
-import BackButton from "../Components/BackButton";
+import MenuStudenta from "../../Components/MenuStudenta";
+import BackButton from "../../Components/BackButton";
 import { Head, Link, router } from "@inertiajs/react";
 
 function Content({ szczegoly, listaplikow }){

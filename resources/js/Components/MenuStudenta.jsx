@@ -50,7 +50,7 @@ export default function MenuStudenta(){
                     </div>
                 </Link>
                 
-                <Link href='/edziekanat' method="get" as="button" className="hover:cursor-pointer w-full">
+                <Link href='/student/edziekanat' method="get" as="button" className="hover:cursor-pointer w-full">
                     <div className="border-b-1 border-[#73768C] flex h-[30px] gap-x-[10px] items-center fustify-start">
                         <img src={Inbox} alt="edziekanat" />
                         <span className="text-[12px]">E-Dziekanat</span>
@@ -86,7 +86,7 @@ export default function MenuStudenta(){
                                 <span>Mapa kampusu</span>
                             </div>
                         </Link>
-                        <Link>
+                        <Link href='/ogloszeniaiankiety' method="get" as="button" className="hover:cursor-pointer w-full">
                             <div className="flex p-1 gap-x-[10px]">
                                 <img src={Bell} alt="ogloszeniaiankiety" />
                                 <span>Ogłoszenia i ankiety</span>

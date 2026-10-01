@@ -41,11 +41,8 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/planzajec', [UserController::class, 'planzajec'])->name('planzajec');
     Route::get('/planzajec/{grupa}', [UserController::class, 'planzajecpost'])->name('planzajec.szukaniegrupy');
     Route::get('/mapa', [UserController::class, 'mapaKampusu']);
-    Route::get('/edziekanat', [UserController::class, 'edziekanat']);
-    Route::get('/edziekanat/{podanie}', [UserController::class, 'podanieinfo']);
-    Route::get('/zlozpodanie', [UserController::class, 'zlozpodanie']);
-    Route::post('/zlozpodanie', [UserController::class, 'zlozpodaniepost']);
     Route::get('/powiadomienia', [UserController::class, 'powiadomienia']);
+    Route::get('/ogloszeniaiankiety', [UserController::class, 'ogloszniaiankiety']);
 });
 
 //trasy dla studenta 
@@ -56,6 +53,10 @@ Route::middleware(['auth', 'role:student'])->group(function (){
 
     Route::get('/student/mojefinanse', [StudentController::class, 'finanse']);
     Route::get('/student/konsultacje', [StudentController::class, 'konsultacje']);
+    Route::get('/student/edziekanat', [StudentController::class, 'edziekanat']);
+    Route::get('/student/edziekanat/{podanie}', [StudentController::class, 'podanieinfo']);
+    Route::get('/student/zlozpodanie', [StudentController::class, 'zlozpodanie']);
+    Route::post('/student/zlozpodanie', [StudentController::class, 'zlozpodaniepost']);
 });
 
 

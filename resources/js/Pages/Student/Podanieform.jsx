@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import MenuStudenta from "../Components/MenuStudenta";
-import BackButton from "../Components/BackButton";
+import MenuStudenta from "../../Components/MenuStudenta";
+import BackButton from "../../Components/BackButton";
 import { Head, router, Link, useForm } from "@inertiajs/react";
 import Form from 'react-bootstrap/Form';
 

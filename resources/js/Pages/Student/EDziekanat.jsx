@@ -1,6 +1,6 @@
 import React from "react";
-import MenuStudenta from "../Components/MenuStudenta";
-import BackButton from "../Components/BackButton";
+import MenuStudenta from "../../Components/MenuStudenta";
+import BackButton from "../../Components/BackButton";
 import { Head, router, Link } from "@inertiajs/react";
 
 
@@ -8,7 +8,7 @@ export function Podanierow({ podanie }){
     return(
         
             <tr className="text-white font-bold h-[40px] text-left text-[24px] hover:bg-[#08083b] hover:cursor-pointer"
-            onClick={() => router.get(`/edziekanat/${podanie.idPodanie}`)}
+            onClick={() => router.get(`/student/edziekanat/${podanie.idPodanie}`)}
             >
                 <td className="py-[20px]">{podanie.temat}</td>
                 <td className="py-[20px]">{podanie.data}</td>
@@ -25,7 +25,7 @@ function Content({ podania }){
             <div className="bg-[#04041d] w-full flex shrink-0 h-[40px] mx-auto text-center border-b-[0.3px] border-white p-[10px] rounded-t-[10px]">
                 <BackButton back={ () => window.history.back()} />
                 <span className="font-bold text-[16px] text-white w-full">E-Dziekanat</span>
-                <Link href='/zlozpodanie' method="get" as="button" className="text-[73768c] w-[10%] hover:cursor-pointer">Zloż podanie</Link>
+                <Link href='/student/zlozpodanie' method="get" as="button" className="text-[73768c] w-[10%] hover:cursor-pointer">Zloż podanie</Link>
             </div>
             <div className="w-full flex-1 min-h-0 pt-3 pb-2 px-1 rounded-b-[10px] flex flex-col relative ">
                 <div className="bg-[#1e293b] w-full h-full mx-auto p-5 rounded-[15px]">
