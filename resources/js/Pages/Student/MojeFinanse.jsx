@@ -25,7 +25,6 @@ function Platnoscrow({ platnosc }){
 }
 
 function Content({ platnosci, suma, najblizszytermin}){
-    console.log(platnosci)
     return (
         <div className="bg-[#04041D] w-full p-[10px] h-screen flex flex-col box-border">
             <div className="bg-[#04041d] w-full flex shrink-0 h-[40px] mx-auto text-center border-b-[0.3px] border-white p-[10px] rounded-t-[10px]">

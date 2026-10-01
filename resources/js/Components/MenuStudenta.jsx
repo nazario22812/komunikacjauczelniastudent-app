@@ -27,7 +27,7 @@ export default function MenuStudenta(){
                 <img src={Logo} alt="logo" className="w-[24px] h-[24px]" />
                 <Link href='/stronaglowna/student' method="get" as='button' className="hover:cursor-pointer"><p className="font-bold text-white text-[14px]">MojaUczelnia</p></Link>
                 <div className="w-full gap-x-[10px] px-[10px] flex items-center justify-end">
-                    <Link><img src={Notification} alt="powiadomienia" className="hover:cursor-pointer" /></Link>
+                    <Link href='/powiadomienia' method="get" as="button" className="hover:cursor-pointer"><img src={Notification} alt="powiadomienia" /></Link>
                     <Link><img src={Settings} alt="ustawienia" className="hover:cursor-pointer"/></Link>
                     <Link href='/logout' method="post" as="button" className="hover:cursor-pointer"><img src={Exit} alt="logout" /></Link>
                 </div>

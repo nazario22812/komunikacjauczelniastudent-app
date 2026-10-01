@@ -16,11 +16,21 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use App\Models\User;
 
 use function PHPSTORM_META\map;
 
 class UserController extends Controller
 {
+
+    public function powiadomienia(Request $request){
+        $user = $request->user();
+        // $powiadomienia = User::with('komunikat')->where('User_idUser', $user->idUser)->get();
+        $powiadomienia = $user->komunikat()->get()->toArray();
+        return Inertia::render('Powiadomienia',[
+            'powiadomienia' => $powiadomienia
+        ]);
+    }
     
     public function zlozpodaniepost(Request $request): RedirectResponse {
         if(empty($request->temat) || empty($request->tresc)){
