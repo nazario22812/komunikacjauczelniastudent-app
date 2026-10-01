@@ -17,7 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use App\Models\User;
-
+use App\Models\Komunikat;
 use function PHPSTORM_META\map;
 
 class UserController extends Controller
@@ -26,7 +26,7 @@ class UserController extends Controller
 
     public function ogloszniaiankiety(Request $request){
         $user = $request->user();
-        $ogloszenia = $user->komunikat()->where('czyOgloszenie', 1)->orderby('idKomunikat', 'desc')->get()->toArray();
+        $ogloszenia = Komunikat::where('czyOgloszenie', 1)->orderby('idKomunikat', 'desc')->get()->toArray();
 
         return Inertia::render('Ogloszenia',[
             'ogloszenia' => $ogloszenia
