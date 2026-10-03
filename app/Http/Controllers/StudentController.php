@@ -44,6 +44,7 @@ class StudentController extends Controller
         ->get()
         ->toArray();
 
+        // substr($item->GodzinaZakonczenia, 0, 5) ,
         // dd($ocenykoncowe);
         
 
@@ -135,7 +136,7 @@ class StudentController extends Controller
         // ->get()
         // ->values()
         // ->toArray();
-        $podania = Podanie::with('plik')->where('autor', $user->idUser)->get();
+        $podania = Podanie::where('autor', $user->idUser)->get();
         // dd($podania);
 
         return Inertia::render('Student/EDziekanat', [

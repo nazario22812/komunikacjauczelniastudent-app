@@ -18,47 +18,14 @@ function Content({ oceny }){
                 </div>   
                 <div className="bg-[#1e293b] w-full h-full mx-auto p-5 rounded-b-[15px] overflow-y-auto pr-2 custom-scrollbar">
                     {oceny && oceny.length > 0 ? (
-                            // CzyKoncowa
-                            // : 
-                            // 1
-                            // Semester
-                            // : 
-                            // 4
-                            // TytulNaukowy
-                            // : 
-                            // "dr hab. inż."
-                            // Zadanie_idZadanie
-                            // : 
-                            // null
-                            // idOcena
-                            // : 
-                            // 0
-                            // idPrzedmiot
-                            // : 
-                            // 1
-                            // idStudent
-                            // : 
-                            // 3
-                            // nazwa
-                            // : 
-                            // "Bazy Danych"
-                            // skalaOceny
-                            // : 
-                            // "3.0"
-                            // typ
-                            // : 
-                            // "Egzamin"
-                            // wykladowca_imie
-                            // : 
-                            // "Maria"
-                            // wykladowca_nazwisko
-                            // : 
-                            // "Wiśniewska"
+                            
                             <div className="w-full h-[100%]">
                                 {oceny.map((ocena) => (
-                                    <div key={ocena.id} className="w-full h-[11%] bg-[#73768c] rounded-[15px] mb-4 flex">
-                                        <span>{ocena.nazwa}</span>
-                                        <span></span>
+                                    <div key={ocena.id} className="w-full h-[11%] grid grid-cols-[1fr_1fr_1fr_1fr] flex items-center justify-center pl-5 text-white text-[15px] bg-[#73768c] rounded-[15px] mb-4 ">
+                                        <span>{ocena.nazwa} {ocena.TypZajec}</span>
+                                        <span>{ocena.TytulNaukowy} {ocena.wykladowca_imie} {ocena.wykladowca_nazwisko}</span>
+                                        <span>{ocena.typ}</span>
+                                        <span className="font-bold">{ocena.skalaOceny}</span>
                                     </div>
                                 ))}
                                
