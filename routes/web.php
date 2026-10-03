@@ -57,6 +57,7 @@ Route::middleware(['auth', 'role:student'])->group(function (){
     Route::get('/student/edziekanat/{podanie}', [StudentController::class, 'podanieinfo']);
     Route::get('/student/zlozpodanie', [StudentController::class, 'zlozpodanie']);
     Route::post('/student/zlozpodanie', [StudentController::class, 'zlozpodaniepost']);
+    Route::get('/student/ocenykoncowe', [StudentController::class, 'ocenykoncowe']);
 });
 
 

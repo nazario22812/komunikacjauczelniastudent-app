@@ -14,6 +14,8 @@ class Ocena extends Model
     protected $fillable = [
         'Semester',
         'skalaOceny',
+        'TypZajec',
+        'czyKoncowa',
         'idStudent',
         'idPrzedmiot',
         'Zadanie_idZadanie',

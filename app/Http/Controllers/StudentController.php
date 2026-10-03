@@ -12,10 +12,45 @@ use App\Models\Student;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
-
+use App\Models\Ocena;
 class StudentController extends Controller
 {
     //
+
+    public function ocenykoncowe(Request $request){
+       
+
+        $user = $request->user();
+        $student = Student::where('User_idUser', $user->idUser)->first();
+        $ocenykoncowe = Ocena::select(
+            'ocena.*',
+            'przedmiot.nazwa',
+            'przedmiot.typ',
+            'prowadzacy.TytulNaukowy',
+            'user.name AS wykladowca_imie',
+            'user.surname AS wykladowca_nazwisko'
+        )
+        ->join('przedmiot', function($join){
+            $join->on('ocena.idPrzedmiot', '=', 'przedmiot.idPrzedmiot');
+        })
+        ->join('Prowadzacy_has_Przedmiot', function($join){
+            $join->on('przedmiot.idPrzedmiot', '=', 'Prowadzacy_has_Przedmiot.Przedmiot_idPrzedmiot');
+        })
+        ->join('prowadzacy', function($join){
+            $join->on('Prowadzacy_has_Przedmiot.Prowadzacy_idProwadzacy', '=', 'prowadzacy.idProwadzacy');
+        })
+        ->leftjoin('user', 'prowadzacy.User_idUser', '=', 'user.idUser')
+        ->where([['ocena.idStudent', $student->idStudent], ['ocena.CzyKoncowa', 1]])
+        ->get()
+        ->toArray();
+
+        // dd($ocenykoncowe);
+        
+
+        return Inertia::render('Student/Oceny', [
+            'oceny' => $ocenykoncowe
+        ]);
+    }
 
     public function zlozpodaniepost(Request $request): RedirectResponse {
         if(empty($request->temat) || empty($request->tresc)){

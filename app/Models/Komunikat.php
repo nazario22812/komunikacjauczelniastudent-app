@@ -15,8 +15,7 @@ class Komunikat extends Model
     protected $fillable = [
         'temat',
         'tresc',
-        'odbiorcy',
-        'nadawca',
+        'czyOgloszenie'
     ];
 
     public function user(){
