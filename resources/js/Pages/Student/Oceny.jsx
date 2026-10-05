@@ -1,10 +1,13 @@
 import React from "react";
 import MenuStudenta from "../../Components/MenuStudenta";
-import { Head } from "@inertiajs/react";
+import { Head, useForm, router } from "@inertiajs/react";
 import BackButton from "../../Components/BackButton";
+import Form from 'react-bootstrap/Form';
+import { useState } from "react";
 
-function Content({ oceny }){
-    console.log(oceny)
+function Content({ oceny, semestry, studentsem }){
+    const [sem, setsem] = useState(studentsem)
+    const filteroceny = oceny.filter(ocena => ocena.Semester === Number(sem))
     return (
         
         <div className="bg-[#04041D] w-full p-[10px] h-screen flex flex-col box-border">
@@ -13,14 +16,23 @@ function Content({ oceny }){
                 <span className="font-bold text-[16px] text-white w-full">Twoje oceny</span>
             </div>
             <div className="w-full flex-1 min-h-0 pt-3 pb-2 px-4 rounded-b-[10px] flex flex-col relative ">
-                <div className="bg-[#06062c] w-full h-[15%] mx-auto rounded-t-[15px] px-[12px] flex text-left items-center" > 
+                <div className="bg-[#06062c] w-full h-[15%] mx-auto rounded-t-[15px] px-[12px] flex text-left items-center gap-2.5" > 
                     <span className="text-white font-bold text-[36px] ">Oceny końcowe</span>    
-                </div>   
+                    <form action="" className="w-[15%]  absolute  right-5">
+                        <Form.Select onChange={(e) => {setsem(e.target.value)}} className="w-full border border-white rounded-[15px] bg-[#1e293b] text-white h-[40px]">
+                            <option value={studentsem}>Wybierz semester</option>
+                            {semestry.map((semester) => (
+                                <option key={semester.id} value={semester.Semester}>{semester.Semester}</option>    
+                            ))}  
+                        </Form.Select>
+                    </form>
+                </div>
+                  
                 <div className="bg-[#1e293b] w-full h-full mx-auto p-5 rounded-b-[15px] overflow-y-auto pr-2 custom-scrollbar">
-                    {oceny && oceny.length > 0 ? (
+                    {filteroceny && filteroceny.length > 0 ? (
                             
                             <div className="w-full h-[100%]">
-                                {oceny.map((ocena) => (
+                                {filteroceny.map((ocena) => (
                                     <div key={ocena.id} className="w-full h-[11%] grid grid-cols-[1fr_1fr_1fr_1fr] flex items-center justify-center pl-5 text-white text-[15px] bg-[#73768c] rounded-[15px] mb-4 ">
                                         <span>{ocena.nazwa} {ocena.TypZajec}</span>
                                         <span>{ocena.TytulNaukowy} {ocena.wykladowca_imie} {ocena.wykladowca_nazwisko}</span>
@@ -42,7 +54,7 @@ function Content({ oceny }){
     )
 }
 
-export default function Oceny({ auth, oceny }) {
+export default function Oceny({ auth, oceny, semestry, studentsem }) {
     return (
         // <div>
         //     <p>ja student</p>
@@ -52,7 +64,7 @@ export default function Oceny({ auth, oceny }) {
         <div className="flex">
             <Head title="Oceny"/>
             <MenuStudenta/>
-            <Content oceny={oceny}/>
+            <Content oceny={oceny} semestry={semestry} studentsem={studentsem}/>
         </div>
     );
 }

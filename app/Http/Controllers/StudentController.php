@@ -43,13 +43,17 @@ class StudentController extends Controller
         ->where([['ocena.idStudent', $student->idStudent], ['ocena.CzyKoncowa', 1]])
         ->get()
         ->toArray();
-
+        // SELECT DISTINCT `Semester` FROM `ocena` ORDER BY `Semester` DESC;
+        $semestry = Ocena::select('Semester')->distinct()->orderby('Semester', 'desc')->where([['idStudent', $student->idStudent], ['ocena.CzyKoncowa', 1]])->get()->toArray();
+        $studentsem = $student->semester;
         // substr($item->GodzinaZakonczenia, 0, 5) ,
         // dd($ocenykoncowe);
         
 
         return Inertia::render('Student/Oceny', [
-            'oceny' => $ocenykoncowe
+            'oceny' => $ocenykoncowe,
+            'semestry' => $semestry,
+            'studentsem' => $studentsem
         ]);
     }
 
