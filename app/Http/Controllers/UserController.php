@@ -30,8 +30,8 @@ class UserController extends Controller
         $ogloszenia = Komunikat::where('czyOgloszenie', 1)->orderby('idKomunikat', 'desc')->get()->toArray();
         $ankiety = Ankieta::orderby('idAnkieta', 'desc')->get()->toArray();
         return Inertia::render('Ogloszenia',[
-            'ogloszenia' => $ogloszenia,
-            'ankiety' => $ankiety
+            'ogloszenia' => array_slice($ogloszenia, 0, 10),
+            'ankiety' => array_slice($ankiety, 0, 10)
         ]);
     }
 

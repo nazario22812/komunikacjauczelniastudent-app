@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kurs;
 use App\Models\Planzajec;
 use Illuminate\Http\RedirectResponse;
 use App\Models\Podanie;
@@ -17,9 +18,16 @@ class StudentController extends Controller
 {
     //
 
-    public function ocenykoncowe(Request $request){
-       
+    public function mojekursy(Request $request){
+        $user = $request->user();
+        $student = Student::where('User_idUser', $user->idUser)->first();
+        $listakursow = $student->kurs()->get()->toArray();
+        return Inertia::render('Student/Mojekursy',[
+            'mojekursy' => $listakursow
+        ]);
+    }
 
+    public function ocenykoncowe(Request $request){
         $user = $request->user();
         $student = Student::where('User_idUser', $user->idUser)->first();
         $ocenykoncowe = Ocena::select(

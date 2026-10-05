@@ -55,6 +55,6 @@ class Student extends Model
     }
 
     public function kurs(){
-        return $this->belongsToMany(Kurs::class, 'kurs_has_student', 'Kurs_idkurs', 'Student_idStudent');
+        return $this->belongsToMany(Kurs::class, 'kurs_has_student', 'Student_idStudent', 'Kurs_idkurs');
     }
 }
