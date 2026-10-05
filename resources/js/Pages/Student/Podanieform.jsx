@@ -47,7 +47,7 @@ function Content({}){
     const wyslijpodanie = (e) => {
         e.preventDefault();
 
-        post('/zlozpodanie', {
+        post('/student/zlozpodanie', {
             forceFormData: true,
         });
     }

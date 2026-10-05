@@ -93,7 +93,7 @@ class StudentController extends Controller
             };
         }
         
-        return redirect('/edziekanat'); 
+        return redirect('/student/edziekanat'); 
     }
 
     public function zlozpodanie(){
