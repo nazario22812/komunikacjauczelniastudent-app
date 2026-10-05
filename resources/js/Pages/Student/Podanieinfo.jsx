@@ -41,7 +41,7 @@ function Content({ szczegoly, listaplikow }){
                             <span className="text-[#73768c] font-bold text-[20px]">Załączniki</span><br />
                             {listaplikow.map((plik, index) => (
                                 <div key={index}>
-                                    <a href={`/storage/${plik.nazwa}`} target="_blank" className="text-[17px] text-[#73768C]">🗒️{plik.nazwa}, </a>
+                                    <a href={`/storage/${plik.nazwa}`} target="_blank" className="text-[17px] text-[#73768C]">🔗{plik.nazwa}, </a>
                                 </div>
                             ))}
                                                     

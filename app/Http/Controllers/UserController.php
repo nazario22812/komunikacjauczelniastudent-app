@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ankieta;
 use App\Models\Budynek;
 use App\Models\Grupastudenta;
 use App\Models\Kierunek;
@@ -27,16 +28,17 @@ class UserController extends Controller
     public function ogloszniaiankiety(Request $request){
         $user = $request->user();
         $ogloszenia = Komunikat::where('czyOgloszenie', 1)->orderby('idKomunikat', 'desc')->get()->toArray();
-
+        $ankiety = Ankieta::orderby('idAnkieta', 'desc')->get()->toArray();
         return Inertia::render('Ogloszenia',[
-            'ogloszenia' => $ogloszenia
+            'ogloszenia' => $ogloszenia,
+            'ankiety' => $ankiety
         ]);
     }
 
     public function powiadomienia(Request $request){
         $user = $request->user();
         // $powiadomienia = User::with('komunikat')->where('User_idUser', $user->idUser)->get();
-        $powiadomienia = $user->komunikat()->where('czyOgloszenie', 0)->get()->toArray();
+        $powiadomienia = $user->komunikat()->where('czyOgloszenie', 0)->orderby('idKomunikat', 'desc')->get()->toArray();
         return Inertia::render('Powiadomienia',[
             'powiadomienia' => $powiadomienia
         ]);
