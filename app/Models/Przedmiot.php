@@ -32,4 +32,8 @@ class Przedmiot extends Model
     public function ocena(){
         return $this->hasMany(Ocena::class, 'idPrzedmiot', 'idPrzedmiot');
     }
+
+    public function kurs(){
+        return $this->hasMany(Kurs::class, 'Przedmiot_idPrzedmiot', 'idPrzedmiot');
+    }
 }

@@ -16,6 +16,7 @@ class Zadanie extends Model
         'TerminOddania',
         'CzyNaOcene',
         'Zajęcie_idZajęcie',
+        'kurs_idkurs'
     ];
 
     public function ocena(){
@@ -27,5 +28,9 @@ class Zadanie extends Model
 
     public function student(){
         return $this->belongsToMany(Student::class, 'student_has_zadanie',  'Student_idStudent','Zadanie_idZadanie',);
+    }
+
+    public function kurs(){
+        return $this->belongsTo(Kurs::class, 'kurs_idkurs', 'idkurs');
     }
 }

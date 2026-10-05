@@ -28,9 +28,7 @@ class Zajecie extends Model
         return $this->belongsTo(Przedmiot::class, 'Predmiot_idPrzedmiot', 'idPrzedmiot');
     }
 
-    public function plik(){
-        return $this->belongsToMany(Plik::class, 'plik_has_zajęcie', 'Plik_idPlik', 'Zajęcie_idZajęcie', 'Zajęcie_PlanZajec_idPlanZajec', 'Zajęcie_Sala_idSala', 'Zajęcie_Sala_Budynek_idBudynek');
-    }
+    
 
     public function planzajec(){
         return $this->belongsTo(PlanZajec::class, 'PlanZajec_idPlanZajec', 'idPlanZajec');

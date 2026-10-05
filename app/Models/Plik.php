@@ -20,11 +20,14 @@ class Plik extends Model
         'Podanie_idPodanie'
     ];
 
-    public function zajecie(){
-        return $this->belongsToMany(Zajecie::class, 'plik_has_zajęcie', 'Plik_idPlik', 'Zajęcie_idZajęcie', 'Zajęcie_PlanZajec_idPlanZajec', 'Zajęcie_Sala_idSala', 'Zajęcie_Sala_Budynek_idBudynek');
-    }
+   
 
     public function podanie(){
         return $this->belongsTo(Podanie::class, 'Podanie_idPodanie', 'idPodanie');
     }
+    public function plik(){
+        return $this->belongsTo(Kurs::class, 'Kurs_idkurs', 'idkurs');
+    }
+
+
 }

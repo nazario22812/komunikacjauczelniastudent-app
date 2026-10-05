@@ -17,9 +17,7 @@ class Prowadzacy extends Model
         'katedra',
         'User_idUser',
         'Zajęcie_idZajęcie',
-        'Zajęcie_PlanZajec_idPlanZajec',
-        'Zajęcie_Sala_idSala',
-        'Zajęcie_Sala_Budynek_idBudynek'
+        
     ];
 
     public function user(){
@@ -37,5 +35,8 @@ class Prowadzacy extends Model
 
     public function zajecie(){
         return $this->hasMany(Zajecie::class, 'Prowadzacy_idProwadzacy', 'idProwadzacy');
+    }
+    public function kurs(){
+        return $this->hasMany(Kurs::class, 'Prowadzacy_idProwadzacy', 'idProwadzacy');
     }
 }

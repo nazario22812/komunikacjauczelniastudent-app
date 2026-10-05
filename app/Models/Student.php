@@ -54,5 +54,7 @@ class Student extends Model
         return $this->belongsToMany(Zadanie::class, 'student_has_zadanie', 'Student_idStudent', 'Zadanie_idZadanie');
     }
 
-
+    public function kurs(){
+        return $this->belongsToMany(Kurs::class, 'kurs_has_student', 'Kurs_idkurs', 'Student_idStudent');
+    }
 }

@@ -14,14 +14,13 @@ class Ankieta extends Model
 
     protected $fillable = [
         'temat',
-        'opis'
+        'opis',
+        'link'
     ];
 
     public function user(){
         return $this->belongsToMany(User::class, 'user_has_ankieta', 'Ankieta_idAnkieta', 'User_idUser');
     }
 
-    public function pytania(){
-        return $this->hasMany(Pytania::class, 'Ankieta_idAnkieta', 'idAnkieta');
-    }
+    
 }
