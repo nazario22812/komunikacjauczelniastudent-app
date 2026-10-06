@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kierunek;
 use App\Models\Kurs;
 use App\Models\Planzajec;
 use Illuminate\Http\RedirectResponse;
@@ -22,8 +23,15 @@ class StudentController extends Controller
         $user = $request->user();
         $student = Student::where('User_idUser', $user->idUser)->first();
         $listakursow = $student->kurs()->with('prowadzacy.user')->get()->toArray();
+        $listawszystkichkursow = Kurs::where('Kierunek_idKierunek', $student->Kierunek_idKierunek)->with('prowadzacy.user')->get()->toArray();
+        $semestrykursow = Kurs::select('Semester')->distinct()->orderby('Semester', 'desc')->where('Kierunek_idKierunek', $student->Kierunek_idKierunek)->get()->toArray();;
+        $kierunek = Kierunek::where('idKierunek', $student->Kierunek_idKierunek)->first();
+        // dd($listawszystkichkursow);
         return Inertia::render('Student/Mojekursy',[
-            'mojekursy' => $listakursow
+            'mojekursy' => $listakursow,
+            'wszystkiekursy' => $listawszystkichkursow,
+            'listasemestrow' => $semestrykursow,
+            'kierunekstudenta' => $kierunek
         ]);
     }
 

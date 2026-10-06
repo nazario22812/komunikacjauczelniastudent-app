@@ -1,12 +1,12 @@
 import React from "react";
 import MenuStudenta from "../../Components/MenuStudenta";
-import { Head } from "@inertiajs/react";
+import { Head, Link } from "@inertiajs/react";
 import BackButton from "../../Components/BackButton";
 import Lupa from '@/../images/search-rounded.png';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { useState } from 'react';
 
-function Content({ mojekursy }){
+function Content({ mojekursy, wszystkiekursy, listasemestrow, kierunekstudenta }){
     const [pokaz, setpokaz] = useState(false);
     const handleClose = () => setpokaz(false);
     const handleOpen = () => setpokaz(true);
@@ -52,7 +52,7 @@ function Content({ mojekursy }){
                                     </div>
 
                                     <button className="w-full bg-[#06062c] hover:bg-[#101042] text-white py-2 rounded-[10px] text-center font-medium hover:cursor-pointer">
-                                        Zapisz się
+                                        Otwórz kurs
                                     </button>
                                 </div>
                             ))}
@@ -71,7 +71,7 @@ function Content({ mojekursy }){
 
                 </div>
             )}     
-            <div className={`fixed top-0 right-0 h-full w-[400px] bg-[#04041D] border-l border-white/20 shadow-2xl z-50 p-6 flex flex-col text-white transition-transform duration-300 ease-in-out ${pokaz ? 'translate-x-0' : 'translate-x-full'}`}>
+            <div className={`fixed top-0 right-0 h-full w-[500px] bg-[#04041D] border-l border-white/20 shadow-2xl z-50 p-6 flex flex-col text-white transition-transform duration-300 ease-in-out ${pokaz ? 'translate-x-0' : 'translate-x-full'}`}>
                 
                 <div className="flex justify-between items-center pb-4 border-b border-white/20">
                     <h2 className="font-bold text-[20px]">Wszystkie kursy</h2>
@@ -84,7 +84,31 @@ function Content({ mojekursy }){
                 </div>
 
                 <div className="flex-1 overflow-y-auto custom-scrollbar py-4">
-                    
+                    <h1 className="text-[22px] font-semibold">{kierunekstudenta.nazwa}</h1>
+
+                    {wszystkiekursy && wszystkiekursy.length > 0 ? (
+                        <div>
+                            {listasemestrow.map((semestr) => (
+                                <div key={semestr.id} className="pb-2">
+                                    <h1 className="text-[18px]">{semestr.Semester} semester</h1>
+                                
+                                    <div className="flex flex-col gap-1">
+                                        {wszystkiekursy.filter((kurs) => kurs.Semester === semestr.Semester).map((kurs)=> (
+                                            <div key={kurs.id}>
+                                                <Link className="text-[14px] pl-5 text-[#73768c]">{kurs.nazwa}, {kurs.prowadzacy.TytulNaukowy} {kurs.prowadzacy.user.name} {kurs.prowadzacy.user.surname}</Link>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+
+                            ))}
+                        </div>
+                    ):(
+                        <div className="w-full flex-1 flex items-center justify-center text-[24px] text-[#73768C]">
+                            <span>Brak kursów</span>
+                        </div>
+                    )}
                 </div>
 
             </div>
@@ -93,7 +117,7 @@ function Content({ mojekursy }){
     );
 }
 
-export default function MojeKursy({ auth, mojekursy }) {
+export default function MojeKursy({ auth, mojekursy, wszystkiekursy,listasemestrow, kierunekstudenta }) {
     return (
         // <div>
         //     <p>ja student</p>
@@ -103,7 +127,7 @@ export default function MojeKursy({ auth, mojekursy }) {
         <div className="flex">
             <Head title="Moje kursy"/>
             <MenuStudenta/>
-            <Content mojekursy={mojekursy}/>
+            <Content mojekursy={mojekursy} wszystkiekursy={wszystkiekursy} listasemestrow={listasemestrow} kierunekstudenta={kierunekstudenta}/>
         </div>
     );
 }
