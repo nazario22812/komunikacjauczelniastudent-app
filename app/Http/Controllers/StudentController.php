@@ -21,7 +21,7 @@ class StudentController extends Controller
     public function mojekursy(Request $request){
         $user = $request->user();
         $student = Student::where('User_idUser', $user->idUser)->first();
-        $listakursow = $student->kurs()->get()->toArray();
+        $listakursow = $student->kurs()->with('prowadzacy.user')->get()->toArray();
         return Inertia::render('Student/Mojekursy',[
             'mojekursy' => $listakursow
         ]);

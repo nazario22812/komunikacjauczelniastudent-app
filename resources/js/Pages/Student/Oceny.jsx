@@ -18,14 +18,14 @@ function Content({ oceny, semestry, studentsem }){
             <div className="w-full flex-1 min-h-0 pt-3 pb-2 px-4 rounded-b-[10px] flex flex-col relative ">
                 <div className="bg-[#06062c] w-full h-[15%] mx-auto rounded-t-[15px] px-[12px] flex text-left items-center gap-2.5" > 
                     <span className="text-white font-bold text-[36px] ">Oceny końcowe</span>    
-                    <form action="" className="w-[15%]  absolute  right-5">
+                    <div action="" className="w-[15%]  absolute  right-5">
                         <Form.Select onChange={(e) => {setsem(e.target.value)}} className="w-full border border-white rounded-[15px] bg-[#1e293b] text-white h-[40px]">
                             <option value={studentsem}>Wybierz semester</option>
                             {semestry.map((semester) => (
                                 <option key={semester.id} value={semester.Semester}>{semester.Semester}</option>    
                             ))}  
                         </Form.Select>
-                    </form>
+                    </div>
                 </div>
                   
                 <div className="bg-[#1e293b] w-full h-full mx-auto p-5 rounded-b-[15px] overflow-y-auto pr-2 custom-scrollbar">
