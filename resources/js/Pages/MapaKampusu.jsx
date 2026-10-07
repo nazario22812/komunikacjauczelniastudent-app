@@ -6,6 +6,7 @@ import Lupa from '@/../images/search-rounded.png';
 import { MapContainer, Polygon, TileLayer, Polyline, Popup, Marker } from "react-leaflet";
 import 'leaflet/dist/leaflet.css'
 import { useGeolocated } from "react-geolocated";
+import { ToastContainer, toast } from "react-toastify";
 
 
 
@@ -45,7 +46,20 @@ function Content({sale}){
     return (
         // <div className="w-full">
         // </div>
+        
         <div className="bg-[#04041D] w-full p-[10px] h-screen flex flex-col box-border">
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick={false}
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+            />
             <div className="bg-[#04041d] w-full flex shrink-0 h-[40px] mx-auto text-center border-b-[0.3px] border-white p-[10px] rounded-t-[10px]">
                 <BackButton back={ () => window.history.back()} />
                 <span className="font-bold text-[16px] text-white w-full">Mapa kampusu</span>
@@ -100,9 +114,17 @@ function Content({sale}){
                     </div>
                     <div className="w-full mx-auto h-[28px] px-[18px] my-3 flex items-center mt-10">
                         <button  type="button" onClick={() => {
-                            if(filtersale.length > 0){
                                 if (!searchItem.trim()) {
-                                        alert("Wpisz numer sali!");
+                                        toast.info('Wpisz salę', {
+                                                position: "bottom-right",
+                                                autoClose: 5000,
+                                                hideProgressBar: false,
+                                                closeOnClick: false,
+                                                pauseOnHover: true,
+                                                draggable: true,
+                                                progress: undefined,
+                                                theme: "dark",
+                                            });
                                         return;
                                     }
                                         
@@ -112,11 +134,20 @@ function Content({sale}){
                                         
                                     if (found) {
                                         handleSelectSuggestion(found);
-                                    } else if (filtersale.length > 0) {
-                                        handleSelectSuggestion(filtersale[0]);
-                                    } else {
-                                        alert("Nie znaleziono takiej sali.");
-                                    }                            }
+                                    } 
+                                    else {
+                                        toast.error('Nie znaleziono takiej sali', {
+                                                position: "bottom-right",
+                                                autoClose: 5000,
+                                                hideProgressBar: false,
+                                                closeOnClick: false,
+                                                pauseOnHover: true,
+                                                draggable: true,
+                                                progress: undefined,
+                                                theme: "dark",
+                                            });
+                                    }                           
+                                
                         }} className="text-[15px] h-[40px] mx-auto w-3/4  text-white bg-[#f97316] rounded-[15px] hover:cursor-pointer active:bg-[#c55b11]">
                             Wyszukaj
                         </button>
