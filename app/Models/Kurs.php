@@ -17,6 +17,7 @@ class Kurs extends Model
         'kod',
         'Przedmiot_idPrzedmiot',
         'Prowadzacy_idProwadzacy',
+        'Kierunek_idKierunek'
     ];
 
     public function student(){
@@ -41,5 +42,8 @@ class Kurs extends Model
 
     public function zadanie(){
         return $this->hasMany(Zadanie::class, 'kurs_idkurs', 'idkurs');
+    }
+    public function kierunek(){
+        return $this->belongsTo(Kierunek::class, 'Kierunek_idKierunek', 'idKierunek');
     }
 }

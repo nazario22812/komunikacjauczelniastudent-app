@@ -15,18 +15,29 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Ocena;
+use App\Models\Przedmiot;
+
 class StudentController extends Controller
 {
     //
-
+    public function mojekursypost(Request $request, $idkurs) : RedirectResponse{
+        $user = $request->user();
+        $student = Student::where('User_idUser', $user->idUser)->first();
+        $kurs = Kurs::where('idkurs', $idkurs)->first();
+        if($student->kurs()->where('Kurs_idkurs', $idkurs)->exists()){
+            return redirect('/student/mojekursy')->with('status', 'Jesteś już na tym kursie');
+        }
+        $student->kurs()->syncWithoutDetaching([$idkurs]);  // przypisuje do tabeli pomocniczej ale jezeli taki wpis jest to nic z nim nie robie
+        return redirect('/student/mojekursy')->with('status', 'Jesteś zapisany na kurs');
+    }
     public function mojekursy(Request $request){
         $user = $request->user();
         $student = Student::where('User_idUser', $user->idUser)->first();
         $listakursow = $student->kurs()->with('prowadzacy.user')->get()->toArray();
-        $listawszystkichkursow = Kurs::where('Kierunek_idKierunek', $student->Kierunek_idKierunek)->with('prowadzacy.user')->get()->toArray();
-        $semestrykursow = Kurs::select('Semester')->distinct()->orderby('Semester', 'desc')->where('Kierunek_idKierunek', $student->Kierunek_idKierunek)->get()->toArray();;
+        $listawszystkichkursow = Kurs::where('Kierunek_idKierunek', $student->Kierunek_idKierunek)->with(['prowadzacy.user', 'przedmiot'])->get()->toArray();
+        $semestrykursow = Kurs::select('Semester')->distinct()->orderby('Semester', 'desc')->where('Kierunek_idKierunek', $student->Kierunek_idKierunek)->get()->toArray();
         $kierunek = Kierunek::where('idKierunek', $student->Kierunek_idKierunek)->first();
-        // dd($listawszystkichkursow);
+        // dd($przedmiotykursow);
         return Inertia::render('Student/Mojekursy',[
             'mojekursy' => $listakursow,
             'wszystkiekursy' => $listawszystkichkursow,

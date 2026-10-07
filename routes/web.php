@@ -59,6 +59,7 @@ Route::middleware(['auth', 'role:student'])->group(function (){
     Route::post('/student/zlozpodanie', [StudentController::class, 'zlozpodaniepost']);
     Route::get('/student/ocenykoncowe', [StudentController::class, 'ocenykoncowe']);
     Route::get('/student/mojekursy', [StudentController::class, 'mojekursy']);
+    Route::post('/student/mojekursy/{idkurs}', [StudentController::class, 'mojekursypost']);
 });
 
 
