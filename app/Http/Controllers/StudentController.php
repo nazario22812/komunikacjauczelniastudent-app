@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Kierunek;
 use App\Models\Kurs;
+use App\Models\Literatura;
 use App\Models\Planzajec;
 use Illuminate\Http\RedirectResponse;
 use App\Models\Podanie;
@@ -16,6 +17,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Ocena;
 use App\Models\Przedmiot;
+use App\Models\Sylabus;
 
 class StudentController extends Controller
 {
@@ -23,8 +25,18 @@ class StudentController extends Controller
 
     public function kurs($nazwa, $idkurs){
         $kurs = Kurs::where('idKurs', $idkurs)->with(['prowadzacy.user', 'przedmiot'])->first();
+        $materialy = Plik::where('Kurs_idKurs', $idkurs)->get()->toArray();
+
+        $przedmiot = Przedmiot::where('idPrzedmiot', $kurs->Przedmiot_idPrzedmiot)->first();
+        $sylabus = Sylabus::where('Przedmiot_idPrzedmiot', $przedmiot->idPrzedmiot)->first();
+        $literatura = Literatura::where('Sylabus_idSylabus', $sylabus->idSylabus)->get()->toArray();
+        // dd($literatura);
         return Inertia::render('Student/Kurs', [
-            'kurs' => $kurs
+            'kurs' => $kurs,
+            'materialy' => $materialy,
+            'przedmiot' => $przedmiot,
+            'sylabus' => $sylabus,
+            'literatura' => $literatura
         ]);
     }
 
