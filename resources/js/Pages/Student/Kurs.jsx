@@ -67,7 +67,38 @@ function Sylabusplusliteratura({sylabus, literatura, przedmiot, kurs}){
     );
 }
 
-function Content({ kurs, materialy, sylabus, literatura, przedmiot }){
+function Oceny({oceny}){
+    return(
+        <div className="overflow-x-auto rounded-[10px] border border-gray-700/60">
+            <table className="w-full text-left border-collapse">
+                <thead>
+                    <tr className="border-b border-gray-700 text-[#73768C] text-[14px]">
+                        <th className="p-3 font-medium">Nazwa Zadania</th>
+                        <th className="p-3 font-medium">Ocena</th>
+                    </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-800 text-[14px]">
+                    {oceny && oceny.length > 0 ? (
+                        oceny.map((ocena) => (
+                            <tr key={ocena.id} className="hover:bg-[#1e293b]/50 transition-colors">
+                                <td className="p-3 font-medium text-white">{ocena.nazwaZadania || '—'}</td>
+                                <td className="p-3 font-bold text-white">{ocena.skalaOceny}</td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="5" className="p-4 text-center text-gray-400">
+                                Brak ocen
+                            </td>
+                        </tr>
+                    )}
+                </tbody>
+            </table>
+        </div>
+    );
+}
+
+function Content({ kurs, materialy, sylabus, literatura, przedmiot, oceny }){
    
 
     
@@ -104,7 +135,7 @@ function Content({ kurs, materialy, sylabus, literatura, przedmiot }){
                                 <h2>Any content 4</h2>
                             </TabPanel>
                              <TabPanel className="hidden bg-[#06062c] h-full rounded-b-[10px]  text-white">
-                                <h2>Any content 3</h2>
+                                <Oceny oceny={oceny}/>
                             </TabPanel>
                              <TabPanel className="hidden bg-[#06062c] h-full rounded-b-[10px]  text-white">
                                 <Sylabusplusliteratura sylabus={sylabus} literatura={literatura} przedmiot={przedmiot} kurs={kurs}/>
@@ -119,7 +150,7 @@ function Content({ kurs, materialy, sylabus, literatura, przedmiot }){
     );
 }
 
-export default function MojeKursy({ auth, kurs, materialy, sylabus, literatura, przedmiot }) {
+export default function MojeKursy({ auth, kurs, materialy, sylabus, literatura, przedmiot, oceny }) {
     
     return (
         // <div>
@@ -131,7 +162,7 @@ export default function MojeKursy({ auth, kurs, materialy, sylabus, literatura, 
            
             <Head title="Moje kursy"/>
             <MenuStudenta/>
-            <Content kurs={kurs} materialy={materialy} sylabus={sylabus} literatura={literatura} przedmiot={przedmiot}/>
+            <Content kurs={kurs} materialy={materialy} sylabus={sylabus} literatura={literatura} przedmiot={przedmiot} oceny={oceny}/>
         </div>
     );
 }

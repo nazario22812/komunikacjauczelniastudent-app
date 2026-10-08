@@ -12,7 +12,7 @@ class Zadanie extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'nazwa',
+        'nazwaZadania',
         'tresc',
         'TerminOddania',
         'CzyNaOcene',

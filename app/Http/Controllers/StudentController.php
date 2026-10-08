@@ -23,20 +23,43 @@ class StudentController extends Controller
 {
     //
 
-    public function kurs($nazwa, $idkurs){
+    public function kurs(Request $request, $nazwa, $idkurs){
+
+
+        $user = $request->user();
+        $student = Student::where('User_idUser', $user->idUser)->first();
+
         $kurs = Kurs::where('idKurs', $idkurs)->with(['prowadzacy.user', 'przedmiot'])->first();
         $materialy = Plik::where('Kurs_idKurs', $idkurs)->get()->toArray();
 
         $przedmiot = Przedmiot::where('idPrzedmiot', $kurs->Przedmiot_idPrzedmiot)->first();
         $sylabus = Sylabus::where('Przedmiot_idPrzedmiot', $przedmiot->idPrzedmiot)->first();
         $literatura = Literatura::where('Sylabus_idSylabus', $sylabus->idSylabus)->get()->toArray();
-        // dd($literatura);
+
+        $oceny = Ocena::select(
+            'ocena.*',
+            'zadanie.*',
+            'kurs.*'
+        )
+        ->join('zadanie', function($join){
+            $join->on('ocena.Zadanie_idZadanie', '=', 'zadanie.idZadanie');
+        })
+        ->join('kurs', function($join){
+            $join->on('zadanie.kurs_idkurs', '=', 'kurs.idkurs');
+        })
+        ->where([['ocena.idStudent', $student->idStudent], ['kurs.idkurs', $idkurs], ['ocena.czyKoncowa', 0]])
+        ->whereNotNull('ocena.Zadanie_idZadanie')
+        ->orderby('ocena.idOcena', 'desc')
+        ->get()->toArray();
+
+        // dd($oceny);
         return Inertia::render('Student/Kurs', [
             'kurs' => $kurs,
             'materialy' => $materialy,
             'przedmiot' => $przedmiot,
             'sylabus' => $sylabus,
-            'literatura' => $literatura
+            'literatura' => $literatura,
+            'oceny' => $oceny
         ]);
     }
 
