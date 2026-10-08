@@ -52,7 +52,7 @@ class User extends Model implements \Illuminate\Contracts\Auth\Authenticatable
     }
 
     public function pracownikdziekanatu(){
-        return $this->hasOne(PracownikDziekanatu::class, 'User_idUser', 'idUser');
+        return $this->hasOne(Pracownikdziekanatu::class, 'User_idUser', 'idUser');
     }
 
     public function isStudent(): bool

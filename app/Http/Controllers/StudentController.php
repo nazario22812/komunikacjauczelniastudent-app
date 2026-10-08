@@ -103,11 +103,11 @@ class StudentController extends Controller
         ->join('przedmiot', function($join){
             $join->on('ocena.idPrzedmiot', '=', 'przedmiot.idPrzedmiot');
         })
-        ->join('Prowadzacy_has_Przedmiot', function($join){
-            $join->on('przedmiot.idPrzedmiot', '=', 'Prowadzacy_has_Przedmiot.Przedmiot_idPrzedmiot');
+        ->join('prowadzacy_has_przedmiot', function($join){
+            $join->on('przedmiot.idPrzedmiot', '=', 'prowadzacy_has_przedmiot.przedmiot_idPrzedmiot');
         })
         ->join('prowadzacy', function($join){
-            $join->on('Prowadzacy_has_Przedmiot.Prowadzacy_idProwadzacy', '=', 'prowadzacy.idProwadzacy');
+            $join->on('prowadzacy_has_przedmiot.prowadzacy_idProwadzacy', '=', 'prowadzacy.idProwadzacy');
         })
         ->leftjoin('user', 'prowadzacy.User_idUser', '=', 'user.idUser')
         ->where([['ocena.idStudent', $student->idStudent], ['ocena.CzyKoncowa', 1]])
@@ -117,7 +117,7 @@ class StudentController extends Controller
         $semestry = Ocena::select('Semester')->distinct()->orderby('Semester', 'desc')->where([['idStudent', $student->idStudent], ['ocena.CzyKoncowa', 1]])->get()->toArray();
         $studentsem = $student->semester;
         // substr($item->GodzinaZakonczenia, 0, 5) ,
-        // dd($ocenykoncowe);
+        // dd($semestry);
         
 
         return Inertia::render('Student/Oceny', [

@@ -1,58 +1,60 @@
 
 
-version: '3.8'
+  version: '3.8'
 
-services:
-  mysql:
-    image: mysql:8.0
-    container_name: baza_komunikacjauczelniastudent
-    restart: always
-    environment:
-      MYSQL_DATABASE: komuniakcjauczelniastudent
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+  services:
+    mysql:
+      image: mysql:8.0
+      container_name: baza_komunikacjauczelniastudent
+      restart: always
+      environment:
+        MYSQL_DATABASE: komuniakcjauczelniastudent
+        MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      
+      ports:
+        - "3307:3306"
+      volumes:
+        - mysql_data:/var/lib/mysql
+
+    laravel:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      
+      container_name: beck_komunikacjauczelniastudent
+      restart: always
+      working_dir: /komunikacjauczelniastudent-app
+      volumes:
+        - ./:/komunikacjauczelniastudent-app
+        - /komunikacjauczelniastudent-app/vendor
+      ports:
+        - "8000:8000"
+      depends_on:
+        - mysql
+      extra_hosts:
+        - "host.docker.internal:host-gateway"
+
+    react:
+      image: node:20-alpine
+      container_name: front_komunikacjauczelniastudent
+      working_dir: /komunikacjauczelniastudent-app
+      volumes:
+        - ./:/komunikacjauczelniastudent-app
+      ports:
+        - "5173:5173"
+      command: sh -c "npm install --force && npm run dev -- --host"
     
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-
-  laravel:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    
-    container_name: beck_komunikacjauczelniastudent
-    restart: always
-    working_dir: /komunikacjauczelniastudent-app
-    volumes:
-      - ./:/komunikacjauczelniastudent-app
-      - /komunikacjauczelniastudent-app/vendor
-    ports:
-      - "8000:8000"
-    depends_on:
-      - mysql
-
-  react:
-    image: node:20-alpine
-    container_name: front_komunikacjauczelniastudent
-    working_dir: /komunikacjauczelniastudent-app
-    volumes:
-      - ./:/komunikacjauczelniastudent-app
-    ports:
-      - "5173:5173"
-    command: sh -c "npm install --force && npm run dev -- --host"
-  
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: pma_komunikacjauczelniastudent
-    restart: always
-    environment:
-      PMA_HOST: mysql
-      PMA_USER: root
-      PMA_PASSWORD: ""
-    ports:
-      - "8080:80"
-    depends_on:
-      - mysql
-volumes:
-  mysql_data:
+    phpmyadmin:
+      image: phpmyadmin/phpmyadmin
+      container_name: pma_komunikacjauczelniastudent
+      restart: always
+      environment:
+        PMA_HOST: mysql
+        PMA_USER: root
+        PMA_PASSWORD: ""
+      ports:
+        - "8080:80"
+      depends_on:
+        - mysql
+  volumes:
+    mysql_data:
