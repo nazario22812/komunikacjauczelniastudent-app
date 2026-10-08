@@ -20,6 +20,14 @@ use App\Models\Przedmiot;
 class StudentController extends Controller
 {
     //
+
+    public function kurs($nazwa, $idkurs){
+        $kurs = Kurs::where('idKurs', $idkurs)->with(['prowadzacy.user', 'przedmiot'])->first();
+        return Inertia::render('Student/Kurs', [
+            'kurs' => $kurs
+        ]);
+    }
+
     public function mojekursypost(Request $request, $idkurs) : RedirectResponse{
         $user = $request->user();
         $student = Student::where('User_idUser', $user->idUser)->first();

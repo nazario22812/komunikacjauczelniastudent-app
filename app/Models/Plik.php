@@ -17,7 +17,9 @@ class Plik extends Model
         'typ',
         'rozmiar',
         'dataTworzenia',
-        'Podanie_idPodanie'
+        'Podanie_idPodanie',
+        'Kurs_idkurs',
+        'Zadanie_idZadanie'
     ];
 
    
@@ -29,5 +31,8 @@ class Plik extends Model
         return $this->belongsTo(Kurs::class, 'Kurs_idkurs', 'idkurs');
     }
 
+    public function zadanie(){
+        return $this->belongsTo(Zadanie::class, 'Zadanie_idZadanie', 'idZadanie');
+    }
 
 }

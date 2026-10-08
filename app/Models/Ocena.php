@@ -19,7 +19,6 @@ class Ocena extends Model
         'idStudent',
         'idPrzedmiot',
         'Zadanie_idZadanie',
-        'kurs_idkurs'
     ];
 
 
@@ -35,7 +34,5 @@ class Ocena extends Model
         return $this->belongsTo(Zadanie::class, 'Zadanie_idZadanie', 'idZadanie');
     }
 
-    public function kurs(){
-        return $this->belongsTo(Kurs::class, 'kurs_idkurs', 'idkurs');
-    }
+    
 }

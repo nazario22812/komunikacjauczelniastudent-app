@@ -12,19 +12,17 @@ class Zadanie extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'nazwa',
         'tresc',
         'TerminOddania',
         'CzyNaOcene',
-        'Zajęcie_idZajęcie',
         'kurs_idkurs'
     ];
 
     public function ocena(){
         return $this->hasOne(Ocena::class, 'Zadanie_idZadanie', 'idZadanie');
     }
-    public function zajecie(){
-        return $this->belongsTo(Zajecie::class, 'Zajęcie_idZajęcie', 'idZajęcie');
-    }
+    
 
     public function student(){
         return $this->belongsToMany(Student::class, 'student_has_zadanie',  'Student_idStudent','Zadanie_idZadanie',);
@@ -33,4 +31,9 @@ class Zadanie extends Model
     public function kurs(){
         return $this->belongsTo(Kurs::class, 'kurs_idkurs', 'idkurs');
     }
+
+    public function plik(){
+        return $this->hasMany(Plik::class, 'Zadanie_idZadanie', 'idZadanie');
+    }
+
 }

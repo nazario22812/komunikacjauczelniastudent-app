@@ -32,9 +32,7 @@ class Kurs extends Model
         return $this->belongsTo(Prowadzacy::class, 'Prowadzacy_idProwadzacy', 'idProwadzacy');
     }
 
-    public function ocena(){
-        return $this->hasMany(Ocena::class, 'kurs_idkurs', 'idkurs');
-    } 
+  
 
     public function plik(){
         return $this->hasMany(Plik::class,  'Kurs_idkurs', 'idkurs');

@@ -95,7 +95,7 @@ function Content({ mojekursy, wszystkiekursy, listasemestrow, kierunekstudenta }
                                         <p className="text-gray-400 text-[14px] ">Prowadzący: {kurs.prowadzacy.TytulNaukowy} {kurs.prowadzacy.user.name} {kurs.prowadzacy.user.surname}</p>
                                     </div>
 
-                                    <button className="w-full bg-[#06062c] hover:bg-[#101042] text-white py-2 rounded-[10px] text-center font-medium hover:cursor-pointer">
+                                    <button onClick={() => router.get(`/student/mojekursy/${kurs.nazwa}/${kurs.idkurs}`)} className="w-full bg-[#06062c] hover:bg-[#101042] text-white py-2 rounded-[10px] text-center font-medium hover:cursor-pointer">
                                         Otwórz kurs
                                     </button>
                                 </div>
