@@ -207,14 +207,90 @@ function Content({ mojekursy, wszystkiekursy, listasemestrow, kierunekstudenta }
     );
 }
 
+function Koddokursu({ isOpen, onClose, zwroconyKurs, wszystkiekursy }){
+    if (!isOpen) return null;
+    
+    const [znalezionyKurs,setznalezionyKurs] = useState('');
+    const [idZnalezionegoKursu, setidZnalezionegoKursu] = useState(null);
+    const znajdzKurs = () => {
+        const kurs = wszystkiekursy.find((k) => k.kod === znalezionyKurs);
+        if(kurs){
+            // setidZnalezionegoKursu(kurs.idkurs);
+            // console.log(idZnalezionegoKursu);
+            router.post(`/student/mojekursy/${kurs.idkurs}`);
+            onClose();
+        }
+        else{
+            setidZnalezionegoKursu(null);
+            // alert("nie znaleziono kursu");
+            toast.error('Nie znaleziono kursu', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+        }
+    }
+    
+    return (
+        <>
+            {isOpen && (
+                <div className="fixed inset-0 bg-black/60 z-40 transition-opacity" onClick={onClose}>
 
+                </div>
+            )}
+            <div className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[300px] w-[600px] bg-[#04041D] border border-white/20 rounded-[15px] shadow-2xl z-50 p-6 flex flex-col text-white transition-all duration-300 ease-in-out ${isOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0 pointer-events-none'}`}>                
+                <div className="flex justify-between items-center pb-4 border-b border-white/20">
+                    <h2 className="font-bold text-[20px]">Podaj kod do kursu</h2>
+                    <h4 className="text-[17px] font-thin">{zwroconyKurs?.nazwa}</h4>
+                    <button 
+                        onClick={onClose}
+                        className="text-gray-400 hover:text-white text-[28px] font-bold px-2 leading-none cursor-pointer"
+                    >
+                        &times;
+                    </button>
+                </div>
+
+                <div className="flex-1 overflow-y-auto">
+                    <div className="bg-[#1e293b] w-[80%] mx-auto mt-[20%] max-h-[60%] flex items-center text-white rounded-[10px] overflow-hidden border border-white">
+
+                        <input 
+                            type="text" 
+                            placeholder="szukaj kurs za kodem" 
+                            className="w-full bg-transparent px-4 py-1 text-white placeholder-gray-400 focus:outline-none"
+                            value={znalezionyKurs}
+                            maxLength={6}
+                            minLength={5}
+                            onChange={(e) => setznalezionyKurs(e.target.value)}
+                        />
+
+                        <div onClick={znajdzKurs} className=" px-3 py-1 flex items-center justify-center cursor-pointer  transition-colors">
+                            <img  src={Lupa} className="w-[28px] h-[28px] object-contain" alt="wyszukaj" />
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </>
+    );
+}
 
 export default function MojeKursy({ auth, mojekursy, wszystkiekursy,listasemestrow, kierunekstudenta }) {
     const pageProps = usePage().props;
     
 
     const message = pageProps.status || pageProps.flash?.status;
-
+    const kurs = pageProps.kurs || pageProps.flash?.kurs;
+    
+    const [pokazKod, setpokazKod] = useState(false);
+    const [zwroconyKurs, setzwroconyKurs] = useState(null);
+    const handleClose2 = () => setpokazKod(false);
+    
     useEffect(() => {
         if (message && message !== 'nie jestes zapisany na ten kurs') {
             toast.info(message, {
@@ -226,8 +302,10 @@ export default function MojeKursy({ auth, mojekursy, wszystkiekursy,listasemestr
         }
         else if (message && message === 'nie jestes zapisany na ten kurs') {
             console.log('test');
+            setpokazKod(true);
+            setzwroconyKurs(kurs);
         }
-    }, [message]);
+    }, [message], [kurs]);
     return (
         // <div>
         //     <p>ja student</p>
@@ -250,6 +328,7 @@ export default function MojeKursy({ auth, mojekursy, wszystkiekursy,listasemestr
             <Head title="Moje kursy"/>
             <MenuStudenta/>
             <Content mojekursy={mojekursy} wszystkiekursy={wszystkiekursy} listasemestrow={listasemestrow} kierunekstudenta={kierunekstudenta}/>
+            <Koddokursu isOpen={pokazKod} onClose={handleClose2} zwroconyKurs={zwroconyKurs} wszystkiekursy={wszystkiekursy}/>
         </div>
     );
 }

@@ -35,7 +35,7 @@ class StudentController extends Controller
             // return redirect(`/student/mojekursy/$kurs->nazwa/$idkurs`);
             return redirect()->route('student.kurs', ['nazwa' => $kurs->nazwa, 'idkurs' => $idkurs]);
         }else{
-            return redirect('/student/mojekursy')->with('status', 'nie jestes zapisany na ten kurs');
+            return redirect('/student/mojekursy')->with('status', 'nie jestes zapisany na ten kurs')->with('kurs', $kurs);
         }
     }
 
