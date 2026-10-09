@@ -38,8 +38,6 @@ function Content({ mojekursy, wszystkiekursy, listasemestrow, kierunekstudenta }
         }
     }
 
-    
-    
     return (
         
         <div className="bg-[#04041D] w-full p-[10px] h-screen flex flex-col box-border">
@@ -108,6 +106,32 @@ function Content({ mojekursy, wszystkiekursy, listasemestrow, kierunekstudenta }
                     )}
                 </div>
             </div>  
+            
+            {/* panel dla wprowadzenia kodu do kursu
+            {pokazKod && (
+                <div className="fixed inset-0 bg-black/60 z-40 transition-opacity" onClick={handleClose2}>
+
+                </div>
+            )}
+            <div className={`fixed top-0 center-0 h-[400px] w-[500px] bg-[#04041D] border-l border-white/20 shadow-2xl z-50 p-6 flex flex-col text-white transition-transform duration-300 ease-in-out ${pokazKod ? 'translate-x-0' : 'translate-x-full'}`}>
+                
+                <div className="flex justify-between items-center pb-4 border-b border-white/20">
+                    <h2 className="font-bold text-[20px]">Podaj kod do kursu</h2>
+                    <button 
+                        onClick={handleClose2}
+                        className="text-gray-400 hover:text-white text-[28px] font-bold px-2 leading-none cursor-pointer"
+                    >
+                        &times;
+                    </button>
+                </div>
+
+                <div className="flex-1 overflow-y-auto">
+                    
+                </div>
+
+            </div> */}
+
+
 
             {/* panel ktora wyjezdza od prawej strony */}
             {pokaz && (
@@ -132,21 +156,7 @@ function Content({ mojekursy, wszystkiekursy, listasemestrow, kierunekstudenta }
 
                     {wszystkiekursy && wszystkiekursy.length > 0 ? (
                         <div>
-                            {/* {listasemestrow.map((semestr) => (
-                                <div key={semestr.id} className="pb-2">
-                                    <h1 className="text-[18px]">{semestr.Semester} semester</h1>
-                                
-                                    <div className="flex flex-col gap-1">
-                                        {wszystkiekursy.filter((kurs) => kurs.Semester === semestr.Semester).map((kurs)=> (
-                                            <div key={kurs.id}>
-                                                <Link className="text-[14px] pl-5 text-[#73768c]">{kurs.nazwa}, {kurs.prowadzacy.TytulNaukowy} {kurs.prowadzacy.user.name} {kurs.prowadzacy.user.surname}</Link>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-
-
-                            ))} */}
+                            
                             {listasemestrow.map((semestr) => {
                                 
                                 const kursySemestru = wszystkiekursy.filter((kurs) => kurs.Semester === semestr.Semester);
@@ -166,7 +176,7 @@ function Content({ mojekursy, wszystkiekursy, listasemestrow, kierunekstudenta }
                                                     {kursySemestru.filter((kurs) => kurs.Przedmiot_idPrzedmiot === przedmiot.idPrzedmiot)
                                                     .map((kurs) => (
                                                         <div key={kurs.idKurs}>
-                                                            <Link className="text-[14px] pl-5 text-[#73768c] shrink">
+                                                            <Link onClick={() => router.post(`/student/checkkurs/${kurs.idkurs}`)} className="text-[14px] pl-5 text-[#73768c] shrink cursor-pointer">
                                                                 {kurs.nazwa}, {kurs.prowadzacy.TytulNaukowy} {kurs.prowadzacy.user.name} {kurs.prowadzacy.user.surname}
                                                             </Link>
                                                         </div>
@@ -197,6 +207,8 @@ function Content({ mojekursy, wszystkiekursy, listasemestrow, kierunekstudenta }
     );
 }
 
+
+
 export default function MojeKursy({ auth, mojekursy, wszystkiekursy,listasemestrow, kierunekstudenta }) {
     const pageProps = usePage().props;
     
@@ -204,12 +216,16 @@ export default function MojeKursy({ auth, mojekursy, wszystkiekursy,listasemestr
     const message = pageProps.status || pageProps.flash?.status;
 
     useEffect(() => {
-        if (message) {
+        if (message && message !== 'nie jestes zapisany na ten kurs') {
             toast.info(message, {
                 position: "bottom-right",
                 autoClose: 5000,
                 theme: "dark",
+                
             });
+        }
+        else if (message && message === 'nie jestes zapisany na ten kurs') {
+            console.log('test');
         }
     }, [message]);
     return (

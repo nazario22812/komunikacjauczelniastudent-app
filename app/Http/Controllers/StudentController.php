@@ -6,6 +6,7 @@ use App\Models\Kierunek;
 use App\Models\Kurs;
 use App\Models\Literatura;
 use App\Models\Planzajec;
+use App\Models\Zadanie;
 use Illuminate\Http\RedirectResponse;
 use App\Models\Podanie;
 use App\Models\Plik;
@@ -22,6 +23,21 @@ use App\Models\Sylabus;
 class StudentController extends Controller
 {
     //
+
+    public function sprawdzeniekursu(Request $request , $idkurs){
+        $user = $request->user();
+        $student = Student::where('User_idUser', $user->idUser)->first();
+        $kurs = Kurs::where('idkurs', $idkurs)->with(['prowadzacy.user', 'przedmiot'])->first();
+
+        // dd($kurs);
+        // /student/mojekursy/{nazwa}/{idkurs}
+        if($student->kurs()->where('Kurs_idkurs', $idkurs)->exists()){
+            // return redirect(`/student/mojekursy/$kurs->nazwa/$idkurs`);
+            return redirect()->route('student.kurs', ['nazwa' => $kurs->nazwa, 'idkurs' => $idkurs]);
+        }else{
+            return redirect('/student/mojekursy')->with('status', 'nie jestes zapisany na ten kurs');
+        }
+    }
 
     public function kurs(Request $request, $nazwa, $idkurs){
 
@@ -52,6 +68,9 @@ class StudentController extends Controller
         ->orderby('ocena.idOcena', 'desc')
         ->get()->toArray();
 
+
+        $zadania = Zadanie::where('kurs_idkurs', $idkurs)->get()->toArray();
+
         // dd($oceny);
         return Inertia::render('Student/Kurs', [
             'kurs' => $kurs,
@@ -59,7 +78,9 @@ class StudentController extends Controller
             'przedmiot' => $przedmiot,
             'sylabus' => $sylabus,
             'literatura' => $literatura,
-            'oceny' => $oceny
+            'oceny' => $oceny,
+            'zadania' => $zadania
+
         ]);
     }
 

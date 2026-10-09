@@ -60,7 +60,8 @@ Route::middleware(['auth', 'role:student'])->group(function (){
     Route::get('/student/ocenykoncowe', [StudentController::class, 'ocenykoncowe']);
     Route::get('/student/mojekursy', [StudentController::class, 'mojekursy']);
     Route::post('/student/mojekursy/{idkurs}', [StudentController::class, 'mojekursypost']);
-    Route::get('/student/mojekursy/{nazwa}/{idkurs}', [StudentController::class, 'kurs']);
+    Route::get('/student/mojekursy/{nazwa}/{idkurs}', [StudentController::class, 'kurs'])->name('student.kurs');
+    Route::post('/student/checkkurs/{idkurs}', [StudentController::class, 'sprawdzeniekursu']);
 });
 
 
