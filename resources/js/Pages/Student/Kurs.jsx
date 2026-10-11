@@ -118,9 +118,8 @@ function Zadania({ zadania }){
                 <tbody className="divide-y divide-gray-800 text-[14px]">
                     {zadania && zadania.length > 0 ? (
                         zadania.map((zadanie) => (
-                            <tr key={zadanie.id} className="hover:bg-[#1e293b]/50 transition-colors">
-                                <td className="p-3 font-medium text-white">{zadanie.nazwaZadania || '—'}</td>
-                                {/* <td className="p-3 font-bold text-white">{ocena.skalaOceny}</td> */}
+                            <tr key={zadanie.id} onClick={() => router.get(`/student/kurs/${zadanie.idZadanie}`)} className="hover:bg-[#1e293b]/50 transition-colors cursor-pointer">
+                                <td  className="p-3 font-medium text-white">{zadanie.nazwaZadania || '—'}</td>
                             </tr>
                         ))
                     ) : (

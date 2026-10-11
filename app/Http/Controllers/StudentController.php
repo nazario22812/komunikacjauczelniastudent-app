@@ -23,6 +23,48 @@ use App\Models\Sylabus;
 class StudentController extends Controller
 {
     //
+    public function wyslijzadanie(Request $request, $idZadanie){
+        $user = $request->user();
+        $student = Student::where('User_idUser', $user->idUser)->first();
+        $pliki = Plik::where('Zadanie_idZadanie', $idZadanie)->get()->toArray();
+
+        
+
+        foreach($pliki as $plik){
+            foreach($request->file('files') as $uploadedFile){
+                if($plik['nazwa'] != $uploadedFile->getClientOriginalName()){
+                    $nazwa = $plik->getClientOriginalName();
+                    $sciezka = $plik->storeAs('zadania', $nazwa, 'public');
+                    $typ = $plik->getMimeType();
+                    $size = $plik->getSize();
+                    $data = date("Y-m-d H:i:s");
+
+
+                    Plik::create([
+                        'nazwa' => $sciezka,
+                        'typ' => $typ,
+                        'rozmiar' => $size,
+                        'dataTworzenia' => $data,
+                        'Zadanie_idZadanie' => $idZadanie
+                    ]);
+                }
+            }
+        }
+    }
+    public function zadanieform(Request $request, $idZadanie){
+        //zadanie ocena plik
+        $user = $request->user();
+        $student = Student::where('User_idUser', $user->idUser)->first();
+        $zadanie = $student->zadanie()->where('Zadanie_idZadanie', $idZadanie)->with(['kurs.przedmiot', 'kurs.prowadzacy.user'])->first();
+        $pliki = Plik::where('Zadanie_idZadanie', $idZadanie)->get()->toArray();
+        $ocena = Ocena::where([['Zadanie_idZadanie', $idZadanie], ['idStudent', $student->idStudent]])->first();
+        // dd($zadanie);
+        return Inertia::render('Student/Zadanie',[
+            'zadanie' => $zadanie,
+            'pliki' => $pliki ? $pliki : null,
+            'ocena' => $ocena ? $ocena : null
+        ]);
+    }
 
     public function sprawdzeniekursu(Request $request , $idkurs){
         $user = $request->user();
