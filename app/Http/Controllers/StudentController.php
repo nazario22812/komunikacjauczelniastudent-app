@@ -312,7 +312,7 @@ class StudentController extends Controller
         // ->get()
         // ->values()
         // ->toArray();
-        $podania = Podanie::where('autor', $user->idUser)->get();
+        $podania = Podanie::where('autor', $user->idUser)->orderBy('data', 'desc')->get();
         // dd($podania);
 
         return Inertia::render('Student/EDziekanat', [
