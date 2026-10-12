@@ -37,7 +37,7 @@ class User extends Model implements \Illuminate\Contracts\Auth\Authenticatable
     }
 
     public function komunikat(){
-        return $this->belongsToMany(Komunikat::class, 'user_has_komunikat', 'User_idUser', 'Komunikat_idKomunikat');
+        return $this->belongsToMany(Komunikat::class, 'user_has_komunikat', 'Komunikat_idKomunikat', 'User_idUser');
     }
 
     public function ankieta(){

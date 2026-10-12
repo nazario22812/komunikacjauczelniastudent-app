@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kierunek;
+use App\Models\Komunikat;
 use App\Models\Kurs;
 use App\Models\Literatura;
 use App\Models\Planzajec;
@@ -26,30 +27,45 @@ class StudentController extends Controller
     public function wyslijzadanie(Request $request, $idZadanie){
         $user = $request->user();
         $student = Student::where('User_idUser', $user->idUser)->first();
+        
+        if($request->file('pliks') == null){
+            return redirect('/student/kurs/' . $idZadanie)->with('error', 'Nie wybrano pliku');
+        }
         $pliki = Plik::where('Zadanie_idZadanie', $idZadanie)->get()->toArray();
 
+        $zadanie = $student->zadanie()->where('Zadanie_idZadanie', $idZadanie)->with(['kurs.przedmiot', 'kurs.prowadzacy.user'])->first();
+        $prowadzacy = $zadanie->kurs->prowadzacy->User_idUser;
+
+        $temat = "Masz zadanie do sprawdzania";
+        $tresc = $user->name . "" . $user->surname . " wysłał pliki do sprawdzenia zadania " . $zadanie->nazwaZadania . "do kursu" . $zadanie->kurs->nazwa;
         
 
-        foreach($pliki as $plik){
-            foreach($request->file('files') as $uploadedFile){
-                if($plik['nazwa'] != $uploadedFile->getClientOriginalName()){
-                    $nazwa = $plik->getClientOriginalName();
-                    $sciezka = $plik->storeAs('zadania', $nazwa, 'public');
-                    $typ = $plik->getMimeType();
-                    $size = $plik->getSize();
-                    $data = date("Y-m-d H:i:s");
+        $istniejacynazwy = Plik::where('Zadanie_idZadanie', $idZadanie)->pluck('nazwa')->toArray();
+        foreach($request->file('pliks') as $uploadedFile ){
+            $originalnazwa = $uploadedFile->getClientOriginalName();
+            $sciezka = $uploadedFile->storeAs('zadania', $originalnazwa, 'public');
+            $typ = $uploadedFile->getMimeType();
+            $size = $uploadedFile->getSize();
+            $data = date("Y-m-d H:i:s");
 
-
-                    Plik::create([
-                        'nazwa' => $sciezka,
-                        'typ' => $typ,
-                        'rozmiar' => $size,
-                        'dataTworzenia' => $data,
-                        'Zadanie_idZadanie' => $idZadanie
-                    ]);
-                }
-            }
+            Plik::create([
+                'nazwa' => $sciezka,
+                'typ' => $typ,
+                'rozmiar' => $size,
+                'dataTworzenia' => $data,
+                'Zadanie_idZadanie' => $idZadanie
+            ]);
         }
+
+       
+
+        $komunikat = Komunikat::create([
+            'temat' => $temat,
+            'tresc' => $tresc,
+            'czyOgloszenie' => 0
+        ]);
+        $komunikat->user()->attach($prowadzacy);
+        return redirect('/student/kurs/' . $idZadanie)->with('status', 'Zadanie zostało wysłane');
     }
     public function zadanieform(Request $request, $idZadanie){
         //zadanie ocena plik

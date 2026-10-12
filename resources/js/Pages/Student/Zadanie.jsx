@@ -1,20 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MenuStudenta from "../../Components/MenuStudenta";
-import { Head, useForm } from "@inertiajs/react";
+import { Head, useForm, usePage } from "@inertiajs/react";
 import BackButton from "../../Components/BackButton";
 import { useDropzone } from "react-dropzone";
+import { ToastContainer, toast } from "react-toastify";
 
 function Content({ zadanie, pliki = null, ocena = null }) {
+    const initialFiles = Array.isArray(pliki) ? pliki : [];
     const { data, setData, post, processing, errors } = useForm({
-        files: [],
+        pliks: initialFiles,
     });
 
-    const [files, setFiles] = useState([]);
+    const [pliks, setpliks] = useState(initialFiles);
+
     const onDrop = (acceptedFiles) => {
-        setFiles((previousFiles) => {
+        setpliks((previousFiles) => {
+            const safePreviousFiles = Array.isArray(previousFiles) ? previousFiles : [];
+
             const newFiles = acceptedFiles.filter(
                 (newFile) =>
-                    !previousFiles.some(
+                    !safePreviousFiles.some(
                         (file) =>
                             file.name === newFile.name &&
                             file.size === newFile.size &&
@@ -22,9 +27,9 @@ function Content({ zadanie, pliki = null, ocena = null }) {
                     ),
             );
 
-            const updatedFiles = [...previousFiles, ...newFiles];
+            const updatedFiles = [...safePreviousFiles, ...newFiles];
 
-            setData("files", updatedFiles);
+            setData("pliks", updatedFiles);
 
             return updatedFiles;
         });
@@ -46,19 +51,23 @@ function Content({ zadanie, pliki = null, ocena = null }) {
                     [".xlsx"],
                 "application/vnd.ms-excel": [".xls"],
             },
+            
+            
         });
 
     const removeFile = (indexToRemove) => {
-        const updatedFiles = files.filter(
+        const updatedFiles = pliks.filter(
             (_, index) => index !== indexToRemove,
         );
 
-        setFiles(updatedFiles);
-        setData("files", updatedFiles);
+        setpliks(updatedFiles);
+        setData("pliks", updatedFiles);
     };
 
     const wyslijzadanie = (e) => {
         e.preventDefault();
+
+        
 
         post(`/student/kurs/wyslijzadanie/${zadanie.idZadanie}`, {
             forceFormData: true,
@@ -66,7 +75,9 @@ function Content({ zadanie, pliki = null, ocena = null }) {
     }
 
     return (
+        
         <div className="bg-[#04041D] w-full p-[10px] h-screen flex flex-col box-border">
+             
             <div className="bg-[#04041d] w-full flex shrink-0 h-[40px] mx-auto text-center border-b-[0.3px] border-white p-[10px] rounded-t-[10px]">
                 <BackButton back={() => window.history.back()} />
                 <span className="font-bold text-[16px] text-white w-full ">
@@ -78,14 +89,15 @@ function Content({ zadanie, pliki = null, ocena = null }) {
                     <div className="w-full text-center text-white font-bold text-[58px]">
                         <span>{zadanie.nazwaZadania}</span>
                     </div>
-                    <form onsubmit={wyslijzadanie}>
+                    <form onSubmit={wyslijzadanie}>
                         <div className="px-[40px] py-[16px] w-full mt-1">
                             <span className="w-[60%] block mx-auto text-[24px] text-[white] text-left">
                                 Treść zadania
                             </span>
                             <textarea
+                                readOnly
                                 className="w-[60%] disabled block mx-auto bg-[#06062c] rounded-[15px] text-[16px] h-[15%] px-3 py-2 text-[#73768C] border border-white shrink hover:cursor-default"
-                                value={zadanie.tresc}
+                                defaultValue={zadanie.tresc}
                             />
                         </div>
                         <div className="w-full px-[40px] py-[16px] mt-1">
@@ -137,35 +149,30 @@ function Content({ zadanie, pliki = null, ocena = null }) {
                                         )}
                                     </div>
 
-                                    {files.length > 0 && (
+                                    {pliks && pliks.length > 0 ? (
                                         <aside className="w-full">
                                             <h4 className="text-white text-lg font-semibold mb-3">
-                                                Wybrane pliki ({files.length})
+                                                Wybrane pliki ({pliks.length})
                                             </h4>
 
                                             <ul className="flex flex-col gap-2">
-                                                {files.map((file, index) => (
+                                                {pliks.map((file, index) => (
                                                     <li
                                                         key={`${file.name}-${file.lastModified}-${index}`}
                                                         className="flex items-center gap-3 p-3 bg-[#06062c] border border-white/20 rounded-xl text-[#A1A1AA]"
+
                                                     >
                                                         <span className="text-xl">
                                                             📎
                                                         </span>
 
                                                         <div className="flex-1 min-w-0">
-                                                            <p className="break-all">
+                                                            <p  className="break-all">
                                                                 {file.name}
                                                             </p>
 
                                                             <p className="text-xs text-[#73768C]">
-                                                                {(
-                                                                    file.size /
-                                                                    1024
-                                                                ).toFixed(
-                                                                    1,
-                                                                )}{" "}
-                                                                KB
+                                                                {( file.size / 1024 ).toFixed( 1, )}{" "}KB
                                                             </p>
                                                         </div>
 
@@ -184,6 +191,8 @@ function Content({ zadanie, pliki = null, ocena = null }) {
                                                 ))}
                                             </ul>
                                         </aside>
+                                    ):(
+                                        <div></div>
                                     )}
                                 </section>
                             </div>
@@ -201,6 +210,36 @@ function Content({ zadanie, pliki = null, ocena = null }) {
 }
 
 export default function Zadanie({ auth, zadanie, pliki = null, ocena = null }) {
+    const Pageprops = usePage().props;
+    const error = Pageprops.error || Pageprops.flash?.error;
+    const status = Pageprops.status || Pageprops.flash?.status;
+
+    useEffect(() => {
+        if(status){
+            toast.done(status, {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+        }else if (error){
+            toast.error(error, {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+        }
+    }, [error], [status]);
+
     return (
         // <div>
         //     <p>ja student</p>
@@ -208,6 +247,18 @@ export default function Zadanie({ auth, zadanie, pliki = null, ocena = null }) {
 
         //
         <div className="flex">
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick={false}
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+            />
             <Head title={zadanie.nazwaZadania} />
             <MenuStudenta />
             <Content zadanie={zadanie} pliki={pliki} ocena={ocena} />
