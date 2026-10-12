@@ -24,6 +24,24 @@ use App\Models\Sylabus;
 class StudentController extends Controller
 {
     //
+
+    public function usuniecieplikuzadania($idZadanie, $idPlik){
+        $plik = Plik::where([['idPlik', $idPlik], ['Zadanie_idZadanie', $idZadanie]])->first();
+        
+
+        if($plik){
+            if(Storage::disk('public')->exists($plik->nazwa)){
+                Storage::disk('public')->delete($plik->nazwa);
+                $plik->delete();
+            }
+            return redirect('/student/kurs/' . $idZadanie)->with('status', 'plik został usunięty');
+        }else{
+            return redirect('/student/kurs/' . $idZadanie)->with('error', 'nie znaleziono pliku');
+        }
+
+        
+    }
+
     public function wyslijzadanie(Request $request, $idZadanie){
         $user = $request->user();
         $student = Student::where('User_idUser', $user->idUser)->first();
@@ -42,6 +60,9 @@ class StudentController extends Controller
 
         $istniejacynazwy = Plik::where('Zadanie_idZadanie', $idZadanie)->pluck('nazwa')->toArray();
         foreach($request->file('pliks') as $uploadedFile ){
+            if (!$uploadedFile || !$uploadedFile->isValid()) {
+               continue;
+            }
             $originalnazwa = $uploadedFile->getClientOriginalName();
             $sciezka = $uploadedFile->storeAs('zadania', $originalnazwa, 'public');
             $typ = $uploadedFile->getMimeType();
@@ -58,7 +79,9 @@ class StudentController extends Controller
         }
 
        
-
+        $zadanie->pivot->update([
+            'status' => 'Wysłane'
+        ]);
         $komunikat = Komunikat::create([
             'temat' => $temat,
             'tresc' => $tresc,
@@ -71,7 +94,7 @@ class StudentController extends Controller
         //zadanie ocena plik
         $user = $request->user();
         $student = Student::where('User_idUser', $user->idUser)->first();
-        $zadanie = $student->zadanie()->where('Zadanie_idZadanie', $idZadanie)->with(['kurs.przedmiot', 'kurs.prowadzacy.user'])->first();
+        $zadanie = $student->zadanie()->where('Zadanie_idZadanie', $idZadanie)->with(['kurs.przedmiot', 'kurs.prowadzacy.user'])->withPivot('status')->first();
         $pliki = Plik::where('Zadanie_idZadanie', $idZadanie)->get()->toArray();
         $ocena = Ocena::where([['Zadanie_idZadanie', $idZadanie], ['idStudent', $student->idStudent]])->first();
         // dd($zadanie);

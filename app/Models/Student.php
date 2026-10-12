@@ -51,7 +51,7 @@ class Student extends Model
     }
 
     public function zadanie(){
-        return $this->belongsToMany(Zadanie::class, 'student_has_zadanie', 'Student_idStudent', 'Zadanie_idZadanie');
+        return $this->belongsToMany(Zadanie::class, 'student_has_zadanie', 'Student_idStudent', 'Zadanie_idZadanie')->withPivot('status');
     }
 
     public function kurs(){

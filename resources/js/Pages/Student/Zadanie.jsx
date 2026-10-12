@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import MenuStudenta from "../../Components/MenuStudenta";
-import { Head, useForm, usePage } from "@inertiajs/react";
+import { Head, router, useForm, usePage } from "@inertiajs/react";
 import BackButton from "../../Components/BackButton";
 import { useDropzone } from "react-dropzone";
 import { ToastContainer, toast } from "react-toastify";
 
 function Content({ zadanie, pliki = null, ocena = null }) {
+    
     const initialFiles = Array.isArray(pliki) ? pliki : [];
     const { data, setData, post, processing, errors } = useForm({
         pliks: initialFiles,
@@ -87,13 +88,25 @@ function Content({ zadanie, pliki = null, ocena = null }) {
             <div className="w-full flex-1 min-h-0 pt-3 pb-2 px-1 rounded-b-[10px] flex flex-col relative ">
                 <div className="bg-[#1e293b] w-full h-full mx-auto pt-[35px] pb-[10px] px-[75px] rounded-[15px] relative overflow-y-auto pr-2 custom-scrollbar">
                     <div className="w-full text-center text-white font-bold text-[58px]">
-                        <span>{zadanie.nazwaZadania}</span>
+                        <span>{zadanie.nazwaZadania}</span><br />
+                        <div className="w-[60%] mx-auto  flex justify-between items-center">
+                            {ocena != null ? (
+                                <span className="text-[22px] font-thin">Ocena: {ocena.skalaOceny}</span>
+                            ) : (
+                                <span className="text-[22px] font-thin">Nie ocenione</span>
+                            )}
+                            <span className="text-[22px] font-thin">Status: {zadanie.pivot.status}</span>
+                        </div>
+                         
                     </div>
                     <form onSubmit={wyslijzadanie}>
                         <div className="px-[40px] py-[16px] w-full mt-1">
-                            <span className="w-[60%] block mx-auto text-[24px] text-[white] text-left">
-                                Treść zadania
-                            </span>
+                            <div className="w-full flex">
+                                <span className="w-[60%] block mx-auto text-[24px] text-[white] text-left">
+                                    Treść zadania
+                                </span>
+                            </div>
+                            
                             <textarea
                                 readOnly
                                 className="w-[60%] disabled block mx-auto bg-[#06062c] rounded-[15px] text-[16px] h-[15%] px-3 py-2 text-[#73768C] border border-white shrink hover:cursor-default"
@@ -158,7 +171,7 @@ function Content({ zadanie, pliki = null, ocena = null }) {
                                             <ul className="flex flex-col gap-2">
                                                 {pliks.map((file, index) => (
                                                     <li
-                                                        key={`${file.name}-${file.lastModified}-${index}`}
+                                                        key={`${file.nazwa}-${file.lastModified}-${index}`}
                                                         className="flex items-center gap-3 p-3 bg-[#06062c] border border-white/20 rounded-xl text-[#A1A1AA]"
 
                                                     >
@@ -168,7 +181,7 @@ function Content({ zadanie, pliki = null, ocena = null }) {
 
                                                         <div className="flex-1 min-w-0">
                                                             <p  className="break-all">
-                                                                {file.name}
+                                                                {file.nazwa || file.name}
                                                             </p>
 
                                                             <p className="text-xs text-[#73768C]">
@@ -176,17 +189,17 @@ function Content({ zadanie, pliki = null, ocena = null }) {
                                                             </p>
                                                         </div>
 
-                                                        <button
-                                                            type="button"
-                                                            onClick={() =>
-                                                                removeFile(
-                                                                    index,
-                                                                )
-                                                            }
-                                                            className="shrink-0 text-red-400 hover:text-red-300"
-                                                        >
-                                                            Usuń
-                                                        </button>
+                                                        {zadanie.pivot.status != "Wysłane" ? (
+                                                            <button type="button" onClick={() => removeFile(index,)} className="shrink-0 text-red-400 hover:text-red-300">
+                                                                Usuń
+                                                            </button>
+                                                        ) : (
+                                                            <button type="button" onClick={() => router.post(`/student/kurs/redagujzadanie/${zadanie.idZadanie}/${file.idPlik}`)} className="shrink-0 text-red-400 hover:text-red-300">
+                                                                Usuń
+                                                            </button>
+                                                        )}
+
+                                                        
                                                     </li>
                                                 ))}
                                             </ul>
@@ -216,7 +229,7 @@ export default function Zadanie({ auth, zadanie, pliki = null, ocena = null }) {
 
     useEffect(() => {
         if(status){
-            toast.done(status, {
+            toast.info(status, {
                 position: "bottom-right",
                 autoClose: 5000,
                 hideProgressBar: false,

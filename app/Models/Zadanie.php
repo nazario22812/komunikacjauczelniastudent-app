@@ -25,7 +25,7 @@ class Zadanie extends Model
     
 
     public function student(){
-        return $this->belongsToMany(Student::class, 'student_has_zadanie',  'Student_idStudent','Zadanie_idZadanie',);
+        return $this->belongsToMany(Student::class, 'student_has_zadanie',  'Student_idStudent','Zadanie_idZadanie',)->withPivot('status');
     }
 
     public function kurs(){

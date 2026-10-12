@@ -64,6 +64,7 @@ Route::middleware(['auth', 'role:student'])->group(function (){
     Route::post('/student/checkkurs/{idkurs}', [StudentController::class, 'sprawdzeniekursu']);
     Route::get('/student/kurs/{idZadanie}', [StudentController::class, 'zadanieform']);
     Route::post('/student/kurs/wyslijzadanie/{idZadanie}', [StudentController::class, 'wyslijzadanie']);
+    Route::post('/student/kurs/redagujzadanie/{idZadanie}/{idPlik}', [StudentController::class, 'usuniecieplikuzadania']);
 });
 
 
