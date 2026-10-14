@@ -116,7 +116,7 @@ export default function MenuStudenta(){
                                 <span>Moje kursy</span>
                             </div>
                         </Link>
-                        <Link>
+                        <Link href='/student/mojezadania' method="get" as="button" className="hover:cursor-pointer w-full">
                             <div className="flex p-1 gap-x-[10px]">
                                 <img src={Task} alt="mojezadania" />
                                 <span>Moje zadania</span>

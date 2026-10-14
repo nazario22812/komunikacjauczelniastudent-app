@@ -25,6 +25,15 @@ class StudentController extends Controller
 {
     //
 
+    public function mojezadania(Request $request){
+        $user = request()->user();
+        $student = Student::where('User_idUser', $user->idUser)->first();
+        $zadania = $student->zadanie()->with(['kurs.przedmiot', 'kurs.prowadzacy.user'])->withPivot('status')->get()->toArray();
+        return Inertia::render('Student/Mojezadania', [
+            'zadania' => $zadania
+        ]);
+    }
+
     public function usuniecieplikuzadania($idZadanie, $idPlik){
         $plik = Plik::where([['idPlik', $idPlik], ['Zadanie_idZadanie', $idZadanie]])->first();
         
