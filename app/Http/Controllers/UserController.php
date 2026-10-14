@@ -20,7 +20,7 @@ use Inertia\Inertia;
 use App\Models\User;
 use App\Models\Komunikat;
 use function PHPSTORM_META\map;
-
+use Carbon\Carbon;
 class UserController extends Controller
 {   
 
@@ -81,8 +81,9 @@ class UserController extends Controller
     }
 
     public function planzajecpost($grpa){
+        
         $planzajec = Planzajec::where('GrupaStudenta_idGrupaStudenta', $grpa)->first();
-        // dd($grpa);
+        // $rezerwacje = Rezerwacja::with('zajecie.przedmiot')->where('Zajęcie_PlanZajec_idPlanZajec', $planzajec->idPlanZajec)->get();
         $rezerwacje = Rezerwacja::select(
             'rezerwacja.*',
             'zajęcie.DzienTygodnia',
@@ -106,34 +107,54 @@ class UserController extends Controller
         })
         ->leftJoin('przedmiot', 'zajęcie.Przedmiot_idPrzedmiot', '=', 'przedmiot.idPrzedmiot')
         ->leftJoin('user', 'prowadzacy.User_idUser' , '=' , 'user.idUser')
+
         ->where([['rezerwacja.Zajęcie_PlanZajec_idPlanZajec', $planzajec->idPlanZajec], ['rezerwacja.typWydarzenia', 'Zajęcia']])
         ->get();
+        
         $gotowyplan = $rezerwacje->map(function ($item) {
-            return[
-                'id' => $item->idRezerwacja,
-                'dzien' => $item->DzienTygodnia,
-                'godzina_rozpoczecia' => substr($item->GodzinaRozpoczecia, 0 , 5),
-                'godzina_zakonczenia' => substr($item->GodzinaZakonczenia, 0, 5) ,
-                'tytul' => $item->nazwa_przedmiotu,
-                'typ' => $item->TypZajec,
-                'parzystosc' => $item->Parzystosc,
-                'numersali' => $item->numerSali,
-                'imie' =>substr($item->name, 0, 1) ,
-                'nazwisko' => $item->surname,
-                'tytulNaukowy' => $item->TytulNaukowy
-
+            $dniMapowania = [
+                'Poniedziałek' => 1,
+                'Wtorek' => 2,
+                'Środa' => 3,
+                'Czwartek' => 4,
+                'Piątek' => 5,
+                'Sobota' => 6,
+                'Niedziela' => 7,
             ];
-        })->sortBy('godzina_rozpoczecia')->values()->toArray();
 
+            $numerDnia = $dniMapowania[$item->DzienTygodnia] ?? 1;
+            
+            // $dataZajec = Carbon::now()->startOfWeek()->addDays($numerDnia - 1)->format('Y-m-d');
+            // dd($dataZajec); 
+            return [
+                'id' => $item->idRezerwacja,
+                'start' => $item->data . 'T' . $item->GodzinaRozpoczecia,
+                'end' => $item->data . 'T' . $item->GodzinaZakonczenia,
+                'title' => $item->nazwa_przedmiotu . ' (' . $item->TypZajec . ')',
+                'extendedProps' => [
+                    'typ' => $item->TypZajec,
+                    'parzystosc' => $item->Parzystosc,
+                    'numersali' => $item->numerSali,
+                    'imie' => substr($item->name, 0, 1),
+                    'nazwisko' => $item->surname,
+                    'tytulNaukowy' => $item->TytulNaukowy
+                ]
+            ];
+        })->values()->toArray();
+        
+        
+        // dd($gotowyplan);
+       
         $listaKierunkow = Kierunek::get()->values()->toArray();
-        $listaGrup = Grupastudenta::where('typGrupy', 'Laboratoryjna')->get()->values()->toArray();     
-
-        return Inertia::render('PlanZajec',[
+        $listaGrup = Grupastudenta::where('typGrupy', 'Laboratoryjna')->get()->values()->toArray();                       
+ 
+        // dd($listaGrup);
+        // dd($listaKierunkow);
+        return Inertia::render('PlanZajec', [
             'plan' => $gotowyplan,
             'listagrup' => $listaGrup,
             'listakierunkow' => $listaKierunkow
-        ]);
-    }
+        ]);    }
 
     public function planzajec(Request $request){
 
@@ -173,21 +194,37 @@ class UserController extends Controller
 
             ->where([['rezerwacja.Zajęcie_PlanZajec_idPlanZajec', $planzajec->idPlanZajec], ['rezerwacja.typWydarzenia', 'Zajęcia']])
             ->get();
+            
             $gotowyplan = $rezerwacje->map(function ($item) {
-                return[
-                    'id' => $item->idRezerwacja,
-                    'dzien' => $item->DzienTygodnia,
-                    'godzina_rozpoczecia' => substr($item->GodzinaRozpoczecia, 0 , 5),
-                    'godzina_zakonczenia' => substr($item->GodzinaZakonczenia, 0, 5) ,
-                    'tytul' => $item->nazwa_przedmiotu,
-                    'typ' => $item->TypZajec,
-                    'parzystosc' => $item->Parzystosc,
-                    'numersali' => $item->numerSali,
-                    'imie' =>substr($item->name, 0, 1) ,
-                    'nazwisko' => $item->surname,
-                    'tytulNaukowy' => $item->TytulNaukowy
+                $dniMapowania = [
+                    'Poniedziałek' => 1,
+                    'Wtorek' => 2,
+                    'Środa' => 3,
+                    'Czwartek' => 4,
+                    'Piątek' => 5,
+                    'Sobota' => 6,
+                    'Niedziela' => 7,
                 ];
-            })->sortBy('godzina_rozpoczecia')->values()->toArray();
+
+                $numerDnia = $dniMapowania[$item->DzienTygodnia] ?? 1;
+                
+                // $dataZajec = Carbon::now()->startOfWeek()->addDays($numerDnia - 1)->format('Y-m-d');
+                // dd($dataZajec); 
+                return [
+                    'id' => $item->idRezerwacja,
+                    'start' => $item->data . 'T' . $item->GodzinaRozpoczecia,
+                    'end' => $item->data . 'T' . $item->GodzinaZakonczenia,
+                    'title' => $item->nazwa_przedmiotu . ' (' . $item->TypZajec . ')',
+                    'extendedProps' => [
+                        'typ' => $item->TypZajec,
+                        'parzystosc' => $item->Parzystosc,
+                        'numersali' => $item->numerSali,
+                        'imie' => substr($item->name, 0, 1),
+                        'nazwisko' => $item->surname,
+                        'tytulNaukowy' => $item->TytulNaukowy
+                    ]
+                ];
+            })->values()->toArray();
         }
         
         // dd($gotowyplan);
