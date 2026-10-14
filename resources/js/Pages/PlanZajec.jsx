@@ -65,6 +65,9 @@ function Content({ plan = null, listagrup, listakierunkow}){
                         slotDuration="01:00:00"
                         height="100%"
                         expandRows={true}
+                        weekNumberFormat={{
+                            week: 'narrow'
+                        }}
                         // eventClick={function(info) {
                         //     info.event.size
                         // }}
