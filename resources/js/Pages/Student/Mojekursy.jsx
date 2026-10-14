@@ -176,9 +176,9 @@ function Content({ mojekursy, wszystkiekursy, listasemestrow, kierunekstudenta }
                                                     {kursySemestru.filter((kurs) => kurs.Przedmiot_idPrzedmiot === przedmiot.idPrzedmiot)
                                                     .map((kurs) => (
                                                         <div key={kurs.idKurs}>
-                                                            <Link onClick={() => router.post(`/student/checkkurs/${kurs.idkurs}`)} className="text-[14px] pl-5 text-[#73768c] shrink cursor-pointer">
+                                                            <p onClick={() => router.post(`/student/checkkurs/${kurs.idkurs}`)} className="text-[14px] pl-5 text-[#73768c] shrink cursor-pointer">
                                                                 {kurs.nazwa}, {kurs.prowadzacy.TytulNaukowy} {kurs.prowadzacy.user.name} {kurs.prowadzacy.user.surname}
-                                                            </Link>
+                                                            </p>
                                                         </div>
                                                     ))}
                             
@@ -289,7 +289,10 @@ export default function MojeKursy({ auth, mojekursy, wszystkiekursy,listasemestr
     
     const [pokazKod, setpokazKod] = useState(false);
     const [zwroconyKurs, setzwroconyKurs] = useState(null);
-    const handleClose2 = () => setpokazKod(false);
+    const handleClose2 = () => {
+        setpokazKod(false);
+            // setzwroconyKurs(null);
+    };
     
     useEffect(() => {
         if (message && message !== 'nie jestes zapisany na ten kurs') {
@@ -305,7 +308,7 @@ export default function MojeKursy({ auth, mojekursy, wszystkiekursy,listasemestr
             setpokazKod(true);
             setzwroconyKurs(kurs);
         }
-    }, [message], [kurs]);
+    }, [message, kurs]);
     return (
         // <div>
         //     <p>ja student</p>
