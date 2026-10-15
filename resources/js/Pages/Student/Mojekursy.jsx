@@ -3,7 +3,6 @@ import MenuStudenta from "../../Components/MenuStudenta";
 import { Head, Link, router, usePage } from "@inertiajs/react";
 import BackButton from "../../Components/BackButton";
 import Lupa from '@/../images/search-rounded.png';
-import Offcanvas from 'react-bootstrap/Offcanvas';
 import { useState } from 'react';
 import { ToastContainer, toast } from "react-toastify";
 

@@ -1,14 +1,52 @@
-import React from "react";
+import React, {useState} from "react";
 import MenuStudenta from "../../Components/MenuStudenta";
 import { Head, router } from "@inertiajs/react";
+import { ToastContainer, toast } from "react-toastify";
 
 
-function Content({ kursy }){
+function Content({ kursy, powiadomienie, wszystkiekursy, zadanie }){
     
-    console.log(kursy);
+    const [znalezionyKurs,setznalezionyKurs] = useState('');
+    const [idZnalezionegoKursu, setidZnalezionegoKursu] = useState(null);
+    const znajdzKurs = () => {
+        const kurs = wszystkiekursy.find((k) => k.kod === znalezionyKurs);
+        if(kurs){
+            // setidZnalezionegoKursu(kurs.idkurs);
+            // console.log(idZnalezionegoKursu);
+            router.post(`/student/mojekursy/${kurs.idkurs}`);
+        }
+        else{
+            setidZnalezionegoKursu(null);
+            // alert("nie znaleziono kursu");
+            toast.error('Nie znaleziono kursu', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+        }
+    }
+
+    console.log(zadanie)
 
     return(
         <div className="bg-[#04041D] w-full p-[10px] h-screen flex flex-col box-border">
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick={false}
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+            />
             <div className="bg-[#08083b] w-full flex shrink-0 h-[40px] mx-auto text-center border-[0.3px] border-white p-[10px] rounded-t-[10px]">
                 <span className="font-bold text-[16px] text-white w-full">Strona główna</span>
             </div>
@@ -16,12 +54,49 @@ function Content({ kursy }){
             <div className="bg-[#08083b] w-full h-full grid grid-rows-2 gap-4 border-[0.3px] border-white px-[10px] py-[10px]  rounded-b-[10px]">
                 <div className="bg-[#06062C] rounded-[10px] px-[35px] py-[20px] grid grid-cols-2 gap-3">
                     <div className="rounded-[10px] bg-[#0F0F75] flex border border-white">
-                        <div className="w-[40%] ">1</div>
-                        <div className="w-[60%] bg-[#1E293B] rounded-r-[10px] border border-white">2</div>
+                        <div className="w-[40%] flex items-center justify-center p-4 text-center shkrink font-bold text-white text-[32px]"><span>Powiadomienia</span></div>
+                        <div className="w-[60%] bg-[#1E293B] px-[20px] py-[20px] rounded-r-[10px] border border-white ">
+                            <div className="w-full h-[20%] flex items-center justify-center p-4 mb-3 text-center shkrink text-white font-medium text-[20px] bg-[#8585EF] rounded-[10px]">
+                                <span >{powiadomienie.temat}</span>
+                            </div>
+                            <div className="w-full h-[75%] text-white text-[18px]  bg-[#8585EF] p-2 rounded-[10px]">
+                                <span>{powiadomienie.tresc}</span>
+                            </div>
+                        </div>
                     </div>
                     <div className="rounded-[10px] bg-[#0F0F75] flex border border-white">
-                        <div className="w-[40%] ">1</div>
-                        <div className="w-[60%] bg-[#1E293B] rounded-r-[10px] border border-white">2</div>
+                        <div className="w-[40%] flex items-center justify-center p-4 text-center shkrink font-bold text-white text-[32px]"><span>Zadania</span></div>
+                        <div className="w-[60%] bg-[#1E293B] px-[20px] py-[20px] rounded-r-[10px] border border-white">
+                            <div className="w-full h-[25%] flex items-center justify-center p-4 mb-3 text-center shkrink text-white font-medium text-[20px] bg-[#8585EF] rounded-[10px]">
+                                <div className="bg-[#1e293b] w-full h-full flex items-center text-white rounded-[10px] overflow-hidden border border-white">
+                                
+                                    <input 
+                                        type="text" 
+                                        placeholder="szukaj kurs za kodem" 
+                                        className="w-[70%] bg-transparent px-4 py-1 text-white placeholder-gray-400 focus:outline-none"
+                                        value={znalezionyKurs}
+                                        maxLength={6}
+                                        minLength={5}
+                                        onChange={(e) => setznalezionyKurs(e.target.value)}
+                                    />
+            
+                                    <div className="w-[30%] h-full px-2 py-1 bg-[#F97316] flex items-center justify-center cursor-pointer  transition-colors">
+                                        <span onClick={znajdzKurs}>Wpisz się</span> 
+                                    </div>
+            
+                                </div>
+                            </div>
+                            <div className="w-full h-[70%] text-white text-[18px]  bg-[#8585EF] p-2 rounded-[10px]">
+                                <div className="w-full h-[15%] border-b border-gray-300 flex items-center justify-center p-4 mb-1 text-center shkrink text-white font-medium text-[20px] bg-[#8585EF] rounded-[10px]">
+                                    <span>{zadanie.nazwaZadania}</span>
+                                </div>
+                                <div className="w-full h-[80%] text-white text-[18px]  bg-[#8585EF] p-2 rounded-[10px]">
+                                    <span>Kurs: {zadanie.kurs.nazwa}</span><br />    
+                                    <span>Status: {zadanie.pivot.status}</span><br />
+                                    <span>Termin oddania: {zadanie.TerminOddania}</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div className="bg-[#06062C] rounded-[10px]">
@@ -55,14 +130,14 @@ function Content({ kursy }){
 
 
 
-export default function StudentGlowna({ auth, kursy }) {
+export default function StudentGlowna({ auth, kursy, powiadomienie, wszystkiekursy, zadanie }) {
     return (
        
         
         <div className="flex">
             <Head title="Strona główna"/>
             <MenuStudenta/>
-            <Content kursy={kursy}/>
+            <Content kursy={kursy} powiadomienie={powiadomienie} wszystkiekursy={wszystkiekursy} zadanie={zadanie}/>
         </div>
     );
 }

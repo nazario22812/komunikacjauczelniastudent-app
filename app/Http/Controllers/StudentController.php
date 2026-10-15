@@ -30,9 +30,17 @@ class StudentController extends Controller
         $user = $request->user();
         $student = Student::where('User_idUser', $user->idUser)->first();
         $listakursow = $student->kurs()->with('prowadzacy.user')->orderBy('Kurs_idkurs', 'desc')->limit(5)->get()->toArray();
+        $listawszystkichkursow = Kurs::where('Kierunek_idKierunek', $student->Kierunek_idKierunek)->with(['prowadzacy.user', 'przedmiot'])->get()->toArray();
+        $zadanie = $student->zadanie()->with(['kurs.przedmiot', 'kurs.prowadzacy.user'])->withPivot('status')->orderBy('Zadanie_idZadanie', 'desc')->first();
+        // dd($zadanie);
+
+        $powiadomienie = $user->komunikat()->where('czyOgloszenie', 0)->orderby('idKomunikat', 'desc')->first();
 
         return Inertia::render('Student/StronaGlowna', [
             'kursy' => $listakursow,
+            'powiadomienie' => $powiadomienie,
+            'wszystkiekursy' => $listawszystkichkursow,
+            'zadanie' => $zadanie
         ]);
     }
 

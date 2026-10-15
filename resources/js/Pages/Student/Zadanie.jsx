@@ -89,6 +89,7 @@ function Content({ zadanie, pliki = null, ocena = null }) {
                 <div className="bg-[#1e293b] w-full h-full mx-auto pt-[35px] pb-[10px] px-[75px] rounded-[15px] relative overflow-y-auto pr-2 custom-scrollbar">
                     <div className="w-full text-center text-white font-bold text-[58px]">
                         <span>{zadanie.nazwaZadania}</span><br />
+                        <span className="text-[20px] font-thin">termin oddania: {zadanie.TerminOddania}</span><br />
                         <div className="w-[60%] mx-auto  flex justify-between items-center">
                             {ocena != null ? (
                                 <span className="text-[22px] font-thin">Ocena: {ocena.skalaOceny}</span>
