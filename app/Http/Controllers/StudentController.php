@@ -25,6 +25,17 @@ class StudentController extends Controller
 {
     //
 
+
+    public function stronaglowna(Request $request){
+        $user = $request->user();
+        $student = Student::where('User_idUser', $user->idUser)->first();
+        $listakursow = $student->kurs()->with('prowadzacy.user')->orderBy('Kurs_idkurs', 'desc')->limit(5)->get()->toArray();
+
+        return Inertia::render('Student/StronaGlowna', [
+            'kursy' => $listakursow,
+        ]);
+    }
+
     public function mojezadania(Request $request){
         $user = request()->user();
         $student = Student::where('User_idUser', $user->idUser)->first();

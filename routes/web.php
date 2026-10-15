@@ -47,9 +47,7 @@ Route::middleware(['auth'])->group(function(){
 
 //trasy dla studenta 
 Route::middleware(['auth', 'role:student'])->group(function (){
-    Route::get('/stronaglowna/student', function () {
-        return Inertia::render('Student/StronaGlowna');
-    })->name('stronaglownastudent');
+    Route::get('/stronaglowna/student', [StudentController::class, 'stronaglowna'])->name('stronaglownastudent');
 
     Route::get('/student/mojefinanse', [StudentController::class, 'finanse']);
     Route::get('/student/konsultacje', [StudentController::class, 'konsultacje']);
