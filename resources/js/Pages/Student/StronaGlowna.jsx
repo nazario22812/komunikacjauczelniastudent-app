@@ -31,7 +31,6 @@ function Content({ kursy, powiadomienie, wszystkiekursy, zadanie }){
         }
     }
 
-    console.log(zadanie)
 
     return(
         <div className="bg-[#04041D] w-full p-[10px] h-screen flex flex-col box-border">

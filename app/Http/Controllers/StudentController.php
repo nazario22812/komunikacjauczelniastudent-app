@@ -35,7 +35,7 @@ class StudentController extends Controller
         // dd($zadanie);
 
         $powiadomienie = $user->komunikat()->where('czyOgloszenie', 0)->orderby('idKomunikat', 'desc')->first();
-
+        dd($powiadomienie);
         return Inertia::render('Student/StronaGlowna', [
             'kursy' => $listakursow,
             'powiadomienie' => $powiadomienie,
