@@ -11,13 +11,23 @@ function Materialy({materialy}){
     return (
         <table className="w-[100%] h-full">
             <tbody className="w-[100%] overflow-y-auto pr-2 custom-scrollbar">
-                    {materialy.map((material) => (
-                        <tr key={material.id} className="w-full ">
-                            <td className="w-full">
-                                <a href={`/storage/${material.nazwa}`} target="_blank" className="text-[22px] text-[#73768C] ">🔗{material.nazwa}, </a>
-                            </td>
-                        </tr>
-                    ))}
+                    {materialy && materialy.length > 0 ? (
+                        <div>
+                            {materialy.map((material) => (
+                                <tr key={material.id} className="w-full ">
+                                    <td className="w-full">
+                                        <a href={`/storage/${material.nazwa}`} target="_blank" className="text-[22px] text-[#73768C] ">🔗{material.nazwa}, </a>
+                                    </td>
+                                </tr>
+                            ))}
+                        </div>
+                    ):
+                    (
+                        <div className="w-full mx-auto text-center mt-10 text-[24px] text-[#73768C]">
+                            <span>Brak materiałów</span>
+                        </div>
+                    )}
+                    
             </tbody>
         </table>
     );

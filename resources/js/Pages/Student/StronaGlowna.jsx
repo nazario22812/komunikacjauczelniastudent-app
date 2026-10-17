@@ -55,12 +55,22 @@ function Content({ kursy, powiadomienie, wszystkiekursy, zadanie }){
                     <div className="rounded-[10px] bg-[#0F0F75] flex border border-white">
                         <div className="w-[40%] flex items-center justify-center p-4 text-center shkrink font-bold text-white text-[32px]"><span>Powiadomienia</span></div>
                         <div className="w-[60%] bg-[#1E293B] px-[20px] py-[20px] rounded-r-[10px] border border-white ">
-                            <div className="w-full h-[20%] flex items-center justify-center p-4 mb-3 text-center shkrink text-white font-medium text-[20px] bg-[#8585EF] rounded-[10px]">
-                                <span >{powiadomienie.temat}</span>
-                            </div>
-                            <div className="w-full h-[75%] text-white text-[18px]  bg-[#8585EF] p-2 rounded-[10px]">
-                                <span>{powiadomienie.tresc}</span>
-                            </div>
+                            {powiadomienie ? (
+                                <>
+                                    <div className="w-full h-[20%] flex items-center justify-center p-4 mb-3 text-center shkrink text-white font-medium text-[20px] bg-[#8585EF] rounded-[10px]">
+                                        <span>{powiadomienie.temat}</span>
+                                    </div>
+                                    <div className="w-full h-[75%] text-white text-[18px]  bg-[#8585EF] p-2 rounded-[10px]">
+                                        <span>{powiadomienie.tresc}</span>
+                                    </div>
+                                </>
+                            ) : (
+                                <div className="w-full mx-auto text-center mt-10 text-[24px] text-white">
+                                    <span>Brak zadań</span>
+                                </div>
+                            )}
+                            
+                            
                         </div>
                     </div>
                     <div className="rounded-[10px] bg-[#0F0F75] flex border border-white">
@@ -86,14 +96,24 @@ function Content({ kursy, powiadomienie, wszystkiekursy, zadanie }){
                                 </div>
                             </div>
                             <div className="w-full h-[70%] text-white text-[18px]  bg-[#8585EF] p-2 rounded-[10px]">
-                                <div className="w-full h-[15%] border-b border-gray-300 flex items-center justify-center p-4 mb-1 text-center shkrink text-white font-medium text-[20px] bg-[#8585EF] rounded-[10px]">
-                                    <span>{zadanie.nazwaZadania}</span>
-                                </div>
-                                <div className="w-full h-[80%] text-white text-[18px]  bg-[#8585EF] p-2 rounded-[10px]">
-                                    <span>Kurs: {zadanie.kurs.nazwa}</span><br />    
-                                    <span>Status: {zadanie.pivot.status}</span><br />
-                                    <span>Termin oddania: {zadanie.TerminOddania}</span>
-                                </div>
+                                {zadanie ? (
+                                    <>
+                                        <div className="w-full h-[15%] border-b border-gray-300 flex items-center justify-center p-4 mb-1 text-center shkrink text-white font-medium text-[20px] bg-[#8585EF] rounded-[10px]">
+                                            <span>{zadanie.nazwaZadania}</span>
+                                        </div>
+                                        <div className="w-full h-[80%] text-white text-[18px]  bg-[#8585EF] p-2 rounded-[10px]">
+                                            <span>Kurs: {zadanie.kurs.nazwa}</span><br />    
+                                            <span>Status: {zadanie.pivot.status}</span><br />
+                                            <span>Termin oddania: {zadanie.TerminOddania}</span>
+                                        </div>
+                                    </>
+                                ): (
+                                    <div className="w-full mx-auto text-center mt-10 text-[24px] text-white">
+                                        <span>Brak zadań</span>
+                                    </div>
+                                )}
+                                
+                                
                             </div>
                         </div>
                     </div>
