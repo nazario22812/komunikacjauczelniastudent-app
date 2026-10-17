@@ -315,6 +315,19 @@ class UserController extends Controller
         $base64data = $user->photo; 
         $photourl = $base64data ? 'data:image/jpeg;base64,' . $base64data : null;
         
+        if($request->expectsJson()){
+            return response()->json(array_merge([
+                'rol' => $role,
+                'name' => $user->name,
+                'surname' => $user->surname,
+                'email' => $user->email,
+                'numerTelefonu' => $user->numerTelefonu,
+                'kontoBankowe' => $user->kontoBankowe,
+                'DataUrodzenia' => $user->DataUrodzenia,
+                'photo' => $photourl
+            ], $polaroli));
+        }
+
         return Inertia::render('MojeDane', array_merge([
             'rol' => $role,
             'name' => $user->name,
