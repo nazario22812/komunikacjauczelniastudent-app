@@ -72,7 +72,7 @@ class LoginController extends Controller
 
     public function destroy(Request $request){
         if($request->expectsJson()){
-            $request->user()->currentAccessToken()->delete;
+            $request->user()->currentAccessToken()->delete();
             return response()->json([
                 'message' => 'Wylogowano pomyślnie'
             ]);
