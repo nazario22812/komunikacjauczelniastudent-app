@@ -48,7 +48,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
 //trasy dla studenta 
 Route::middleware(['auth:sanctum', 'role:student'])->group(function (){
-    Route::get('/stronaglowna/student', [StudentController::class, 'stronaglowna'])->name('stronaglownastudent');
+    Route::get('/stronaglowna/student', [StudentController::class, 'stronaglowna'])->name('stronaglownastudent_mob');
 
     Route::get('/student/mojefinanse', [StudentController::class, 'finanse']);
     Route::get('/student/konsultacje', [StudentController::class, 'konsultacje']);
@@ -74,7 +74,7 @@ Route::middleware(['auth:sanctum', 'role:student'])->group(function (){
 Route::middleware(['auth:sanctum', 'role:prowadzacy'])->group(function (){
     Route::get('/stronaglowna/prowadzacy', function () {
         return Inertia::render('Prowadzacy/StronaGlowna');
-    })->name('stronaglownaprowadzacy');
+    })->name('stronaglownaprowadzacy_mob');
 });
 
 
@@ -84,5 +84,5 @@ Route::middleware(['auth:sanctum', 'role:prowadzacy'])->group(function (){
 Route::middleware(['auth:sanctum', 'role:pracownikdziekanatu'])->group(function (){
     Route::get('/stronaglowna/pracownikdziekanatu', function () {
         return Inertia::render('PracownikDziekanatu/StronaGlowna');
-    })->name('stronaglownapracownikdziekanatu');
+    })->name('stronaglownapracownikdziekanatu_mob');
 });

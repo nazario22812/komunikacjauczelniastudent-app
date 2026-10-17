@@ -4,11 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Authenticatable as Autthenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Model implements \Illuminate\Contracts\Auth\Authenticatable
 {
     //
-    use Autthenticatable;
+    use Autthenticatable, HasApiTokens, Notifiable;
 
     protected $table = 'user';
     protected $primaryKey = 'idUser';

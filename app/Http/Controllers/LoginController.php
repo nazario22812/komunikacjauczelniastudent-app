@@ -28,7 +28,6 @@ class LoginController extends Controller
 
         if(Auth::attempt($validation)){
 
-            $request->session()->regenerate();
             
             /** @var User $user */
             $user = Auth::user();
@@ -45,6 +44,7 @@ class LoginController extends Controller
                     'user' => $user
                 ]);
             }
+            $request->session()->regenerate();
 
 
             if($user->isStudent()){
