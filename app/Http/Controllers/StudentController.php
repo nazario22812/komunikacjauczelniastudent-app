@@ -429,9 +429,38 @@ class StudentController extends Controller
         ->orderBy('termin','asc')
         ->first();
         
+
+        // nr konta,  
         if($request->expectsJson()){
+            $zaleglosci = Platnosc::select(
+                'idPlatnosc',
+                'kwota',
+                'termin',
+                'data',
+                'tytul',
+                'czyOplacone'
+            )
+            ->where([['Student_idStudent', '=', $student->idStudent], ['czyOplacone', 0]])
+            ->get()
+            ->values()
+            ->toArray();
+
+            $oplacone = Platnosc::select(
+                'idPlatnosc',
+                'kwota',
+                'termin',
+                'data',
+                'tytul',
+                'czyOplacone'
+            )
+            ->where([['Student_idStudent', '=', $student->idStudent], ['czyOplacone', 1]])
+            ->get()
+            ->values()
+            ->toArray();
+
             return response()->json([
-                'platnosci' => $platnosci,
+                'zaleglosci' => $zaleglosci,
+                'oplacone' => $oplacone,
                 'suma' => $suma,
                 'najblizszytermin' => substr($najblizszytermin?->termin, 0, 16) ?: null,
             ]);
