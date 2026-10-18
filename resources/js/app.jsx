@@ -15,10 +15,14 @@ createInertiaApp({
         ),
     setup({ el, App, props }) {
         const root = createRoot(el);
+        const theme = props.initialPage?.props?.theme ?? 'dark';
+
+        document.body.classList.remove('theme-dark', 'theme-light');
+        document.body.classList.add(theme === 'light' ? 'theme-light' : 'theme-dark');
 
         root.render(<App {...props} />);
     },
     progress: {
-        color: '#4B5563',
+        color: 'var(--theme-dark-progress)',
     },
 });

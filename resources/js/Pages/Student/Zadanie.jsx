@@ -77,16 +77,16 @@ function Content({ zadanie, pliki = null, ocena = null }) {
 
     return (
         
-        <div className="bg-[#04041D] w-full p-[10px] h-screen flex flex-col box-border">
+        <div className="bg-theme-dark-page w-full p-[10px] h-screen flex flex-col box-border">
              
-            <div className="bg-[#04041d] w-full flex shrink-0 h-[40px] mx-auto text-center border-b-[0.3px] border-white p-[10px] rounded-t-[10px]">
+            <div className="bg-theme-dark-page w-full flex shrink-0 h-[40px] mx-auto text-center border-b-[0.3px] border-white p-[10px] rounded-t-[10px]">
                 <BackButton back={() => window.history.back()} />
                 <span className="font-bold text-[16px] text-white w-full ">
                     Zadanie
                 </span>
             </div>
             <div className="w-full flex-1 min-h-0 pt-3 pb-2 px-1 rounded-b-[10px] flex flex-col relative ">
-                <div className="bg-[#1e293b] w-full h-full mx-auto pt-[35px] pb-[10px] px-[75px] rounded-[15px] relative overflow-y-auto pr-2 custom-scrollbar">
+                <div className="bg-theme-dark-slate w-full h-full mx-auto pt-[35px] pb-[10px] px-[75px] rounded-[15px] relative overflow-y-auto pr-2 custom-scrollbar">
                     <div className="w-full text-center text-white font-bold text-[58px]">
                         <span>{zadanie.nazwaZadania}</span><br />
                         <span className="text-[20px] font-thin">termin oddania: {zadanie.TerminOddania}</span><br />
@@ -110,7 +110,7 @@ function Content({ zadanie, pliki = null, ocena = null }) {
                             
                             <textarea
                                 readOnly
-                                className="w-[60%] disabled block mx-auto bg-[#06062c] rounded-[15px] text-[16px] h-[15%] px-3 py-2 text-[#73768C] border border-white shrink hover:cursor-default"
+                                className="w-[60%] disabled block mx-auto bg-theme-dark-surface rounded-[15px] text-[16px] h-[15%] px-3 py-2 text-theme-dark-muted border border-white shrink hover:cursor-default"
                                 defaultValue={zadanie.tresc}
                             />
                         </div>
@@ -127,17 +127,17 @@ function Content({ zadanie, pliki = null, ocena = null }) {
                                                 w-full min-h-[180px]
                                                 flex flex-col items-center justify-center
                                                 gap-3 p-6
-                                                bg-[#06062c]
-                                                border-2 border-dashed border-[#73768C]
+                                                bg-theme-dark-surface
+                                                border-2 border-dashed border-theme-dark-muted
                                                 rounded-[15px]
                                                 text-white text-center
                                                 cursor-pointer
                                                 transition-all duration-200
                                                 hover:border-orange-500
-                                                hover:bg-[#0b0b3b]
+                                                hover:bg-theme-dark-accent-ink-2
                                                 focus:outline-none focus:ring-2
                                                 focus:ring-orange-500
-                                                ${isDragActive ? "border-orange-500 bg-[#11113f] scale-[1.01]" : ""}
+                                                ${isDragActive ? "border-orange-500 bg-theme-dark-accent-ink scale-[1.01]" : ""}
                                             `,
                                         })}
                                     >
@@ -155,7 +155,7 @@ function Content({ zadanie, pliki = null, ocena = null }) {
                                                     Przeciągnij i upuść pliki
                                                 </p>
 
-                                                <p className="text-sm text-[#A1A1AA]">
+                                                <p className="text-sm text-theme-dark-light">
                                                     lub kliknij, aby wybrać z
                                                     komputera
                                                 </p>
@@ -173,7 +173,7 @@ function Content({ zadanie, pliki = null, ocena = null }) {
                                                 {pliks.map((file, index) => (
                                                     <li
                                                         key={`${file.nazwa}-${file.lastModified}-${index}`}
-                                                        className="flex items-center gap-3 p-3 bg-[#06062c] border border-white/20 rounded-xl text-[#A1A1AA]"
+                                                        className="flex items-center gap-3 p-3 bg-theme-dark-surface border border-white/20 rounded-xl text-theme-dark-light"
 
                                                     >
                                                         <span className="text-xl">
@@ -185,7 +185,7 @@ function Content({ zadanie, pliki = null, ocena = null }) {
                                                                 {file.nazwa || file.name}
                                                             </p>
 
-                                                            <p className="text-xs text-[#73768C]">
+                                                            <p className="text-xs text-theme-dark-muted">
                                                                 {( file.size / 1024 ).toFixed( 1, )}{" "}KB
                                                             </p>
                                                         </div>
@@ -212,7 +212,7 @@ function Content({ zadanie, pliki = null, ocena = null }) {
                             </div>
                         </div>
                         <div className="px-[40px] py-[16px] w-full ">
-                            <button disabled={processing} type="submit" className="w-[20%] h-[60px] text-[32px] block mx-auto text-white bg-[#f97316] rounded-[15px] hover:cursor-pointer active:bg-[#c55b11]">
+                            <button disabled={processing} type="submit" className="w-[20%] h-[60px] text-[32px] block mx-auto text-white bg-theme-dark-orange rounded-[15px] hover:cursor-pointer active:bg-theme-dark-orange-dark">
                                 Wyślij
                             </button>
                         </div>

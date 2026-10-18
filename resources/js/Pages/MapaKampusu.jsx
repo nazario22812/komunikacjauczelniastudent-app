@@ -23,7 +23,7 @@ function Content({sale}){
         })
         if(!coords){
             return (
-                <div className="w-full h-screen bg-[#04041D] text-center p-50 ">
+                <div className="w-full h-screen bg-theme-dark-page text-center p-50 ">
                     <span className="text-white font-bold text-[48px]">ładowanie mapy</span>
                 </div>
             )
@@ -47,7 +47,7 @@ function Content({sale}){
         // <div className="w-full">
         // </div>
         
-        <div className="bg-[#04041D] w-full p-[10px] h-screen flex flex-col box-border">
+        <div className="bg-theme-dark-page w-full p-[10px] h-screen flex flex-col box-border">
             <ToastContainer
                 position="bottom-right"
                 autoClose={5000}
@@ -60,7 +60,7 @@ function Content({sale}){
                 pauseOnHover
                 theme="dark"
             />
-            <div className="bg-[#04041d] w-full flex shrink-0 h-[40px] mx-auto text-center border-b-[0.3px] border-white p-[10px] rounded-t-[10px]">
+            <div className="bg-theme-dark-page w-full flex shrink-0 h-[40px] mx-auto text-center border-b-[0.3px] border-white p-[10px] rounded-t-[10px]">
                 <BackButton back={ () => window.history.back()} />
                 <span className="font-bold text-[16px] text-white w-full">Mapa kampusu</span>
             </div>
@@ -84,7 +84,7 @@ function Content({sale}){
                         </Marker>
                     )}
                 </MapContainer>
-                <div className=" absolute top-8 right-5 z-50  ml-[75%] h-[30%] w-[30%] bg-[#1e293b] rounded-[10px] border border-white ">
+                <div className=" absolute top-8 right-5 z-50  ml-[75%] h-[30%] w-[30%] bg-theme-dark-slate rounded-[10px] border border-white ">
                    
                     <div className="mx-auto w-full text-center">
                         <span className="w-full mx-auto text-white text-[48px] font-bold  ">Mapa kampusu</span>
@@ -101,9 +101,9 @@ function Content({sale}){
                         </div>
 
                         {isOpen && searchItem.length > 0 && filtersale.length > 0 && (
-                            <ul className="absolute top-full left-0 w-full bg-[#1e293b] border border-white border-t-0 rounded-[10px] max-h-40 overflow-y-auto z-50 shadow-lg">
+                            <ul className="absolute top-full left-0 w-full bg-theme-dark-slate border border-white border-t-0 rounded-[10px] max-h-40 overflow-y-auto z-50 shadow-lg">
                                 {filtersale.map((item, index) => (
-                                    <li key={index} className="p-2 text-white text-sm hover:bg-[#334155] cursor-pointer border-b border-gray-700 last:border-b-0"
+                                    <li key={index} className="p-2 text-white text-sm hover:bg-theme-dark-slate-3 cursor-pointer border-b border-gray-700 last:border-b-0"
                                     onClick={() => handleSelectSuggestion(item)}>
                                         <span className="font-bold">{item.numerSali}</span>
                                     </li>
@@ -148,7 +148,7 @@ function Content({sale}){
                                             });
                                     }                           
                                 
-                        }} className="text-[15px] h-[40px] mx-auto w-3/4  text-white bg-[#f97316] rounded-[15px] hover:cursor-pointer active:bg-[#c55b11]">
+                        }} className="text-[15px] h-[40px] mx-auto w-3/4  text-white bg-theme-dark-orange rounded-[15px] hover:cursor-pointer active:bg-theme-dark-orange-dark">
                             Wyszukaj
                         </button>
                     </div>

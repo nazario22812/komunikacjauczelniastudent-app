@@ -1,3 +1,7 @@
+@php
+    $theme = session('theme', 'dark');
+@endphp
+
 <html>
     <head>
         <meta charset="utf-8" />
@@ -5,7 +9,7 @@
         @vite('resources/js/app.jsx')
         <x-inertia::head />
     </head>
-    <body>
+    <body class="theme-{{ $theme }}">
         <x-inertia::app />
     </body>
 </html>

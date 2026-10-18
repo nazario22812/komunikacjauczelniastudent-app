@@ -2,14 +2,245 @@
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 
+:root {
+  --theme-dark-page: #04041D;
+  --theme-dark-surface: #06062C;
+  --theme-dark-panel: #08083B;
+  --theme-dark-login: #0B0B58;
+  --theme-dark-accent-indigo: #0F0F75;
+  --theme-dark-accent-navy: #101042;
+  --theme-dark-accent-ink: #11113F;
+  --theme-dark-accent-ink-deep: #0b0b3b;
+  --theme-dark-slate: #1E293B;
+  --theme-dark-slate-soft: #314361;
+  --theme-dark-slate-muted: #334155;
+  --theme-dark-lavender: #8585EF;
+  --theme-dark-orange: #F97316;
+  --theme-dark-orange-deep: #c55b11;
+  --theme-dark-cyan: #0ea5e9;
+  --theme-dark-violet: #8b5cf6;
+  --theme-dark-blue: #3788d8;
+  --theme-dark-green: #0DFF00;
+  --theme-dark-red: #852221;
+  --theme-dark-gray: #4B5563;
+  --theme-dark-light-gray: #A1A1AA;
+  --theme-dark-purple-muted: #676C98;
+  --theme-dark-muted: #73768C;
+  --theme-dark-progress: #4B5563;
+  --theme-dark-border: #000000;
+
+  --theme-light-page: #F8FAFC;
+  --theme-light-surface: #FFFFFF;
+  --theme-light-panel: #E2E8F0;
+  --theme-light-login: #E0F2FE;
+  --theme-light-accent-indigo: #2563eb;
+  --theme-light-accent-navy: #1d4ed8;
+  --theme-light-accent-ink: #0F172A;
+  --theme-light-accent-ink-deep: #1E293B;
+  --theme-light-slate: #F1F5F9;
+  --theme-light-slate-soft: #E5E7EB;
+  --theme-light-slate-muted: #CBD5E1;
+  --theme-light-lavender: #C4B5FD;
+  --theme-light-orange: #F59E0B;
+  --theme-light-orange-deep: #D97706;
+  --theme-light-cyan: #38BDF8;
+  --theme-light-violet: #8B5CF6;
+  --theme-light-blue: #3B82F6;
+  --theme-light-green: #22C55E;
+  --theme-light-red: #EF4444;
+  --theme-light-gray: #94A3B8;
+  --theme-light-light-gray: #CBD5E1;
+  --theme-light-purple-muted: #7C3AED;
+  --theme-light-muted: #475569;
+  --theme-light-progress: #94A3B8;
+  --theme-light-border: #CBD5E1;
+}
+
+
+.theme-dark {
+  --theme-page: var(--theme-dark-page);
+  --theme-surface: var(--theme-dark-surface);
+  --theme-panel: var(--theme-dark-panel);
+  --theme-login: var(--theme-dark-login);
+  --theme-accent-indigo: var(--theme-dark-accent-indigo);
+  --theme-accent-navy: var(--theme-dark-accent-navy);
+  --theme-accent-ink: var(--theme-dark-accent-ink);
+  --theme-accent-ink-deep: var(--theme-dark-accent-ink-deep);
+  --theme-slate: var(--theme-dark-slate);
+  --theme-slate-soft: var(--theme-dark-slate-soft);
+  --theme-slate-muted: var(--theme-dark-slate-muted);
+  --theme-lavender: var(--theme-dark-lavender);
+  --theme-orange: var(--theme-dark-orange);
+  --theme-orange-deep: var(--theme-dark-orange-deep);
+  --theme-cyan: var(--theme-dark-cyan);
+  --theme-violet: var(--theme-dark-violet);
+  --theme-blue: var(--theme-dark-blue);
+  --theme-green: var(--theme-dark-green);
+  --theme-red: var(--theme-dark-red);
+  --theme-gray: var(--theme-dark-gray);
+  --theme-light-gray: var(--theme-dark-light-gray);
+  --theme-purple-muted: var(--theme-dark-purple-muted);
+  --theme-muted: var(--theme-dark-muted);
+  --theme-progress: var(--theme-dark-progress);
+  --theme-border: var(--theme-dark-border);
+  --theme-text: #FFFFFF;
+}
+
+.theme-light {
+  --theme-page: var(--theme-light-page);
+  --theme-surface: var(--theme-light-surface);
+  --theme-panel: var(--theme-light-panel);
+  --theme-login: var(--theme-light-login);
+  --theme-accent-indigo: var(--theme-light-accent-indigo);
+  --theme-accent-navy: var(--theme-light-accent-navy);
+  --theme-accent-ink: var(--theme-light-accent-ink);
+  --theme-accent-ink-deep: var(--theme-light-accent-ink-deep);
+  --theme-slate: var(--theme-light-slate);
+  --theme-slate-soft: var(--theme-light-slate-soft);
+  --theme-slate-muted: var(--theme-light-slate-muted);
+  --theme-lavender: var(--theme-light-lavender);
+  --theme-orange: var(--theme-light-orange);
+  --theme-orange-deep: var(--theme-light-orange-deep);
+  --theme-cyan: var(--theme-light-cyan);
+  --theme-violet: var(--theme-light-violet);
+  --theme-blue: var(--theme-light-blue);
+  --theme-green: var(--theme-light-green);
+  --theme-red: var(--theme-light-red);
+  --theme-gray: var(--theme-light-gray);
+  --theme-light-gray: var(--theme-light-light-gray);
+  --theme-purple-muted: var(--theme-light-purple-muted);
+  --theme-muted: var(--theme-light-muted);
+  --theme-progress: var(--theme-light-progress);
+  --theme-border: var(--theme-light-border);
+  --theme-text: #0F172A;
+}
+
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+   'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
-@layer base {
-    
+@layer utilities {
+  .bg-theme-dark-page { background-color: var(--theme-dark-page); }
+  .bg-theme-dark-surface { background-color: var(--theme-dark-surface); }
+  .bg-theme-dark-panel { background-color: var(--theme-dark-panel); }
+  .bg-theme-dark-login { background-color: var(--theme-dark-login); }
+  .bg-theme-dark-accent-indigo { background-color: var(--theme-dark-accent-indigo); }
+  .bg-theme-dark-accent-navy { background-color: var(--theme-dark-accent-navy); }
+  .bg-theme-dark-accent-ink { background-color: var(--theme-dark-accent-ink); }
+  .bg-theme-dark-accent-ink-deep { background-color: var(--theme-dark-accent-ink-deep); }
+  .bg-theme-dark-slate { background-color: var(--theme-dark-slate); }
+  .bg-theme-dark-slate-soft { background-color: var(--theme-dark-slate-soft); }
+  .bg-theme-dark-slate-muted { background-color: var(--theme-dark-slate-muted); }
+  .bg-theme-dark-lavender { background-color: var(--theme-dark-lavender); }
+  .bg-theme-dark-orange { background-color: var(--theme-dark-orange); }
+  .bg-theme-dark-orange-deep { background-color: var(--theme-dark-orange-deep); }
+  .bg-theme-dark-cyan { background-color: var(--theme-dark-cyan); }
+  .bg-theme-dark-violet { background-color: var(--theme-dark-violet); }
+  .bg-theme-dark-blue { background-color: var(--theme-dark-blue); }
+  .bg-theme-dark-green { background-color: var(--theme-dark-green); }
+  .bg-theme-dark-red { background-color: var(--theme-dark-red); }
+  .bg-theme-dark-gray { background-color: var(--theme-dark-gray); }
+  .bg-theme-dark-light-gray { background-color: var(--theme-dark-light-gray); }
+  .bg-theme-dark-purple-muted { background-color: var(--theme-dark-purple-muted); }
+  .bg-theme-dark-muted { background-color: var(--theme-dark-muted); }
+
+  .bg-theme-light-page { background-color: var(--theme-light-page); }
+  .bg-theme-light-surface { background-color: var(--theme-light-surface); }
+  .bg-theme-light-panel { background-color: var(--theme-light-panel); }
+  .bg-theme-light-login { background-color: var(--theme-light-login); }
+  .bg-theme-light-accent-indigo { background-color: var(--theme-light-accent-indigo); }
+  .bg-theme-light-accent-navy { background-color: var(--theme-light-accent-navy); }
+  .bg-theme-light-accent-ink { background-color: var(--theme-light-accent-ink); }
+  .bg-theme-light-accent-ink-deep { background-color: var(--theme-light-accent-ink-deep); }
+  .bg-theme-light-slate { background-color: var(--theme-light-slate); }
+  .bg-theme-light-slate-soft { background-color: var(--theme-light-slate-soft); }
+  .bg-theme-light-slate-muted { background-color: var(--theme-light-slate-muted); }
+  .bg-theme-light-lavender { background-color: var(--theme-light-lavender); }
+  .bg-theme-light-orange { background-color: var(--theme-light-orange); }
+  .bg-theme-light-orange-deep { background-color: var(--theme-light-orange-deep); }
+  .bg-theme-light-cyan { background-color: var(--theme-light-cyan); }
+  .bg-theme-light-violet { background-color: var(--theme-light-violet); }
+  .bg-theme-light-blue { background-color: var(--theme-light-blue); }
+  .bg-theme-light-green { background-color: var(--theme-light-green); }
+  .bg-theme-light-red { background-color: var(--theme-light-red); }
+  .bg-theme-light-gray { background-color: var(--theme-light-gray); }
+  .bg-theme-light-light-gray { background-color: var(--theme-light-light-gray); }
+  .bg-theme-light-purple-muted { background-color: var(--theme-light-purple-muted); }
+  .bg-theme-light-muted { background-color: var(--theme-light-muted); }
+
+  .text-theme-dark-muted { color: var(--theme-dark-muted); }
+  .text-theme-dark-subtle { color: var(--theme-dark-purple-muted); }
+  .text-theme-dark-gray { color: var(--theme-dark-gray); }
+  .text-theme-dark-light { color: var(--theme-dark-light-gray); }
+  .text-theme-dark-green { color: var(--theme-dark-green); }
+  .text-theme-dark-red { color: var(--theme-dark-red); }
+  .text-theme-dark-panel { color: var(--theme-dark-panel); }
+  .text-theme-dark-text { color: var(--theme-text); }
+
+  .text-theme-light-muted { color: var(--theme-light-muted); }
+  .text-theme-light-subtle { color: var(--theme-light-purple-muted); }
+  .text-theme-light-gray { color: var(--theme-light-gray); }
+  .text-theme-light-light { color: var(--theme-light-light-gray); }
+  .text-theme-light-green { color: var(--theme-light-green); }
+  .text-theme-light-red { color: var(--theme-light-red); }
+  .text-theme-light-panel { color: var(--theme-light-panel); }
+  .text-theme-light-text { color: var(--theme-text); }
+
+  .border-theme-dark-muted { border-color: var(--theme-dark-muted); }
+  .border-theme-dark-black { border-color: var(--theme-dark-border); }
+  .border-theme-dark-page { border-color: var(--theme-dark-page); }
+  .divide-theme-dark-muted { border-color: var(--theme-dark-muted); }
+
+  .border-theme-light-muted { border-color: var(--theme-light-muted); }
+  .border-theme-light-black { border-color: var(--theme-light-border); }
+  .border-theme-light-page { border-color: var(--theme-light-page); }
+  .divide-theme-light-muted { border-color: var(--theme-light-muted); }
+
+  .bg-theme-page { background-color: var(--theme-page); }
+  .bg-theme-surface { background-color: var(--theme-surface); }
+  .bg-theme-panel { background-color: var(--theme-panel); }
+  .bg-theme-login { background-color: var(--theme-login); }
+  .bg-theme-accent-indigo { background-color: var(--theme-accent-indigo); }
+  .bg-theme-accent-navy { background-color: var(--theme-accent-navy); }
+  .bg-theme-accent-ink { background-color: var(--theme-accent-ink); }
+  .bg-theme-accent-ink-deep { background-color: var(--theme-accent-ink-deep); }
+  .bg-theme-slate { background-color: var(--theme-slate); }
+  .bg-theme-slate-soft { background-color: var(--theme-slate-soft); }
+  .bg-theme-slate-muted { background-color: var(--theme-slate-muted); }
+  .bg-theme-lavender { background-color: var(--theme-lavender); }
+  .bg-theme-orange { background-color: var(--theme-orange); }
+  .bg-theme-orange-deep { background-color: var(--theme-orange-deep); }
+  .bg-theme-cyan { background-color: var(--theme-cyan); }
+  .bg-theme-violet { background-color: var(--theme-violet); }
+  .bg-theme-blue { background-color: var(--theme-blue); }
+  .bg-theme-green { background-color: var(--theme-green); }
+  .bg-theme-red { background-color: var(--theme-red); }
+  .bg-theme-gray { background-color: var(--theme-gray); }
+  .bg-theme-light-gray { background-color: var(--theme-light-gray); }
+  .bg-theme-purple-muted { background-color: var(--theme-purple-muted); }
+  .bg-theme-muted { background-color: var(--theme-muted); }
+
+  .text-theme-text { color: var(--theme-text); }
+  .text-theme-muted { color: var(--theme-muted); }
+  .text-theme-subtle { color: var(--theme-purple-muted); }
+  .text-theme-gray { color: var(--theme-gray); }
+  .text-theme-light { color: var(--theme-light-gray); }
+  .text-theme-green { color: var(--theme-green); }
+  .text-theme-red { color: var(--theme-red); }
+  .text-theme-panel { color: var(--theme-panel); }
+
+  .border-theme-muted { border-color: var(--theme-muted); }
+  .border-theme-black { border-color: var(--theme-border); }
+  .border-theme-page { border-color: var(--theme-page); }
+  .divide-theme-muted { border-color: var(--theme-muted); }
 }
 
+/* .carousel-control-prev-icon,
+.carousel-control-next-icon {
+    filter: invert(1) grayscale(100);
+    width: 2rem;
+    height: 2rem;
+} */
 
 

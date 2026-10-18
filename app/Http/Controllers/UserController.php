@@ -24,6 +24,35 @@ use Carbon\Carbon;
 class UserController extends Controller
 {   
 
+    public function ustawienia(Request $request){
+        $user = $request->user();
+        $settings = json_decode($user?->Ustawienia ?? '{}', true);
+
+        return Inertia::render('Settings', [
+            'theme' => $settings['theme'] ?? 'dark',
+        ]);
+    }
+
+    public function ustawieniaTheme(Request $request)
+    {
+        $user = $request->user();
+        $theme = $request->input('theme');
+
+        if (! in_array($theme, ['dark', 'light'], true)) {
+            $theme = 'dark';
+        }
+
+        $settings = json_decode($user->Ustawienia ?? '{}', true);
+        $settings['theme'] = $theme;
+
+        $user->update([
+            'Ustawienia' => json_encode($settings),
+        ]);
+
+        session()->put('theme', $theme);
+
+        return redirect()->back();
+    }
 
     public function ogloszniaiankiety(Request $request){
         $user = $request->user();

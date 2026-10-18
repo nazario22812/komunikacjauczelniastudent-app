@@ -5,6 +5,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 use App\Http\Middleware\HandleInertiaRequests;
+use App\Http\Middleware\ThemeMiddleware;
 use Inertia\View\Components\App;
 use App\Http\Middleware\Role;
 return Application::configure(basePath: dirname(__DIR__))
@@ -18,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
         //
         $middleware->web(append: [
             HandleInertiaRequests::class,
+            ThemeMiddleware::class,
         ]);
 
         $middleware->alias([
