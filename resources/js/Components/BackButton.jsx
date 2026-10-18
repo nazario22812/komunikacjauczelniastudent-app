@@ -5,7 +5,7 @@ export default function BackButton({ back }){
         <div>
             <button onClick={() => {  back();  }} className='flex items-center fustify-start hover:cursor-pointer'>
                 <img src={BackPhoto} alt="backbutton" className='w-[15px] h-[15px]' />
-                <span className='text-theme-dark-muted text-[15px]'>Wróć</span>
+                <span className='text-theme-muted text-[15px]'>Wróć</span>
             </button>
         </div>
     );

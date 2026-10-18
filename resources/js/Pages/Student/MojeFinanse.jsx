@@ -7,16 +7,16 @@ import { Head } from "@inertiajs/react";
 function Platnoscrow({ platnosc }){
     return(
         <>
-            <tr className="text-white font-bold h-[40px] text-left text-[24px] hover:bg-theme-dark-panel">
+            <tr className="text-theme-text font-bold h-[40px] text-left text-[24px] hover:bg-theme-panel">
                 <td className="py-[20px]">{platnosc.tytul}</td>
                 <td className="py-[20px]">{platnosc.data}</td>
                 <td className="py-[20px]">{platnosc.termin}</td>
                 <td className="py-[20px]">{platnosc.kwota}</td>
                 <td className="py-[20px]">
                     {platnosc.czyOplacone === 1 ? (
-                        <span className="text-[24px] text-theme-dark-green">Opłacone</span>
+                        <span className="text-[24px] text-theme-green">Opłacone</span>
                     ) : (
-                        <span className="text-[24px] text-theme-dark-red">Nie opłacone</span>
+                        <span className="text-[24px] text-theme-red">Nie opłacone</span>
                     )}
                 </td>
             </tr>
@@ -26,39 +26,39 @@ function Platnoscrow({ platnosc }){
 
 function Content({ platnosci, suma, najblizszytermin}){
     return (
-        <div className="bg-theme-dark-page w-full p-[10px] h-screen flex flex-col box-border">
-            <div className="bg-theme-dark-page w-full flex shrink-0 h-[40px] mx-auto text-center border-b-[0.3px] border-white p-[10px] rounded-t-[10px]">
+        <div className="bg-theme-page w-full p-[10px] h-screen flex flex-col box-border">
+            <div className="bg-theme-page w-full flex shrink-0 h-[40px] mx-auto text-center border-b-[0.3px] border-theme-muted p-[10px] rounded-t-[10px]">
                 <BackButton back={ () => window.history.back()} />
-                <span className="font-bold text-[16px] text-white w-full">Moje finanse</span>
+                <span className="font-bold text-[16px] text-theme-text w-full">Moje finanse</span>
             </div>
             <div className="w-full flex-1 min-h-0 pt-3 pb-2 px-4 rounded-b-[10px] flex flex-col relative ">
                         
-                <div className="bg-theme-dark-slate w-full h-full mx-auto p-5 rounded-[15px]">
+                <div className="bg-theme-slate w-full h-full mx-auto p-5 rounded-[15px]">
                     <div className=" grid  grid-cols-[1fr_1fr_1.5fr]  w-full  gap-2 h-[20%] ">
-                        <div className="w-full mx-auto bg-theme-dark-surface rounded-[15px] text-left px-[37px] py-[26px]">
-                            <span className="text-[24px] text-theme-dark-muted">Suma do zapłaty</span><br />
-                            <span className={`text-[48px] font-bold ${suma < 1 ? 'text-white' : 'text-theme-dark-red'}`}>{suma} PLN</span>
+                        <div className="w-full mx-auto bg-theme-surface rounded-[15px] text-left px-[37px] py-[26px]">
+                            <span className="text-[24px] text-theme-muted">Suma do zapłaty</span><br />
+                            <span className={`text-[48px] font-bold ${suma < 1 ? 'text-theme-text' : 'text-theme-red'}`}>{suma} PLN</span>
                         </div>
                         {najblizszytermin &&(
-                            <div className="w-full mx-auto bg-theme-dark-surface rounded-[15px] text-left px-[37px] py-[26px]">
-                                <span className="text-[24px] text-theme-dark-muted">Najbliższy termin</span><br />
-                                <span className="text-[34px] text-white font-bold">{najblizszytermin}</span>
+                            <div className="w-full mx-auto bg-theme-surface rounded-[15px] text-left px-[37px] py-[26px]">
+                                <span className="text-[24px] text-theme-muted">Najbliższy termin</span><br />
+                                <span className="text-[34px] text-theme-text font-bold">{najblizszytermin}</span>
                             </div>
                         )}
                         
-                        <div className="w-full mx-auto bg-theme-dark-surface rounded-[15px] text-left px-[37px] py-[26px]">
-                            <span className="text-[24px] text-theme-dark-muted">Konto bankowe</span><br />
-                            <span className="text-[48px] text-white font-bold">676767676767676767</span>
+                        <div className="w-full mx-auto bg-theme-surface rounded-[15px] text-left px-[37px] py-[26px]">
+                            <span className="text-[24px] text-theme-muted">Konto bankowe</span><br />
+                            <span className="text-[48px] text-theme-text font-bold">676767676767676767</span>
                             
                         </div>
                     </div>
-                    <div className=" bg-theme-dark-surface h-[77%] mt-5 px-[37px] py-[22px] rounded-[15px] overflow-y-auto pr-2 custom-scrollbar">
-                        <span className="text-white font-bold text-[40px]">Historia Płatności</span>
+                    <div className=" bg-theme-surface h-[77%] mt-5 px-[37px] py-[22px] rounded-[15px] overflow-y-auto pr-2 custom-scrollbar">
+                        <span className="text-theme-text font-bold text-[40px]">Historia Płatności</span>
                         
                         {platnosci && platnosci.length > 0 ? (
                             <table className="w-full ">
                                 <thead>
-                                    <tr className="h-[52px] text-theme-dark-muted text-[24px] border-b border-theme-dark-muted px-[61px] py-[10px] text-left ">
+                                    <tr className="h-[52px] text-theme-muted text-[24px] border-b border-theme-muted px-[61px] py-[10px] text-left ">
                                         <th className="py-[10px]">Tytuł</th>
                                         <th className="py-[10px]">Data wystawienia</th>
                                         <th className="py-[10px]">Termin</th>
@@ -66,14 +66,14 @@ function Content({ platnosci, suma, najblizszytermin}){
                                         <th className="py-[10px]">Status</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-theme-dark-muted ">
+                                <tbody className="divide-y divide-theme-muted ">
                                     {platnosci.map((platnosc) => (
                                         <Platnoscrow key={platnosc.id} platnosc={platnosc}/>
                                     ))}
                                 </tbody>
                             </table>
                         ):(
-                            <div className="w-full mx-auto text-center mt-10 text-[24px] text-theme-dark-muted">
+                            <div className="w-full mx-auto text-center mt-10 text-[24px] text-theme-muted">
                                 <span>Brak płatności</span>
                             </div>
                         )}

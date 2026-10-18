@@ -23,8 +23,8 @@ function Content({sale}){
         })
         if(!coords){
             return (
-                <div className="w-full h-screen bg-theme-dark-page text-center p-50 ">
-                    <span className="text-white font-bold text-[48px]">ładowanie mapy</span>
+                <div className="w-full h-screen bg-theme-page text-center p-50 ">
+                    <span className="text-theme-text font-bold text-[48px]">ładowanie mapy</span>
                 </div>
             )
         }
@@ -47,7 +47,7 @@ function Content({sale}){
         // <div className="w-full">
         // </div>
         
-        <div className="bg-theme-dark-page w-full p-[10px] h-screen flex flex-col box-border">
+        <div className="bg-theme-page w-full p-[10px] h-screen flex flex-col box-border">
             <ToastContainer
                 position="bottom-right"
                 autoClose={5000}
@@ -60,9 +60,9 @@ function Content({sale}){
                 pauseOnHover
                 theme="dark"
             />
-            <div className="bg-theme-dark-page w-full flex shrink-0 h-[40px] mx-auto text-center border-b-[0.3px] border-white p-[10px] rounded-t-[10px]">
+            <div className="bg-theme-page w-full flex shrink-0 h-[40px] mx-auto text-center border-b-[0.3px] border-theme-muted p-[10px] rounded-t-[10px]">
                 <BackButton back={ () => window.history.back()} />
-                <span className="font-bold text-[16px] text-white w-full">Mapa kampusu</span>
+                <span className="font-bold text-[16px] text-theme-text w-full">Mapa kampusu</span>
             </div>
             <div className="w-full flex-1 min-h-0 pt-3 pb-2 px-1 rounded-b-[10px] flex flex-col relative ">
                 <MapContainer key={mapCenter.join(',')} center={mapCenter} zoom={17} scrollWheelZoom={true} className="w-full h-full rounded-[10px] z-0">
@@ -84,26 +84,26 @@ function Content({sale}){
                         </Marker>
                     )}
                 </MapContainer>
-                <div className=" absolute top-8 right-5 z-50  ml-[75%] h-[30%] w-[30%] bg-theme-dark-slate rounded-[10px] border border-white ">
+                <div className=" absolute top-8 right-5 z-50  ml-[75%] h-[30%] w-[30%] bg-theme-slate rounded-[10px] border border-theme-muted ">
                    
                     <div className="mx-auto w-full text-center">
-                        <span className="w-full mx-auto text-white text-[48px] font-bold  ">Mapa kampusu</span>
+                        <span className="w-full mx-auto text-theme-text text-[48px] font-bold  ">Mapa kampusu</span>
                     </div>
-                    <div className=" mx-auto w-full flex text-center text-white mt-10 ">
+                    <div className=" mx-auto w-full flex text-center text-theme-text mt-10 ">
                         
                         <input type="text" placeholder="podaj numer sali (np. E201)" value={searchItem} onChange={(e) => {
                             setsearchItem(e.target.value);
                             setisOpen(true);
-                        }} className="w-full ml-15 p-1 border-t border-b border-l border-white rounded-l-[10px]"></input>
-                        <div className="mr-15 border-t border-b border-r border-white rounded-r-[10px] ">
+                        }} className="w-full ml-15 p-1 border-t border-b border-l border-theme-muted rounded-l-[10px]"></input>
+                        <div className="mr-15 border-t border-b border-r border-theme-muted rounded-r-[10px] ">
                             <img src={Lupa} className=" w-[38px] h-[24px] mx-auto my-2 " alt="wyszukaj" />                            
 
                         </div>
 
                         {isOpen && searchItem.length > 0 && filtersale.length > 0 && (
-                            <ul className="absolute top-full left-0 w-full bg-theme-dark-slate border border-white border-t-0 rounded-[10px] max-h-40 overflow-y-auto z-50 shadow-lg">
+                            <ul className="absolute top-full left-0 w-full bg-theme-slate border border-theme-muted border-t-0 rounded-[10px] max-h-40 overflow-y-auto z-50 shadow-lg">
                                 {filtersale.map((item, index) => (
-                                    <li key={index} className="p-2 text-white text-sm hover:bg-theme-dark-slate-3 cursor-pointer border-b border-gray-700 last:border-b-0"
+                                    <li key={index} className="p-2 text-theme-text text-sm hover:bg-theme-slate-3 cursor-pointer border-b border-theme-black last:border-b-0"
                                     onClick={() => handleSelectSuggestion(item)}>
                                         <span className="font-bold">{item.numerSali}</span>
                                     </li>
@@ -148,7 +148,7 @@ function Content({sale}){
                                             });
                                     }                           
                                 
-                        }} className="text-[15px] h-[40px] mx-auto w-3/4  text-white bg-theme-dark-orange rounded-[15px] hover:cursor-pointer active:bg-theme-dark-orange-dark">
+                        }} className="text-[15px] h-[40px] mx-auto w-3/4  text-white bg-theme-orange rounded-[15px] hover:cursor-pointer active:bg-theme-orange">
                             Wyszukaj
                         </button>
                     </div>

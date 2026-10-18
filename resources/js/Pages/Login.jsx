@@ -28,16 +28,16 @@ export default function Login({ status }){
     }
 
     return (
-        <div className="bg-theme-dark-panel min-h-screen p-4">
+        <div className="bg-theme-panel min-h-screen p-4">
             
             <Head title="Logowanie" />
             
-            <div className="bg-theme-dark-login w-md h-1/2 mx-auto mt-60 overflow-hidden px-6 py-4 shadow-md rounded-lg border-[0.1px] border-white">
+            <div className="bg-theme-login w-md h-1/2 mx-auto mt-60 overflow-hidden px-6 py-4 shadow-md rounded-lg border-[0.1px] border-theme-muted">
                 <img src={image} alt="mojauczelnia" className="w-[240px] h-[240px] mx-auto mb-5" />
                 <form onSubmit={submit} className="">
                     
                     {/* email input and label  */}
-                    <div className="w-3/4 mx-auto h-[35] flex border-[0.1px] border-white m-1 rounded-lg mb-2">   
+                    <div className="w-3/4 mx-auto h-[35] flex border-[0.1px] border-theme-muted m-1 rounded-lg mb-2">   
                         <label htmlFor="email" className="w-1/4"><img src={login} alt="login" className="w-[24px] h-[24px] mx-auto m-1 fill-white"/></label>
 
                         <input 
@@ -59,7 +59,7 @@ export default function Login({ status }){
 
 
                     {/* password input and label  */}
-                    <div className="w-3/4 mx-auto h-[35] flex border-[0.1px] border-white m-1 rounded-lg">
+                    <div className="w-3/4 mx-auto h-[35] flex border-[0.1px] border-theme-muted m-1 rounded-lg">
                         <label htmlFor="password" className="w-1/4 h-full "><img src={haslo} alt="haslo" className="w-[24px] h-[24px] mx-auto m-1 fill-white"/></label>
                         
                         <input
@@ -74,7 +74,7 @@ export default function Login({ status }){
                         />
 
                     </div>
-                    <p className="text-white text-[12px] mx-auto text-center ">{errors.password}</p>
+                    <p className="text-theme-text text-[12px] mx-auto text-center ">{errors.password}</p>
 
 
                     <div  className=" w-3/4 mx-auto pt-5">

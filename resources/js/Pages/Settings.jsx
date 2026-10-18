@@ -1,6 +1,7 @@
 import { useForm } from "@inertiajs/react";
+import React from "react";
 
-export default function Settings({ theme = 'dark' }) {
+export default function Settings({ auth,  theme = 'dark' }) {
     const { data, setData, post, processing } = useForm({
         theme,
     });

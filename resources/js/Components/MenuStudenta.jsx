@@ -21,7 +21,7 @@ export default function MenuStudenta(){
     const [isOpen, setIsOpen] = useState(false);
     const [isOpen2, setIsOpen2] = useState(false);
     return(
-        <nav className="bg-theme-dark-page border border-theme-dark-black w-[20%] h-screen">
+        <nav className="bg-theme-page border border-theme-black w-[20%] h-screen">
             {/* top menu z logo i td */}
             <div className="px-[10px] py-[10px] gap-x-[10px] flex">
                 <img src={Logo} alt="logo" className="w-[24px] h-[24px]" />
@@ -35,37 +35,37 @@ export default function MenuStudenta(){
 
 
             {/* tyl opcji menu */}
-            <div className="px-[10px] text-theme-dark-muted ">
+            <div className="px-[10px] text-theme-muted ">
                 <Link href='/mojedane' method="get" as="button" className="hover:cursor-pointer w-full">
-                    <div className="border-b-1 border-theme-dark-muted flex h-[30px] gap-x-[10px] items-center fustify-start">
+                    <div className="border-b-1 border-theme-muted flex h-[30px] gap-x-[10px] items-center fustify-start">
                         <img src={Account} alt="mojedane" />
                         <span className="text-[12px]">Moje dane</span>
 
                     </div>
                 </Link>
                 <Link href='/planzajec' method="get" as="button" className="hover:cursor-pointer w-full">    
-                    <div className="border-b-1 border-theme-dark-muted flex h-[30px] gap-x-[10px] items-center fustify-start">
+                    <div className="border-b-1 border-theme-muted flex h-[30px] gap-x-[10px] items-center fustify-start">
                         <img src={Calendar} alt="planzajec" />
                         <span className="text-[12px]">Plan Zajęć</span>
                     </div>
                 </Link>
                 
                 <Link href='/student/edziekanat' method="get" as="button" className="hover:cursor-pointer w-full">
-                    <div className="border-b-1 border-theme-dark-muted flex h-[30px] gap-x-[10px] items-center fustify-start">
+                    <div className="border-b-1 border-theme-muted flex h-[30px] gap-x-[10px] items-center fustify-start">
                         <img src={Inbox} alt="edziekanat" />
                         <span className="text-[12px]">E-Dziekanat</span>
                     </div>
                 </Link>
 
                 <Link href='/student/mojefinanse' method="get" as="button" className="hover:cursor-pointer w-full">    
-                    <div className="border-b-1 border-theme-dark-muted flex h-[30px] gap-x-[10px] items-center fustify-start">
+                    <div className="border-b-1 border-theme-muted flex h-[30px] gap-x-[10px] items-center fustify-start">
                         <img src={Wallet} alt="finanse" />
                         <span className="text-[12px]">Moje Finanse</span>
                     </div>
                 </Link>
                 {/* pierwszy dropdown  */}
                 <div className="pt-[10px] pr-[10px] ">
-                    <div className="text-theme-dark-subtle">
+                    <div className="text-theme-subtle">
                         <button onClick={() => { setIsOpen(!isOpen) }} className="flex items-center fustify-start gap-x-[5px] hover:cursor-pointer">
                             <span className="text-[13px]">Komunikacja i organizacja</span>
                             <span className={`text-[12px] transform transition-transform duration-300  ${isOpen ? 'rotate-180' : ''}`}>▼</span>
@@ -97,7 +97,7 @@ export default function MenuStudenta(){
 
                 {/* drugi dropdown */}
                 <div className="pt-[10px] pr-[10px] ">
-                    <div className="text-theme-dark-subtle">
+                    <div className="text-theme-subtle">
                         <button onClick={() => { setIsOpen2(!isOpen2) }} className="flex items-center fustify-start gap-x-[5px] hover:cursor-pointer">
                             <span className="text-[13px]">Nauka</span>
                             <span className={`text-[12px] transform transition-transform duration-300  ${isOpen2 ? 'rotate-180' : ''}`}>▼</span>

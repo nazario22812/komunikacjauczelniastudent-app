@@ -32,7 +32,7 @@
   --theme-light-page: #F8FAFC;
   --theme-light-surface: #FFFFFF;
   --theme-light-panel: #E2E8F0;
-  --theme-light-login: #E0F2FE;
+  --theme-light-login: #1e6fa5;
   --theme-light-accent-indigo: #2563eb;
   --theme-light-accent-navy: #1d4ed8;
   --theme-light-accent-ink: #0F172A;
@@ -51,7 +51,7 @@
   --theme-light-gray: #94A3B8;
   --theme-light-light-gray: #CBD5E1;
   --theme-light-purple-muted: #7C3AED;
-  --theme-light-muted: #475569;
+  --theme-light-muted: #677385;
   --theme-light-progress: #94A3B8;
   --theme-light-border: #CBD5E1;
 }
