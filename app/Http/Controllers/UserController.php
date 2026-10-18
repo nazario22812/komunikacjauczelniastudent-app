@@ -235,7 +235,7 @@ class UserController extends Controller
         // dd($listaGrup);
         // dd($listaKierunkow);
         return Inertia::render('PlanZajec', [
-            'plan' => $gotowyplan,
+            'plan' => $gotowyplan ?? null,
             'listagrup' => $listaGrup,
             'listakierunkow' => $listaKierunkow
         ]);
