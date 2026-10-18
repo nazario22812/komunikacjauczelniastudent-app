@@ -16,14 +16,14 @@ function Materialy({materialy}){
                             {materialy.map((material) => (
                                 <tr key={material.id} className="w-full ">
                                     <td className="w-full">
-                                        <a href={`/storage/${material.nazwa}`} target="_blank" className="text-[22px] text-[#73768C] ">🔗{material.nazwa}, </a>
+                                        <a href={`/storage/${material.nazwa}`} target="_blank" className="text-[22px] text-theme-dark-muted ">🔗{material.nazwa}, </a>
                                     </td>
                                 </tr>
                             ))}
                         </div>
                     ):
                     (
-                        <div className="w-full mx-auto text-center mt-10 text-[24px] text-[#73768C]">
+                        <div className="w-full mx-auto text-center mt-10 text-[24px] text-theme-dark-muted">
                             <span>Brak materiałów</span>
                         </div>
                     )}
@@ -38,7 +38,7 @@ function Sylabusplusliteratura({sylabus, literatura, przedmiot, kurs}){
         <div className="w-[100%] h-full m-5 overflow-y-auto pr-2 custom-scrollbar">
             <div className="mb-2 ">
                 <span className="font-bold text-[22px]">Informacje o przedmiocie</span>
-                <div className="bg-[#1e293b] p-5 rounded-[10px] w-[60%]">
+                <div className="bg-theme-dark-slate p-5 rounded-[10px] w-[60%]">
                     <p>Przedmiot: {przedmiot.nazwa}</p>
                     <p>Semester: {kurs.Semester}</p>
                     <p>ECTS: {przedmiot.punktyECTS}</p>
@@ -52,21 +52,21 @@ function Sylabusplusliteratura({sylabus, literatura, przedmiot, kurs}){
             </div>
             <div className="mb-2 ">
                 <span className="font-bold text-[22px]">Opis przedmiotu</span>
-                <div className="bg-[#1e293b] p-5 rounded-[10px] w-[60%]">
+                <div className="bg-theme-dark-slate p-5 rounded-[10px] w-[60%]">
                     <p>{sylabus.opisPrzedmiotu}</p>
                 </div>
             </div>
             <div className="mb-2 ">
                 <span className="font-bold text-[22px]">Warunki zaliczenia</span>
-                <div className="bg-[#1e293b] p-5 rounded-[10px] w-[60%]">
+                <div className="bg-theme-dark-slate p-5 rounded-[10px] w-[60%]">
                     <p>{sylabus.warunkiZaliczenia}</p>
                 </div>        
             </div>
             <div>
                 <span className="font-bold text-[22px]">Literatura</span>
-                <div className="bg-[#1e293b] p-5 rounded-[10px] w-[60%]">
+                <div className="bg-theme-dark-slate p-5 rounded-[10px] w-[60%]">
                     {literatura.map((ksiazka) => (
-                        <div key={ksiazka.id} className="border-b border-b-[#04041D] pb-1">
+                        <div key={ksiazka.id} className="border-b border-theme-dark-page pb-1">
                             <p className="text-[18px]">{ksiazka.nazwa}</p>
                             <p className="text-[14px] font-thin">{ksiazka.opis}</p>
                         </div>
@@ -82,7 +82,7 @@ function Oceny({oceny}){
         <div className="overflow-x-auto rounded-[10px] border border-gray-700/60">
             <table className="w-full text-left border-collapse">
                 <thead>
-                    <tr className="border-b border-gray-700 text-[#73768C] text-[14px]">
+                    <tr className="border-b border-gray-700 text-theme-dark-muted text-[14px]">
                         <th className="p-3 font-medium">Nazwa Zadania</th>
                         <th className="p-3 font-medium">Ocena</th>
                     </tr>
@@ -90,7 +90,7 @@ function Oceny({oceny}){
                 <tbody className="divide-y divide-gray-800 text-[14px]">
                     {oceny && oceny.length > 0 ? (
                         oceny.map((ocena) => (
-                            <tr key={ocena.id} className="hover:bg-[#1e293b]/50 transition-colors">
+                            <tr key={ocena.id} className="hover:bg-theme-dark-slate/50 transition-colors">
                                 <td className="p-3 font-medium text-white">{ocena.nazwaZadania || '—'}</td>
                                 <td className="p-3 font-bold text-white">{ocena.skalaOceny}</td>
                             </tr>
@@ -121,14 +121,14 @@ function Zadania({ zadania }){
         <div className="overflow-x-auto rounded-[10px] border border-gray-700/60">
             <table className="w-full text-left border-collapse">
                 <thead>
-                    <tr className="border-b border-gray-700 text-[#73768C] text-[14px]">
+                    <tr className="border-b border-gray-700 text-theme-dark-muted text-[14px]">
                         <th className="p-3 font-medium">Nazwa Zadania</th>
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-800 text-[14px]">
                     {zadania && zadania.length > 0 ? (
                         zadania.map((zadanie) => (
-                            <tr key={zadanie.id} onClick={() => router.get(`/student/kurs/${zadanie.idZadanie}`)} className="hover:bg-[#1e293b]/50 transition-colors cursor-pointer">
+                            <tr key={zadanie.id} onClick={() => router.get(`/student/kurs/${zadanie.idZadanie}`)} className="hover:bg-theme-dark-slate/50 transition-colors cursor-pointer">
                                 <td  className="p-3 font-medium text-white">{zadanie.nazwaZadania || '—'}</td>
                             </tr>
                         ))
@@ -151,40 +151,40 @@ function Content({ kurs, materialy, sylabus, literatura, przedmiot, oceny, zadan
     
     return (
         
-       <div className="bg-[#04041D] w-full p-[10px] h-screen flex flex-col box-border">
-            <div className="bg-[#04041d] w-full flex shrink-0 h-[40px] mx-auto text-center border-b-[0.3px] border-white p-[10px] rounded-t-[10px]">
+       <div className="bg-theme-dark-page w-full p-[10px] h-screen flex flex-col box-border">
+            <div className="bg-theme-dark-page w-full flex shrink-0 h-[40px] mx-auto text-center border-b-[0.3px] border-white p-[10px] rounded-t-[10px]">
                 <BackButton back={ () => window.history.back()} />
                 <span className="font-bold text-[16px] text-white w-full">Kurs</span>
             </div>
             <div className="w-full flex-1 min-h-0 pt-3 pb-2 px-4 rounded-b-[10px] flex flex-col relative ">
-                <div className="bg-[#06062c] w-full h-[15%] mx-auto rounded-t-[15px] px-[12px] flex text-left items-center" > 
+                <div className="bg-theme-dark-surface w-full h-[15%] mx-auto rounded-t-[15px] px-[12px] flex text-left items-center" > 
                     <div>
                         <span className="text-white font-bold text-[36px] ">{kurs.nazwa}</span><br />
                         <span className="text-white font-thin text-[20px] ">{kurs.prowadzacy.TytulNaukowy} {kurs.prowadzacy.user.name} {kurs.prowadzacy.user.surname}</span>   
                     </div>
                     
                 </div>   
-                <div className="bg-[#1e293b] w-full h-full mx-auto p-5 rounded-b-[15px] ">
+                <div className="bg-theme-dark-slate w-full h-full mx-auto p-5 rounded-b-[15px] ">
                     
                     <div className="w-[100%]">
                         <Tabs className="w-full flex flex-col h-full" selectedTabPanelClassName="!block"> 
                             <TabList className="flex border-b border-white space-x-8 text-white  cursor-pointer list-none text-center">
-                                <Tab className="w-full" selectedClassName="!border-0 !bg-[#06062c] !rounded-t-[10px]">Materiały</Tab>
-                                <Tab className="w-full" selectedClassName="!border-0 !bg-[#06062c] !rounded-t-[10px]">Zadania</Tab>
-                                <Tab className="w-full" selectedClassName="!border-0 !bg-[#06062c] !rounded-t-[10px]">Oceny</Tab>
-                                <Tab className="w-full" selectedClassName="!border-0 !bg-[#06062c] !rounded-t-[10px]">Dodatkowa informacja</Tab>
+                                <Tab className="w-full" selectedClassName="!border-0 !bg-theme-dark-surface !rounded-t-[10px]">Materiały</Tab>
+                                <Tab className="w-full" selectedClassName="!border-0 !bg-theme-dark-surface !rounded-t-[10px]">Zadania</Tab>
+                                <Tab className="w-full" selectedClassName="!border-0 !bg-theme-dark-surface !rounded-t-[10px]">Oceny</Tab>
+                                <Tab className="w-full" selectedClassName="!border-0 !bg-theme-dark-surface !rounded-t-[10px]">Dodatkowa informacja</Tab>
                             </TabList>
 
-                            <TabPanel className="hidden bg-[#06062c] h-[100%] rounded-b-[10px] text-white p-5">
+                            <TabPanel className="hidden bg-theme-dark-surface h-[100%] rounded-b-[10px] text-white p-5">
                                 <Materialy materialy={materialy}/>
                             </TabPanel>
-                            <TabPanel className="hidden bg-[#06062c] h-full rounded-b-[10px]  text-white">
+                            <TabPanel className="hidden bg-theme-dark-surface h-full rounded-b-[10px]  text-white">
                                 <Zadania zadania={zadania}/>
                             </TabPanel>
-                             <TabPanel className="hidden bg-[#06062c] h-full rounded-b-[10px]  text-white">
+                             <TabPanel className="hidden bg-theme-dark-surface h-full rounded-b-[10px]  text-white">
                                 <Oceny oceny={oceny}/>
                             </TabPanel>
-                             <TabPanel className="hidden bg-[#06062c] h-full rounded-b-[10px]  text-white">
+                             <TabPanel className="hidden bg-theme-dark-surface h-full rounded-b-[10px]  text-white">
                                 <Sylabusplusliteratura sylabus={sylabus} literatura={literatura} przedmiot={przedmiot} kurs={kurs}/>
                             </TabPanel>
                         </Tabs>

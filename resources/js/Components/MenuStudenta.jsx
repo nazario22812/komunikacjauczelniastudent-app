@@ -21,51 +21,51 @@ export default function MenuStudenta(){
     const [isOpen, setIsOpen] = useState(false);
     const [isOpen2, setIsOpen2] = useState(false);
     return(
-        <nav className="bg-[#04041D] border border-[000000] w-[20%] h-screen">
+        <nav className="bg-theme-dark-page border border-theme-dark-black w-[20%] h-screen">
             {/* top menu z logo i td */}
             <div className="px-[10px] py-[10px] gap-x-[10px] flex">
                 <img src={Logo} alt="logo" className="w-[24px] h-[24px]" />
                 <Link href='/stronaglowna/student' method="get" as='button' className="hover:cursor-pointer"><p className="font-bold text-white text-[14px]">MojaUczelnia</p></Link>
                 <div className="w-full gap-x-[10px] px-[10px] flex items-center justify-end">
                     <Link href='/powiadomienia' method="get" as="button" className="hover:cursor-pointer"><img src={Notification} alt="powiadomienia" /></Link>
-                    <Link><img src={Settings} alt="ustawienia" className="hover:cursor-pointer"/></Link>
+                    <Link href='/ustawienia' method="get" as="button" className="hover:cursor-pointer"><img src={Settings} alt="ustawienia" className="hover:cursor-pointer"/></Link>
                     <Link href='/logout' method="post" as="button" className="hover:cursor-pointer"><img src={Exit} alt="logout" /></Link>
                 </div>
             </div>
 
 
             {/* tyl opcji menu */}
-            <div className="px-[10px] text-[#73768C] ">
+            <div className="px-[10px] text-theme-dark-muted ">
                 <Link href='/mojedane' method="get" as="button" className="hover:cursor-pointer w-full">
-                    <div className="border-b-1 border-[#73768C] flex h-[30px] gap-x-[10px] items-center fustify-start">
+                    <div className="border-b-1 border-theme-dark-muted flex h-[30px] gap-x-[10px] items-center fustify-start">
                         <img src={Account} alt="mojedane" />
                         <span className="text-[12px]">Moje dane</span>
 
                     </div>
                 </Link>
                 <Link href='/planzajec' method="get" as="button" className="hover:cursor-pointer w-full">    
-                    <div className="border-b-1 border-[#73768C] flex h-[30px] gap-x-[10px] items-center fustify-start">
+                    <div className="border-b-1 border-theme-dark-muted flex h-[30px] gap-x-[10px] items-center fustify-start">
                         <img src={Calendar} alt="planzajec" />
                         <span className="text-[12px]">Plan Zajęć</span>
                     </div>
                 </Link>
                 
                 <Link href='/student/edziekanat' method="get" as="button" className="hover:cursor-pointer w-full">
-                    <div className="border-b-1 border-[#73768C] flex h-[30px] gap-x-[10px] items-center fustify-start">
+                    <div className="border-b-1 border-theme-dark-muted flex h-[30px] gap-x-[10px] items-center fustify-start">
                         <img src={Inbox} alt="edziekanat" />
                         <span className="text-[12px]">E-Dziekanat</span>
                     </div>
                 </Link>
 
                 <Link href='/student/mojefinanse' method="get" as="button" className="hover:cursor-pointer w-full">    
-                    <div className="border-b-1 border-[#73768C] flex h-[30px] gap-x-[10px] items-center fustify-start">
+                    <div className="border-b-1 border-theme-dark-muted flex h-[30px] gap-x-[10px] items-center fustify-start">
                         <img src={Wallet} alt="finanse" />
                         <span className="text-[12px]">Moje Finanse</span>
                     </div>
                 </Link>
                 {/* pierwszy dropdown  */}
                 <div className="pt-[10px] pr-[10px] ">
-                    <div className="text-[#676C98]">
+                    <div className="text-theme-dark-subtle">
                         <button onClick={() => { setIsOpen(!isOpen) }} className="flex items-center fustify-start gap-x-[5px] hover:cursor-pointer">
                             <span className="text-[13px]">Komunikacja i organizacja</span>
                             <span className={`text-[12px] transform transition-transform duration-300  ${isOpen ? 'rotate-180' : ''}`}>▼</span>
@@ -97,7 +97,7 @@ export default function MenuStudenta(){
 
                 {/* drugi dropdown */}
                 <div className="pt-[10px] pr-[10px] ">
-                    <div className="text-[#676C98]">
+                    <div className="text-theme-dark-subtle">
                         <button onClick={() => { setIsOpen2(!isOpen2) }} className="flex items-center fustify-start gap-x-[5px] hover:cursor-pointer">
                             <span className="text-[13px]">Nauka</span>
                             <span className={`text-[12px] transform transition-transform duration-300  ${isOpen2 ? 'rotate-180' : ''}`}>▼</span>

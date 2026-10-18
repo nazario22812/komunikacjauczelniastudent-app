@@ -28,11 +28,11 @@ export default function Login({ status }){
     }
 
     return (
-        <div className="bg-[08083B] min-h-screen p-4">
+        <div className="bg-theme-dark-panel min-h-screen p-4">
             
             <Head title="Logowanie" />
             
-            <div className="bg-[0B0B58] w-md h-1/2 mx-auto mt-60 overflow-hidden px-6 py-4 shadow-md rounded-lg border-[0.1px] border-white">
+            <div className="bg-theme-dark-login w-md h-1/2 mx-auto mt-60 overflow-hidden px-6 py-4 shadow-md rounded-lg border-[0.1px] border-white">
                 <img src={image} alt="mojauczelnia" className="w-[240px] h-[240px] mx-auto mb-5" />
                 <form onSubmit={submit} className="">
                     
@@ -78,7 +78,7 @@ export default function Login({ status }){
 
 
                     <div  className=" w-3/4 mx-auto pt-5">
-                        <button className="w-full h-[35] mt-5 bg-white rounded-lg text-[08083B] font-bold hover:bg-gray-300 hover:cursor-pointer active:bg-gray-500" disabled={processing}>
+                        <button className="w-full h-[35] mt-5 bg-white rounded-lg text-theme-dark-panel font-bold hover:bg-gray-300 hover:cursor-pointer active:bg-gray-500" disabled={processing}>
                             Zaloguj
                         </button>
                     </div>

@@ -43,6 +43,8 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/mapa', [UserController::class, 'mapaKampusu']);
     Route::get('/powiadomienia', [UserController::class, 'powiadomienia']);
     Route::get('/ogloszeniaiankiety', [UserController::class, 'ogloszniaiankiety']);
+    Route::get('/ustawienia', [UserController::class, 'ustawienia']);
+    Route::post('/ustawienia/theme', [UserController::class, 'ustawieniaTheme'])->name('ustawienia.theme');
 });
 
 //trasy dla studenta 

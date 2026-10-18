@@ -9,16 +9,16 @@ function Content({ rol, name, surname, email, numerTelefonu, kontoBankowe, DataU
     TytulNaukowy, katedra, Odpowiedzialnosc,
     grupaLaboratoryjna, grupaCwiczeniowa, grupaWykladowa }){
     return(
-        <div className="bg-[#04041D] w-full p-[10px] h-screen flex flex-col box-border">
+        <div className="bg-theme-dark-page w-full p-[10px] h-screen flex flex-col box-border">
             {/* <p className="text-white">{rol}</p> */}
             
-            <div className="bg-[#08083b] w-full flex shrink-0 h-[40px] mx-auto text-center border-[0.3px] border-white p-[10px] rounded-t-[10px]">
+            <div className="bg-theme-dark-panel w-full flex shrink-0 h-[40px] mx-auto text-center border-[0.3px] border-white p-[10px] rounded-t-[10px]">
                 <BackButton back={ () => window.history.back()} />
                 <span className="font-bold text-[16px] text-white w-full">Moje dane</span>
             </div>
 
-            <div className="bg-[#08083b] w-full h-full flex-1 border-[0.3px] border-white py-10 rounded-b-[10px]">
-                <div className="w-3/4 h-full bg-[#1E293B] mx-auto  rounded-[15px] flex">
+            <div className="bg-theme-dark-panel w-full h-full flex-1 border-[0.3px] border-white py-10 rounded-b-[10px]">
+                <div className="w-3/4 h-full bg-theme-dark-slate mx-auto  rounded-[15px] flex">
                     
 
                     <div className="w-full m-10 text-left">

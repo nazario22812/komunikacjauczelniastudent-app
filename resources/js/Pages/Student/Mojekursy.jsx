@@ -39,7 +39,7 @@ function Content({ mojekursy, wszystkiekursy, listasemestrow, kierunekstudenta }
 
     return (
         
-        <div className="bg-[#04041D] w-full p-[10px] h-screen flex flex-col box-border">
+        <div className="bg-theme-dark-page w-full p-[10px] h-screen flex flex-col box-border">
             <ToastContainer
                 position="bottom-right"
                 autoClose={5000}
@@ -53,13 +53,13 @@ function Content({ mojekursy, wszystkiekursy, listasemestrow, kierunekstudenta }
                 theme="dark"
             />
 
-            <div className="bg-[#04041d] w-full flex shrink-0 h-[40px] mx-auto text-center border-b-[0.3px] border-white p-[10px] rounded-t-[10px]">
+            <div className="bg-theme-dark-page w-full flex shrink-0 h-[40px] mx-auto text-center border-b-[0.3px] border-white p-[10px] rounded-t-[10px]">
                 <BackButton back={ () => window.history.back()} />
                 <span className="font-bold text-[16px] text-white w-full">Moje kursy</span>
             </div>
             <div className="w-full flex-1 min-h-0 pt-3 pb-2  px-4 rounded-b-[10px] flex flex-col relative ">
                 <div className="w-full h-[8%] flex  text-white">
-                    <div className="bg-[#1e293b] w-[30%] max-h-[60%] flex items-center text-white rounded-[10px] overflow-hidden border border-white">
+                    <div className="bg-theme-dark-slate w-[30%] max-h-[60%] flex items-center text-white rounded-[10px] overflow-hidden border border-white">
 
                         <input 
                             type="text" 
@@ -85,21 +85,21 @@ function Content({ mojekursy, wszystkiekursy, listasemestrow, kierunekstudenta }
                     {mojekursy && mojekursy.length > 0 ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 overflow-y-auto custom-scrollbar pr-2 h-[30%]">
                             {mojekursy.map((kurs) => (
-                                <div key={kurs.id} className="bg-[#1e293b] p-5 rounded-[15px] flex flex-col justify-between gap-5 border border-gray-700/50 hover:border-gray-500">
+                                <div key={kurs.id} className="bg-theme-dark-slate p-5 rounded-[15px] flex flex-col justify-between gap-5 border border-gray-700/50 hover:border-gray-500">
                                     <div>
                                         <h3 className="text-white font-bold text-[20px] leading-light">{kurs.nazwa}</h3>
                                         
                                         <p className="text-gray-400 text-[14px] ">Prowadzący: {kurs.prowadzacy.TytulNaukowy} {kurs.prowadzacy.user.name} {kurs.prowadzacy.user.surname}</p>
                                     </div>
 
-                                    <button onClick={() => router.get(`/student/mojekursy/${kurs.nazwa}/${kurs.idkurs}`)} className="w-full bg-[#06062c] hover:bg-[#101042] text-white py-2 rounded-[10px] text-center font-medium hover:cursor-pointer">
+                                    <button onClick={() => router.get(`/student/mojekursy/${kurs.nazwa}/${kurs.idkurs}`)} className="w-full bg-theme-dark-surface hover:bg-theme-dark-accent-navy text-white py-2 rounded-[10px] text-center font-medium hover:cursor-pointer">
                                         Otwórz kurs
                                     </button>
                                 </div>
                             ))}
                         </div>
                     ):(
-                        <div className="w-full flex-1 flex items-center justify-center text-[24px] text-[#73768C]">
+                        <div className="w-full flex-1 flex items-center justify-center text-[24px] text-theme-dark-muted">
                             <span>Nie masz jeszcze kursów</span>
                         </div>
                     )}
@@ -112,7 +112,7 @@ function Content({ mojekursy, wszystkiekursy, listasemestrow, kierunekstudenta }
 
                 </div>
             )}
-            <div className={`fixed top-0 center-0 h-[400px] w-[500px] bg-[#04041D] border-l border-white/20 shadow-2xl z-50 p-6 flex flex-col text-white transition-transform duration-300 ease-in-out ${pokazKod ? 'translate-x-0' : 'translate-x-full'}`}>
+            <div className={`fixed top-0 center-0 h-[400px] w-[500px] bg-theme-dark-page border-l border-white/20 shadow-2xl z-50 p-6 flex flex-col text-white transition-transform duration-300 ease-in-out ${pokazKod ? 'translate-x-0' : 'translate-x-full'}`}>
                 
                 <div className="flex justify-between items-center pb-4 border-b border-white/20">
                     <h2 className="font-bold text-[20px]">Podaj kod do kursu</h2>
@@ -138,7 +138,7 @@ function Content({ mojekursy, wszystkiekursy, listasemestrow, kierunekstudenta }
 
                 </div>
             )}     
-            <div className={`fixed top-0 right-0 h-full w-[500px] bg-[#04041D] border-l border-white/20 shadow-2xl z-50 p-6 flex flex-col text-white transition-transform duration-300 ease-in-out ${pokaz ? 'translate-x-0' : 'translate-x-full'}`}>
+            <div className={`fixed top-0 right-0 h-full w-[500px] bg-theme-dark-page border-l border-white/20 shadow-2xl z-50 p-6 flex flex-col text-white transition-transform duration-300 ease-in-out ${pokaz ? 'translate-x-0' : 'translate-x-full'}`}>
                 
                 <div className="flex justify-between items-center pb-4 border-b border-white/20">
                     <h2 className="font-bold text-[20px]">Wszystkie kursy</h2>
@@ -175,7 +175,7 @@ function Content({ mojekursy, wszystkiekursy, listasemestrow, kierunekstudenta }
                                                     {kursySemestru.filter((kurs) => kurs.Przedmiot_idPrzedmiot === przedmiot.idPrzedmiot)
                                                     .map((kurs) => (
                                                         <div key={kurs.idKurs}>
-                                                            <p onClick={() => router.post(`/student/checkkurs/${kurs.idkurs}`)} className="text-[14px] pl-5 text-[#73768c] shrink cursor-pointer">
+                                                            <p onClick={() => router.post(`/student/checkkurs/${kurs.idkurs}`)} className="text-[14px] pl-5 text-theme-dark-muted shrink cursor-pointer">
                                                                 {kurs.nazwa}, {kurs.prowadzacy.TytulNaukowy} {kurs.prowadzacy.user.name} {kurs.prowadzacy.user.surname}
                                                             </p>
                                                         </div>
@@ -194,7 +194,7 @@ function Content({ mojekursy, wszystkiekursy, listasemestrow, kierunekstudenta }
                             })}
                         </div>
                     ):(
-                        <div className="w-full flex-1 flex items-center justify-center text-[24px] text-[#73768C]">
+                        <div className="w-full flex-1 flex items-center justify-center text-[24px] text-theme-dark-muted">
                             <span>Brak kursów</span>
                         </div>
                     )}
@@ -242,7 +242,7 @@ function Koddokursu({ isOpen, onClose, zwroconyKurs, wszystkiekursy }){
 
                 </div>
             )}
-            <div className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[300px] w-[600px] bg-[#04041D] border border-white/20 rounded-[15px] shadow-2xl z-50 p-6 flex flex-col text-white transition-all duration-300 ease-in-out ${isOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0 pointer-events-none'}`}>                
+            <div className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[300px] w-[600px] bg-theme-dark-page border border-white/20 rounded-[15px] shadow-2xl z-50 p-6 flex flex-col text-white transition-all duration-300 ease-in-out ${isOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0 pointer-events-none'}`}>                
                 <div className="flex justify-between items-center pb-4 border-b border-white/20">
                     <h2 className="font-bold text-[20px]">Podaj kod do kursu</h2>
                     <h4 className="text-[17px] font-thin">{zwroconyKurs?.nazwa}</h4>
@@ -255,7 +255,7 @@ function Koddokursu({ isOpen, onClose, zwroconyKurs, wszystkiekursy }){
                 </div>
 
                 <div className="flex-1 overflow-y-auto">
-                    <div className="bg-[#1e293b] w-[80%] mx-auto mt-[20%] max-h-[60%] flex items-center text-white rounded-[10px] overflow-hidden border border-white">
+                    <div className="bg-theme-dark-slate w-[80%] mx-auto mt-[20%] max-h-[60%] flex items-center text-white rounded-[10px] overflow-hidden border border-white">
 
                         <input 
                             type="text" 
