@@ -196,17 +196,6 @@ class UserController extends Controller
             ->get();
             
             $gotowyplan = $rezerwacje->map(function ($item) {
-                $dniMapowania = [
-                    'Poniedziałek' => 1,
-                    'Wtorek' => 2,
-                    'Środa' => 3,
-                    'Czwartek' => 4,
-                    'Piątek' => 5,
-                    'Sobota' => 6,
-                    'Niedziela' => 7,
-                ];
-
-                $numerDnia = $dniMapowania[$item->DzienTygodnia] ?? 1;
                 
                 // $dataZajec = Carbon::now()->startOfWeek()->addDays($numerDnia - 1)->format('Y-m-d');
                 // dd($dataZajec); 
@@ -232,6 +221,8 @@ class UserController extends Controller
         $listaKierunkow = Kierunek::get()->values()->toArray();
         $listaGrup = Grupastudenta::where('typGrupy', 'Laboratoryjna')->get()->values()->toArray();                       
  
+        
+
         // dd($listaGrup);
         // dd($listaKierunkow);
         return Inertia::render('PlanZajec', [

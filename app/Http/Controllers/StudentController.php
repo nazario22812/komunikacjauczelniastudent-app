@@ -429,6 +429,14 @@ class StudentController extends Controller
         ->orderBy('termin','asc')
         ->first();
         
+        if($request->expectsJson()){
+            return response()->json([
+                'platnosci' => $platnosci,
+                'suma' => $suma,
+                'najblizszytermin' => substr($najblizszytermin?->termin, 0, 16) ?: null,
+            ]);
+        }
+
         return Inertia::render('Student/MojeFinanse',[
             'platnosci' => $platnosci,
             'suma' => $suma,
