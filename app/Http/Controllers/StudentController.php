@@ -248,7 +248,14 @@ class StudentController extends Controller
         $studentsem = $student->semester;
         // substr($item->GodzinaZakonczenia, 0, 5) ,
         // dd($semestry);
-        
+
+        if($request->expectsJson()){
+            return response()->json([
+                'oceny' => $ocenykoncowe,
+                'semestry' => $semestry,
+                'studentsem' => $studentsem
+            ]);
+        }
 
         return Inertia::render('Student/Oceny', [
             'oceny' => $ocenykoncowe,
