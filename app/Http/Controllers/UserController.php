@@ -235,7 +235,6 @@ class UserController extends Controller
     public function mojedane(Request $request){
         $user = $request->user();
         $role = '';
-
         $polaroli = [];
         $grupalaboratoryjna = null;
         $grupacwiczeniowa = null;

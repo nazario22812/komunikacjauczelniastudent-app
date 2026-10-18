@@ -51,7 +51,6 @@
         "nanoid": "^3.3.18",
         "picocolors": "^1.1.1",
         "picomatch": "^4.0.7",
-        "postcss": "^8.5.26",
         "react": "^19.2.8",
         "react-bootstrap": "^2.10.10",
         "react-dom": "^19.2.8",
@@ -81,9 +80,11 @@
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.0.0",
+        "autoprefixer": "^10.6.1",
         "concurrently": "^9.2.1",
         "laravel-vite-plugin": "^3.1",
-        "tailwindcss": "^4.0.0",
+        "postcss": "^8.5.30",
+        "tailwindcss": "^4.3.3",
         "vite": "^8.0.0"
     },
     "optionalDependencies": {
