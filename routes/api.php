@@ -14,32 +14,32 @@ Route::get('/', function () {
         /** @var User $user */
         $user = Auth::user();
         if($user->isStudent()){
-            return redirect()->route('stronaglownastudent');
+            return redirect()->route('stronaglownastudent_mob');
         }
         if($user->isProwadzacy()){
-            return redirect()->route('stronaglownaprowadzacy');
+            return redirect()->route('stronaglownaprowadzacy_mob');
         }
         if($user->isPracownikDziekanatu()){
-            return redirect()->route('stronaglownapracownikdziekanatu');
+            return redirect()->route('stronaglownapracownikdziekanatu_mob');
         }
         // return redirect()->route('strona-glowna');
     }
 
     return Inertia::render('Login');
-})->name('main');
+});
 
 
 
 Route::middleware('guest')->group(function() {
-    Route::get('/login', [LoginController::class, 'create'])->name('login');
+    Route::get('/login', [LoginController::class, 'create']);
     Route::post('/login', [LoginController::class, 'store']);
 });
 
 Route::middleware(['auth:sanctum'])->group(function(){
-    Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
+    Route::post('/logout', [LoginController::class, 'destroy']);
     Route::get('/mojedane', [UserController::class, 'mojedane']);
-    Route::get('/planzajec', [UserController::class, 'planzajec'])->name('planzajec');
-    Route::get('/planzajec/{grupa}', [UserController::class, 'planzajecpost'])->name('planzajec.szukaniegrupy');
+    Route::get('/planzajec', [UserController::class, 'planzajec']);
+    Route::get('/planzajec/{grupa}', [UserController::class, 'planzajecpost']);
     Route::get('/mapa', [UserController::class, 'mapaKampusu']);
     Route::get('/powiadomienia', [UserController::class, 'powiadomienia']);
     Route::get('/ogloszeniaiankiety', [UserController::class, 'ogloszniaiankiety']);
@@ -47,7 +47,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
 //trasy dla studenta 
 Route::middleware(['auth:sanctum', 'role:student'])->group(function (){
-    Route::get('/stronaglowna/student', [StudentController::class, 'stronaglowna'])->name('stronaglownastudent');
+    Route::get('/stronaglowna/student', [StudentController::class, 'stronaglowna'])->name('stronaglownastudent_mob');
 
     Route::get('/student/mojefinanse', [StudentController::class, 'finanse']);
     Route::get('/student/konsultacje', [StudentController::class, 'konsultacje']);
@@ -58,7 +58,7 @@ Route::middleware(['auth:sanctum', 'role:student'])->group(function (){
     Route::get('/student/ocenykoncowe', [StudentController::class, 'ocenykoncowe']);
     Route::get('/student/mojekursy', [StudentController::class, 'mojekursy']);
     Route::post('/student/mojekursy/{idkurs}', [StudentController::class, 'mojekursypost']);
-    Route::get('/student/mojekursy/{nazwa}/{idkurs}', [StudentController::class, 'kurs'])->name('student.kurs');
+    Route::get('/student/mojekursy/{nazwa}/{idkurs}', [StudentController::class, 'kurs']);
     Route::post('/student/checkkurs/{idkurs}', [StudentController::class, 'sprawdzeniekursu']);
     Route::get('/student/kurs/{idZadanie}', [StudentController::class, 'zadanieform']);
     Route::post('/student/kurs/wyslijzadanie/{idZadanie}', [StudentController::class, 'wyslijzadanie']);
@@ -73,7 +73,7 @@ Route::middleware(['auth:sanctum', 'role:student'])->group(function (){
 Route::middleware(['auth:sanctum', 'role:prowadzacy'])->group(function (){
     Route::get('/stronaglowna/prowadzacy', function () {
         return Inertia::render('Prowadzacy/StronaGlowna');
-    })->name('stronaglownaprowadzacy');
+    })->name('stronaglownaprowadzacy_mob');
 });
 
 
@@ -83,5 +83,5 @@ Route::middleware(['auth:sanctum', 'role:prowadzacy'])->group(function (){
 Route::middleware(['auth:sanctum', 'role:pracownikdziekanatu'])->group(function (){
     Route::get('/stronaglowna/pracownikdziekanatu', function () {
         return Inertia::render('PracownikDziekanatu/StronaGlowna');
-    })->name('stronaglownapracownikdziekanatu');
+    })->name('stronaglownapracownikdziekanatu_mob');
 });
