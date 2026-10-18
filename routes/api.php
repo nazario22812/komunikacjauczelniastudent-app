@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Models\User;
 
-// trasy dla telefonu
 
 Route::get('/', function () {
     if(Auth::check()){
@@ -48,7 +47,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
 //trasy dla studenta 
 Route::middleware(['auth:sanctum', 'role:student'])->group(function (){
-    Route::get('/stronaglowna/student', [StudentController::class, 'stronaglowna'])->name('stronaglownastudent_mob');
+    Route::get('/stronaglowna/student', [StudentController::class, 'stronaglowna'])->name('stronaglownastudent');
 
     Route::get('/student/mojefinanse', [StudentController::class, 'finanse']);
     Route::get('/student/konsultacje', [StudentController::class, 'konsultacje']);
@@ -74,7 +73,7 @@ Route::middleware(['auth:sanctum', 'role:student'])->group(function (){
 Route::middleware(['auth:sanctum', 'role:prowadzacy'])->group(function (){
     Route::get('/stronaglowna/prowadzacy', function () {
         return Inertia::render('Prowadzacy/StronaGlowna');
-    })->name('stronaglownaprowadzacy_mob');
+    })->name('stronaglownaprowadzacy');
 });
 
 
@@ -84,5 +83,5 @@ Route::middleware(['auth:sanctum', 'role:prowadzacy'])->group(function (){
 Route::middleware(['auth:sanctum', 'role:pracownikdziekanatu'])->group(function (){
     Route::get('/stronaglowna/pracownikdziekanatu', function () {
         return Inertia::render('PracownikDziekanatu/StronaGlowna');
-    })->name('stronaglownapracownikdziekanatu_mob');
+    })->name('stronaglownapracownikdziekanatu');
 });

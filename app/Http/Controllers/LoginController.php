@@ -29,6 +29,7 @@ class LoginController extends Controller
         if(Auth::attempt($validation)){
 
             
+            
             /** @var User $user */
             $user = Auth::user();
             
@@ -45,7 +46,6 @@ class LoginController extends Controller
                 ]);
             }
             $request->session()->regenerate();
-
 
             if($user->isStudent()){
                 return redirect(route('stronaglownastudent'));

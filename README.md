@@ -22,7 +22,6 @@ Po pobraniu repozytirum należy:
     docker compose exec laravel php artisan migrate:fresh --seed
     docker compose exec laravel php artisan storage:link
     docker compose exec laravel php artisan install:api
-
     ```
 5. konfiguracja frontendu 
     ```bash
