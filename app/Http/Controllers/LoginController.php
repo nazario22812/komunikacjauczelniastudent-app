@@ -28,7 +28,7 @@ class LoginController extends Controller
 
         if(Auth::attempt($validation)){
 
-            $request->session()->regenerate();
+            
             
             /** @var User $user */
             $user = Auth::user();
@@ -45,7 +45,7 @@ class LoginController extends Controller
                     'user' => $user
                 ]);
             }
-
+            $request->session()->regenerate();
 
             if($user->isStudent()){
                 return redirect(route('stronaglownastudent'));
@@ -72,7 +72,7 @@ class LoginController extends Controller
 
     public function destroy(Request $request){
         if($request->expectsJson()){
-            $request->user()->currentAccessToken()->delete;
+            $request->user()->currentAccessToken()->delete();
             return response()->json([
                 'message' => 'Wylogowano pomyślnie'
             ]);
