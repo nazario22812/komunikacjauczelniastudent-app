@@ -27,7 +27,7 @@ export default defineConfig({
             host: 'localhost',
         },
         watch: {
-            usePolling: true,
+            // usePolling: true,
             ignored: ['**/storage/framework/views/**'],
         },
     },

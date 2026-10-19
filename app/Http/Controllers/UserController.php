@@ -50,7 +50,7 @@ class UserController extends Controller
         ]);
 
         session()->put('theme', $theme);
-
+    
         return redirect()->back();
     }
 
