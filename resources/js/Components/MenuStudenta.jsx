@@ -25,7 +25,7 @@ export default function MenuStudenta(){
             {/* top menu z logo i td */}
             <div className="px-[10px] py-[10px] gap-x-[10px] flex">
                 <img src={Logo} alt="logo" className="w-[24px] h-[24px]" />
-                <Link href='/stronaglowna/student' method="get" as='button' className="hover:cursor-pointer"><p className="font-bold text-white text-[14px]">MojaUczelnia</p></Link>
+                <Link href='/stronaglowna/student' method="get" as='button' className="hover:cursor-pointer"><p className="font-bold text-theme-text text-[14px]">MojaUczelnia</p></Link>
                 <div className="w-full gap-x-[10px] px-[10px] flex items-center justify-end">
                     <Link href='/powiadomienia' method="get" as="button" className="hover:cursor-pointer"><img src={Notification} alt="powiadomienia" /></Link>
                     <Link href='/ustawienia' method="get" as="button" className="hover:cursor-pointer"><img src={Settings} alt="ustawienia" className="hover:cursor-pointer"/></Link>

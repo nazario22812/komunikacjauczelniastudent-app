@@ -99,7 +99,7 @@ function Content({}){
                 <BackButton back={ () => window.history.back()} />
                 <span className="font-bold text-[16px] text-theme-text w-full ">E-Podanie</span>
             </div>
-            <div className="w-full flex-1 h-full pt-3 pb-2 px-1 rounded-b-[10px] flex flex-col ">
+            <div className="w-full flex-1 min-h-0 pt-3 pb-2 px-1 rounded-b-[10px] flex flex-col relative ">
                 <div className="bg-theme-slate w-full h-full mx-auto pt-[35px] pb-[10px] px-[75px] rounded-[15px]   relative overflow-y-auto pr-2 custom-scrollbar    ">
                     <div className="w-full text-center text-theme-text font-bold text-[58px]">
                         <span >Nowe podanie</span>
