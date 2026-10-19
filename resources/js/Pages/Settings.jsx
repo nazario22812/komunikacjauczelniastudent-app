@@ -2,7 +2,8 @@ import { useForm , Head} from "@inertiajs/react";
 import React from "react";
 import BackButton from "../Components/BackButton";
 import MenuStudenta from "../Components/MenuStudenta";
-
+import MenuProwadzacy from "../Components/MenuProwadzacy";
+import MenuDziekanat from "../Components/MenuDziekanat";
 
 
 function Content({ theme = 'dark'  }){
@@ -51,13 +52,22 @@ function Content({ theme = 'dark'  }){
 
 
 
-export default function Settings({ auth,  theme = 'dark' }) {
-   
+export default function Settings({ auth,  theme = 'dark', rol }) {
+    let menu;
+    if (rol === 'Student'){
+        menu = <MenuStudenta/>
+    }
+    if (rol === 'Prowadzący'){
+        menu = <MenuProwadzacy/>
+    }
+    if (rol === 'Pracownik Dziekanatu'){
+        menu === <MenuDziekanat/>
+    }
 
     return (
         <div className="flex">
             <Head title="Ustawienia"/>
-            <MenuStudenta/>
+            {menu}
             <Content theme={theme}/>
         </div>
         

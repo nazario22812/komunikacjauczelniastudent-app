@@ -1,5 +1,7 @@
 import React from "react";
 import MenuStudenta from "../Components/MenuStudenta";
+import MenuProwadzacy from "../Components/MenuProwadzacy";
+import MenuDziekanat from "../Components/MenuDziekanat";
 import BackButton from "../Components/BackButton";
 import { Head } from "@inertiajs/react";
 
@@ -152,16 +154,24 @@ export default function MojeDane({ auth, rol, name, surname, email, numerTelefon
     kierunek, wydzial, TytulNaukowy, katedra, Odpowiedzialnosc,
      grupaLaboratoryjna, grupaCwiczeniowa, grupaWykladowa }) {
 
-    return (
-        // <div>
-        //     <p>ja student</p>
-        // </div>
 
-        // 
+    let menu;
+    if (rol === 'Student'){
+        menu = <MenuStudenta/>
+    }
+    if (rol === 'Prowadzący'){
+        menu = <MenuProwadzacy/>
+    }
+    if (rol === 'Pracownik Dziekanatu'){
+        menu === <MenuDziekanat/>
+    }
+        
+
+    return (
+        
         <div className="flex">
             <Head title="Moje dane"/>
-            <MenuStudenta/>
-            
+            {menu}            
             <Content rol={rol} name={name} surname={surname} email={email} numerTelefonu={numerTelefonu} 
             kontoBankowe={kontoBankowe} DataUrodzenia={DataUrodzenia} photo={photo} 
             index={index} semester={semester} stopien={stopien} trybStudiow={trybStudiow} rok={rok} 

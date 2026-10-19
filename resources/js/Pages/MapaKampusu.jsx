@@ -7,7 +7,8 @@ import { MapContainer, Polygon, TileLayer, Polyline, Popup, Marker } from "react
 import 'leaflet/dist/leaflet.css'
 import { useGeolocated } from "react-geolocated";
 import { ToastContainer, toast } from "react-toastify";
-
+import MenuProwadzacy from "../Components/MenuProwadzacy";
+import MenuDziekanat from "../Components/MenuDziekanat";
 
 
 function Content({sale}){
@@ -159,7 +160,18 @@ function Content({sale}){
     );
 }
 
-export default function MapaKampusu({ auth, sale }) {
+export default function MapaKampusu({ auth, sale, rol }) {
+    let menu;
+    if (rol === 'Student'){
+        menu = <MenuStudenta/>
+    }
+    if (rol === 'Prowadzący'){
+        menu = <MenuProwadzacy/>
+    }
+    if (rol === 'Pracownik Dziekanatu'){
+        menu === <MenuDziekanat/>
+    }
+    
     return (
         // <div>
         //     <p>ja student</p>
@@ -168,8 +180,8 @@ export default function MapaKampusu({ auth, sale }) {
         // 
         <div className="flex">
             <Head title="Mapa kampusu"/>
-            <MenuStudenta/>
-            <Content  sale={sale}/>
+            {menu}
+            <Content sale={sale}/>
         </div>
     );
 }

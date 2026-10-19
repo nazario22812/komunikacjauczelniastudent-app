@@ -3,7 +3,8 @@ import MenuStudenta from "../Components/MenuStudenta";
 import { Head, Link } from "@inertiajs/react";
 import BackButton from "../Components/BackButton";
 import Carousel from "react-bootstrap/Carousel";
-
+import MenuProwadzacy from "../Components/MenuProwadzacy";
+import MenuDziekanat from "../Components/MenuDziekanat";
 
 function Content({ ogloszenia, ankiety }){
     return (
@@ -64,16 +65,22 @@ function Content({ ogloszenia, ankiety }){
     );
 }
 
-export default function Ogłoszenia({ auth, ogloszenia, ankiety }) {
+export default function Ogłoszenia({ auth, ogloszenia, ankiety, rol }) {
+    let menu;
+    if (rol === 'Student'){
+        menu = <MenuStudenta/>
+    }
+    if (rol === 'Prowadzący'){
+        menu = <MenuProwadzacy/>
+    }
+    if (rol === 'Pracownik Dziekanatu'){
+        menu === <MenuDziekanat/>
+    }
     return (
-        // <div>
-        //     <p>ja student</p>
-        // </div>
-
-        // 
+        
         <div className="flex">
             <Head title="Ogłoszenia i ankiety"/>
-            <MenuStudenta/>
+            {menu}
             <Content ogloszenia={ogloszenia} ankiety={ankiety}/>
         </div>
     );

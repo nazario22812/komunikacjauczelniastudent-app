@@ -28,13 +28,25 @@ class UserController extends Controller
         $user = $request->user();
         $settings = json_decode($user?->Ustawienia ?? '{}', true);
 
+        $user = $request->user();
+        $role = '';
+        if($user->isStudent()){
+            $role = 'Student';
+        }
+        if($user->isProwadzacy()){
+            $role = 'Prowadzący';
+        }
+        if($user->isPracownikDziekanatu()){
+            $role = 'Pracownik Dziekanatu';
+        }
+
         return Inertia::render('Settings', [
+            'rol' => $role,
             'theme' => $settings['theme'] ?? 'dark',
         ]);
     }
 
-    public function ustawieniaTheme(Request $request)
-    {
+    public function ustawieniaTheme(Request $request){
         $user = $request->user();
         $theme = $request->input('theme');
 
@@ -58,7 +70,20 @@ class UserController extends Controller
         $user = $request->user();
         $ogloszenia = Komunikat::where('czyOgloszenie', 1)->orderby('idKomunikat', 'desc')->get()->toArray();
         $ankiety = Ankieta::orderby('idAnkieta', 'desc')->get()->toArray();
+        
+        $role = '';
+        if($user->isStudent()){
+            $role = 'Student';
+        }
+        if($user->isProwadzacy()){
+            $role = 'Prowadzący';
+        }
+        if($user->isPracownikDziekanatu()){
+            $role = 'Pracownik Dziekanatu';
+        }
+        
         return Inertia::render('Ogloszenia',[
+            'rol' => $role,
             'ogloszenia' => array_slice($ogloszenia, 0, 10),
             'ankiety' => array_slice($ankiety, 0, 10)
         ]);
@@ -68,14 +93,27 @@ class UserController extends Controller
         $user = $request->user();
         // $powiadomienia = User::with('komunikat')->where('User_idUser', $user->idUser)->get();
         $powiadomienia = $user->komunikat()->where('czyOgloszenie', 0)->orderby('idKomunikat', 'desc')->get()->toArray();
+
+        $role = '';
+        if($user->isStudent()){
+            $role = 'Student';
+        }
+        if($user->isProwadzacy()){
+            $role = 'Prowadzący';
+        }
+        if($user->isPracownikDziekanatu()){
+            $role = 'Pracownik Dziekanatu';
+        }
+
         return Inertia::render('Powiadomienia',[
+            'rol' => $role,
             'powiadomienia' => $powiadomienia
         ]);
     }
     
     
 
-    public function mapaKampusu(){
+    public function mapaKampusu(Request $request){
 
 
         $sali = Sala::select(
@@ -104,12 +142,25 @@ class UserController extends Controller
         // $listaBudynkow = Budynek::get()->values()->toArray();
         // dd($salimapped);
 
+        $user = $request->user();
+        $role = '';
+        if($user->isStudent()){
+            $role = 'Student';
+        }
+        if($user->isProwadzacy()){
+            $role = 'Prowadzący';
+        }
+        if($user->isPracownikDziekanatu()){
+            $role = 'Pracownik Dziekanatu';
+        }
+
         return Inertia::render('MapaKampusu', [
+            'rol' => $role,
             'sale' => $salimapped
         ]);
     }
 
-    public function planzajecpost($grpa){
+    public function planzajecpost(Request $request , $grpa){
         
         $planzajec = Planzajec::where('GrupaStudenta_idGrupaStudenta', $grpa)->first();
         // $rezerwacje = Rezerwacja::with('zajecie.przedmiot')->where('Zajęcie_PlanZajec_idPlanZajec', $planzajec->idPlanZajec)->get();
@@ -176,14 +227,25 @@ class UserController extends Controller
        
         $listaKierunkow = Kierunek::get()->values()->toArray();
         $listaGrup = Grupastudenta::where('typGrupy', 'Laboratoryjna')->get()->values()->toArray();                       
- 
+        $user = $request->user();
+        $role = '';
+        if($user->isStudent()){
+            $role = 'Student';
+        }
+        if($user->isProwadzacy()){
+            $role = 'Prowadzący';
+        }
+        if($user->isPracownikDziekanatu()){
+            $role = 'Pracownik Dziekanatu';
+        }
         // dd($listaGrup);
         // dd($listaKierunkow);
         return Inertia::render('PlanZajec', [
+            'rol' => $role,
             'plan' => $gotowyplan,
             'listagrup' => $listaGrup,
             'listakierunkow' => $listaKierunkow
-        ]);    }
+        ]);}
 
     public function planzajec(Request $request){
 
@@ -192,7 +254,9 @@ class UserController extends Controller
 
         $user = $request->user();
         $gotowyplan = null;
+        $role = '';
         if($user->isStudent()){
+            $role = 'Student';
             $student = Student::with('grupastudenta')->where('User_idUser', $user->idUser)->first();
             $grupa = $student->grupastudenta()->first();
             $planzajec = Planzajec::where('GrupaStudenta_idGrupaStudenta', $grupa->idGrupaStudenta)->first();
@@ -244,6 +308,12 @@ class UserController extends Controller
                 ];
             })->values()->toArray();
         }
+        if($user->isProwadzacy()){
+            $role = 'Prowadzący';
+        }
+        if($user->isPracownikDziekanatu()){
+            $role = 'Pracownik Dziekanatu';
+        }
         
         // dd($gotowyplan);
        
@@ -255,6 +325,7 @@ class UserController extends Controller
         // dd($listaGrup);
         // dd($listaKierunkow);
         return Inertia::render('PlanZajec', [
+            'rol' => $role,
             'plan' => $gotowyplan ?? null,
             'listagrup' => $listaGrup,
             'listakierunkow' => $listaKierunkow

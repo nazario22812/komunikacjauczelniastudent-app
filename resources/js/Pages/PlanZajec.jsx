@@ -4,6 +4,8 @@ import BackButton from "../Components/BackButton";
 import { Head, router, useForm } from "@inertiajs/react";
 import Form from 'react-bootstrap/Form';
 import { useState } from "react";
+import MenuProwadzacy from "../Components/MenuProwadzacy";
+import MenuDziekanat from "../Components/MenuDziekanat";
 
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/react/timegrid';
@@ -140,11 +142,21 @@ function Content({ plan = null, listagrup, listakierunkow}){
 
 
 
-export default function PlanZajec({ auth, plan = null, listagrup, listakierunkow }) {
+export default function PlanZajec({ auth, plan = null, listagrup, listakierunkow, rol }) {
+    let menu;
+    if (rol === 'Student'){
+        menu = <MenuStudenta/>
+    }
+    if (rol === 'Prowadzący'){
+        menu = <MenuProwadzacy/>
+    }
+    if (rol === 'Pracownik Dziekanatu'){
+        menu === <MenuDziekanat/>
+    }
     return (
         <div className="flex">
             <Head title="Plan zajęć"/>
-            <MenuStudenta/>
+            {menu}
             <Content plan={plan} listagrup={listagrup} listakierunkow={listakierunkow}/>
         </div>
     );

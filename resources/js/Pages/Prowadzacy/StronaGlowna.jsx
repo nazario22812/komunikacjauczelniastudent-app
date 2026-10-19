@@ -1,7 +1,11 @@
-export default function Main({ auth }){
+import { Head } from "@inertiajs/react";
+import MenuProwadzacy from "../../Components/MenuProwadzacy";
+
+export default function ProwadzacyGlowna({ auth }){
     return (
-        <div>
-            <p>ja prowadzacy</p>
+        <div className="flex">
+            <Head title="Strona główna"/>
+            <MenuProwadzacy/>
         </div>
     );
 }

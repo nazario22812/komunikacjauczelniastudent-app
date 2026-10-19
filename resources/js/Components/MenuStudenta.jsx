@@ -74,7 +74,7 @@ export default function MenuStudenta(){
                     <div className={`text-[13px] pl-[15px] overflow-hidden transition-all duration-400 ease-in-out ${isOpen ? 'max-h-[150px] opacity-100' : 'max-h-0 opacity-0'}`}>
                         <Link href='/student/konsultacje' method="get" as="button" className="hover:cursor-pointer w-full">
                             <div className="flex p-1 gap-x-[10px]">
-                                <img src={Chat} alt="konsultacje" />
+                                <img src={Chat} className="w-[20px] h-[20px]" alt="konsultacje" />
                                 <span> Konsultacje</span>    
                             </div>
                         </Link>
@@ -82,13 +82,13 @@ export default function MenuStudenta(){
 
                         <Link href='/mapa' method="get" as="button" className="hover:cursor-pointer w-full">
                             <div className="flex p-1 gap-x-[10px]">
-                                <img src={Map} alt="mapakampusu" />
+                                <img src={Map} className="w-[20px] h-[20px]" alt="mapakampusu" />
                                 <span>Mapa kampusu</span>
                             </div>
                         </Link>
                         <Link href='/ogloszeniaiankiety' method="get" as="button" className="hover:cursor-pointer w-full">
                             <div className="flex p-1 gap-x-[10px]">
-                                <img src={Bell} alt="ogloszeniaiankiety" />
+                                <img src={Bell} className="w-[20px] h-[20px]" alt="ogloszeniaiankiety" />
                                 <span>Ogłoszenia i ankiety</span>
                             </div>
                         </Link>    
@@ -106,19 +106,19 @@ export default function MenuStudenta(){
                     <div className={`text-[13px] pl-[15px] overflow-hidden transition-all duration-400 ease-in-out ${isOpen2 ? 'max-h-[150px] opacity-100' : 'max-h-0 opacity-0'}`}>
                         <Link href='/student/ocenykoncowe' method="get" as="button" className="hover:cursor-pointer w-full">
                             <div className="flex p-1 gap-x-[10px]">
-                                <img src={Reward} alt="oceny" />
+                                <img src={Reward} className="w-[20px] h-[20px]" alt="oceny" />
                                 <span>Oceny</span>    
                             </div>
                         </Link>
                         <Link href='/student/mojekursy' method="get" as="button" className="hover:cursor-pointer w-full">
                             <div className="flex p-1 gap-x-[10px]">
-                                <img src={List} alt="mojekursy" />
+                                <img src={List} className="w-[20px] h-[20px]" alt="mojekursy" />
                                 <span>Moje kursy</span>
                             </div>
                         </Link>
                         <Link href='/student/mojezadania' method="get" as="button" className="hover:cursor-pointer w-full">
                             <div className="flex p-1 gap-x-[10px]">
-                                <img src={Task} alt="mojezadania" />
+                                <img src={Task} className="w-[20px] h-[20px]" alt="mojezadania" />
                                 <span>Moje zadania</span>
                             </div>
                         </Link>

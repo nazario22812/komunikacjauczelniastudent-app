@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import MenuStudenta from "../Components/MenuStudenta";
 import { Head } from "@inertiajs/react";
 import BackButton from "../Components/BackButton";
+import MenuProwadzacy from "../Components/MenuProwadzacy";
+import MenuDziekanat from "../Components/MenuDziekanat";
 
 function Powiadomienierow({ powiadomienie }){
     return(
@@ -54,19 +56,24 @@ function Content({ powiadomienia }){
 
 }
 
-export default function Powiadomienia({ auth, powiadomienia }) {
+export default function Powiadomienia({ auth, powiadomienia, rol }) {
     
-    
+    let menu;
+    if (rol === 'Student'){
+        menu = <MenuStudenta/>
+    }
+    if (rol === 'Prowadzący'){
+        menu = <MenuProwadzacy/>
+    }
+    if (rol === 'Pracownik Dziekanatu'){
+        menu === <MenuDziekanat/>
+    }
     return (
-        // <div>
-        //     <p>ja student</p>
-        // </div>
-
-        // 
+    
 
         <div className="flex">
             <Head title="Powiadomienia"/>
-            <MenuStudenta/>
+            {menu}
             <Content powiadomienia={powiadomienia}/>
         </div>
     );

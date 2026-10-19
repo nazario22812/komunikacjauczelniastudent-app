@@ -66,7 +66,7 @@ function Content({ kursy, powiadomienie, wszystkiekursy, zadanie }){
                                 </>
                             ) : (
                                 <div className="w-full mx-auto text-center mt-10 text-[24px] text-theme-text">
-                                    <span>Brak zadań</span>
+                                    <span>Brak powiadomień</span>
                                 </div>
                             )}
                             
