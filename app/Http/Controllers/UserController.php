@@ -82,6 +82,13 @@ class UserController extends Controller
             $role = 'Pracownik Dziekanatu';
         }
         
+        if($request->expectsJson()){
+            return response()->json([
+                'ogloszenia' => array_slice($ogloszenia, 0, 10),
+                'ankiety' => array_slice($ankiety, 0, 10)
+            ]);
+        }
+
         return Inertia::render('Ogloszenia',[
             'rol' => $role,
             'ogloszenia' => array_slice($ogloszenia, 0, 10),
@@ -103,6 +110,12 @@ class UserController extends Controller
         }
         if($user->isPracownikDziekanatu()){
             $role = 'Pracownik Dziekanatu';
+        }
+
+        if($request->expectsJson()){
+            return response()->json([
+                'powiadomienia' => $powiadomienia
+            ]);
         }
 
         return Inertia::render('Powiadomienia',[
@@ -152,6 +165,12 @@ class UserController extends Controller
         }
         if($user->isPracownikDziekanatu()){
             $role = 'Pracownik Dziekanatu';
+        }
+
+        if($request->expectsJson()){
+            return response()->json([
+                'sale' => $salimapped
+            ]);
         }
 
         return Inertia::render('MapaKampusu', [
@@ -238,6 +257,15 @@ class UserController extends Controller
         if($user->isPracownikDziekanatu()){
             $role = 'Pracownik Dziekanatu';
         }
+
+        if($request->expectsJson()){
+            return response()->json([
+                'plan' => $gotowyplan,
+                'listagrup' => $listaGrup,
+                'listakierunkow' => $listaKierunkow
+            ]);
+        }
+
         // dd($listaGrup);
         // dd($listaKierunkow);
         return Inertia::render('PlanZajec', [
@@ -320,7 +348,13 @@ class UserController extends Controller
         $listaKierunkow = Kierunek::get()->values()->toArray();
         $listaGrup = Grupastudenta::where('typGrupy', 'Laboratoryjna')->get()->values()->toArray();                       
  
-        
+        if($request->expectsJson()){
+            return response()->json([[
+                'plan' => $gotowyplan ?? null,
+                'listagrup' => $listaGrup,
+                'listakierunkow' => $listaKierunkow
+            ]]);
+        }
 
         // dd($listaGrup);
         // dd($listaKierunkow);
