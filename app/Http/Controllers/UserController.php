@@ -236,7 +236,9 @@ class UserController extends Controller
                     'numersali' => $item->numerSali,
                     'imie' => substr($item->name, 0, 1),
                     'nazwisko' => $item->surname,
-                    'tytulNaukowy' => $item->TytulNaukowy
+                    'tytulNaukowy' => $item->TytulNaukowy,
+                    'dzientygodnia' => $item->DzienTygodnia
+
                 ]
             ];
         })->values()->toArray();
@@ -331,7 +333,8 @@ class UserController extends Controller
                         'numersali' => $item->numerSali,
                         'imie' => substr($item->name, 0, 1),
                         'nazwisko' => $item->surname,
-                        'tytulNaukowy' => $item->TytulNaukowy
+                        'tytulNaukowy' => $item->TytulNaukowy,
+                        'dzientygodnia' => $item->DzienTygodnia
                     ]
                 ];
             })->values()->toArray();
