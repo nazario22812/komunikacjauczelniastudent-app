@@ -349,11 +349,11 @@ class UserController extends Controller
         $listaGrup = Grupastudenta::where('typGrupy', 'Laboratoryjna')->get()->values()->toArray();                       
  
         if($request->expectsJson()){
-            return response()->json([[
+            return response()->json([
                 'plan' => $gotowyplan ?? null,
                 'listagrup' => $listaGrup,
                 'listakierunkow' => $listaKierunkow
-            ]]);
+            ]);
         }
 
         // dd($listaGrup);
