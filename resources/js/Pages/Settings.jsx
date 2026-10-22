@@ -25,24 +25,27 @@ function Content({ theme = 'dark'  }){
             </div>
             <div className="w-full flex-1 min-h-0 pt-3 pb-2 px-4 rounded-b-[10px] flex flex-col relative ">  
                 <div className="bg-theme-slate w-full h-full mx-auto p-5 rounded-[15px] overflow-y-auto pr-2 custom-scrollbar">
-                    <form onSubmit={submit} className="space-y-5">
-                        <div>
-                            <label htmlFor="theme" className="mb-2 block text-sm font-medium text-theme-muted">
+                    <form onSubmit={submit} className="space-y-5 h-full">
+                        <div className="flex items-center justify-between w-full ">
+                            <label htmlFor="theme" className="mb-2 block text-[20px] font-medium text-theme-text">
                                 Wybierz motyw
                             </label>
                             <select
                                 id="theme"
                                 value={data.theme}
                                 onChange={(e) => setData('theme', e.target.value)}
-                                className="w-[20%] rounded-lg border border-theme-border bg-theme-surface px-3 py-2 text-theme-text outline-none"
+                                className="w-[20%] rounded-lg border border-theme-border bg-theme-surface px-3 py-2 text-theme-text outline-none flex right-1"
                             >
                                 <option value="dark">Dark</option>
                                 <option value="light">Light</option>
                             </select>
                         </div>
-                        <button type="submit" disabled={processing} className="rounded-lg bg-theme-orange px-4 py-2 font-semibold text-white transition hover:opacity-90 disabled:opacity-60">
-                            {processing ? 'Zapisywanie...' : 'Zapisz'}
-                        </button>
+                        <div className="w-full mx-auto flex items-center bottom-1">
+                            <button type="submit" disabled={processing} className="w-[30%] mx-auto rounded-lg bg-theme-orange px-4 py-2 font-semibold text-white transition hover:opacity-90 disabled:opacity-60">
+                                Zapisz
+                            </button>
+                        </div>
+                        
                     </form>
                 </div> 
             </div>        

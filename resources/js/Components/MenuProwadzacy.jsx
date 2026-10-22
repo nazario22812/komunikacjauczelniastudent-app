@@ -10,6 +10,10 @@ import Account from '@/../images/account-box-outline.png';
 import Calendar from '@/../images/calendar-month-outline-sharp.png';
 import Map from '@/../images/map-search-outline-rounded.png';
 import Bell from '@/../images/doorbell-outline.png';
+import List from '@/../images/list-alt-outline-sharp.png';
+import Reward from '@/../images/rewarded-ads-outline-rounded.png';
+import Chat from '@/../images/chat-bubble-outline.png';
+
 
 export default function MenuProwadzacy(){
     
@@ -54,6 +58,31 @@ export default function MenuProwadzacy(){
                     <div className="border-b-1 border-theme-muted flex h-[30px] gap-x-[10px] items-center fustify-start">
                         <img src={Bell} alt="ogloszeniaiankiety" />
                         <span className="text-[12px]">Ogłoszenia i ankiety</span>
+                    </div>
+                </Link>
+                {/* nowe menu */}
+                <Link href='/ogloszeniaiankiety' method="get" as="button" className="hover:cursor-pointer w-full">
+                    <div className="border-b-1 border-theme-muted flex h-[30px] gap-x-[10px] items-center fustify-start">
+                        <img src={Chat} alt="ogloszeniaiankiety" />
+                        <span className="text-[12px]">Konsultacje</span>
+                    </div>
+                </Link>
+                <Link href='/ogloszeniaiankiety' method="get" as="button" className="hover:cursor-pointer w-full">
+                    <div className="border-b-1 border-theme-muted flex h-[30px] gap-x-[10px] items-center fustify-start">
+                        <img src={Reward} alt="ogloszeniaiankiety" />
+                        <span className="text-[12px]">Wystawienie ocen</span>
+                    </div>
+                </Link>
+                <Link href='/ogloszeniaiankiety' method="get" as="button" className="hover:cursor-pointer w-full">
+                    <div className="border-b-1 border-theme-muted flex h-[30px] gap-x-[10px] items-center fustify-start">
+                        <img src={List} alt="ogloszeniaiankiety" />
+                        <span className="text-[12px]">Moje kursy</span>
+                    </div>
+                </Link>
+                <Link href='/ogloszeniaiankiety' method="get" as="button" className="hover:cursor-pointer w-full">
+                    <div className="border-b-1 border-theme-muted flex h-[30px] gap-x-[10px] items-center fustify-start">
+                        <img src={Bell} alt="ogloszeniaiankiety" />
+                        <span className="text-[12px]">Komunikaty</span>
                     </div>
                 </Link>
             </div>
