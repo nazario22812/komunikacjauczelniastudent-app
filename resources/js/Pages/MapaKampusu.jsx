@@ -115,39 +115,39 @@ function Content({sale}){
                     </div>
                     <div className="w-full mx-auto h-[28px] px-[18px] my-3 flex items-center mt-10">
                         <button  type="button" onClick={() => {
-                                if (!searchItem.trim()) {
-                                        toast.info('Wpisz salę', {
-                                                position: "bottom-right",
-                                                autoClose: 5000,
-                                                hideProgressBar: false,
-                                                closeOnClick: false,
-                                                pauseOnHover: true,
-                                                draggable: true,
-                                                progress: undefined,
-                                                theme: "dark",
-                                            });
-                                        return;
-                                    }
-                                        
-                                    const found = sale.find(item => 
-                                        item.numerSali && item.numerSali.toLowerCase() === searchItem.toLowerCase()
-                                    );
-                                        
-                                    if (found) {
-                                        handleSelectSuggestion(found);
-                                    } 
-                                    else {
-                                        toast.error('Nie znaleziono takiej sali', {
-                                                position: "bottom-right",
-                                                autoClose: 5000,
-                                                hideProgressBar: false,
-                                                closeOnClick: false,
-                                                pauseOnHover: true,
-                                                draggable: true,
-                                                progress: undefined,
-                                                theme: "dark",
-                                            });
-                                    }                           
+                            if (!searchItem.trim()) {
+                                    toast.info('Wpisz salę', {
+                                            position: "bottom-right",
+                                            autoClose: 5000,
+                                            hideProgressBar: false,
+                                            closeOnClick: false,
+                                            pauseOnHover: true,
+                                            draggable: true,
+                                            progress: undefined,
+                                            theme: "dark",
+                                        });
+                                    return;
+                                }
+                                       
+                                const found = sale.find(item => 
+                                    item.numerSali && item.numerSali.toLowerCase() === searchItem.toLowerCase()
+                                );
+                                       
+                                if (found) {
+                                    handleSelectSuggestion(found);
+                                } 
+                                else {
+                                    toast.error('Nie znaleziono takiej sali', {
+                                        position: "bottom-right",
+                                        autoClose: 5000,
+                                        hideProgressBar: false,
+                                        closeOnClick: false,
+                                        pauseOnHover: true,
+                                        draggable: true,
+                                        progress: undefined,
+                                        theme: "dark",
+                                    });
+                                }                           
                                 
                         }} className="text-[15px] h-[40px] mx-auto w-3/4  text-white bg-theme-orange rounded-[15px] hover:cursor-pointer active:bg-theme-orange">
                             Wyszukaj

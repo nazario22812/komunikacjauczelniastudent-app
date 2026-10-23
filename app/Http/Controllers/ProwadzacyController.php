@@ -2,16 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Budynek;
 use App\Models\Prowadzacy;
 use Illuminate\Http\Request;
 use App\Models\Rezerwacja;
+use App\Models\Sala;
 use Inertia\Inertia;
 class ProwadzacyController extends Controller
 {
     //
 
-    public function konsultacjaform(){
-        return Inertia::render('Prowadzacy/Konsultacjaform');
+    public function konsultacjaform(Request $request){
+        $budynki = Budynek::select('idBudynek','nazwa')->get()->toArray();
+        $sali = Sala::select('idSala', 'numerSali', 'Budynek_idBudynek')->get()->toArray();
+        // dd($sali);
+        return Inertia::render('Prowadzacy/Konsultacjaform', [
+            'budynki' => $budynki,
+            'sali' => $sali,
+        ]);
     }
     public function usuniecieKonsultacji(Request $request, $idRezerwacja){
         Rezerwacja::where('idRezerwacja', $idRezerwacja)->delete();

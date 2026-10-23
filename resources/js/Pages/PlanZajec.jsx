@@ -107,17 +107,17 @@ function Content({ plan = null, listagrup, listakierunkow}){
                             </div>
                             <div className="w-full px-[29px] pt-[40px]">
                                 <span className="text-[13px] text-theme-text">Kierunek</span>
-                                <Form.Select value={wybranyKierunek} onChange={(e) =>{ setwybranyKierunek(e.target.value); setwybranaGrupa(''); setData('kierunk', e.target.value)}} className="w-full border border-theme-muted rounded-[15px] bg-theme-slate text-theme-text h-[22px]">
+                                <Form.Select value={wybranyKierunek} onChange={(e) =>{ setwybranyKierunek(e.target.value); setwybranaGrupa(''); setData('kierunk', e.target.value)}} className="w-full border border-theme-muted rounded-[15px] bg-theme-slate text-theme-text h-[28px]">
                                     <option>Wybierz kierunek</option>
                                     {listakierunkow && listakierunkow.map((kierunek) => (
                                         <option key={kierunek.idKierunek} value={kierunek.idKierunek}>{kierunek.nazwa}</option>
-
+                                        
                                     )) }
                                 </Form.Select>
                             </div>
                             <div className="w-full px-[29px] pt-[40px]">
                                 <span className="text-[13px] text-theme-text">Grupa</span>
-                                <Form.Select value={wybranaGrupa} onChange={(e) => {setwybranaGrupa(e.target.value); setData('grpa', e.target.value)}} disabled={!wybranyKierunek}  className="w-full border border-theme-muted rounded-[15px] bg-theme-slate text-theme-text h-[22px]">
+                                <Form.Select value={wybranaGrupa} onChange={(e) => {setwybranaGrupa(e.target.value); setData('grpa', e.target.value)}} disabled={!wybranyKierunek}  className="w-full border border-theme-muted rounded-[15px] bg-theme-slate text-theme-text h-[28px]">
                                     <option>Wybierz grupę</option>
                                     {filtergrup.map((grupa) => (
                                         <option key={grupa.idGrupaStudenta} value={grupa.idGrupaStudenta}>{grupa.nazwaGrupy}</option>
