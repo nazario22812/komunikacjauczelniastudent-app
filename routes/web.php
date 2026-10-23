@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ProwadzacyController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -76,6 +77,11 @@ Route::middleware(['auth', 'role:prowadzacy'])->group(function (){
     Route::get('/stronaglowna/prowadzacy', function () {
         return Inertia::render('Prowadzacy/StronaGlowna');
     })->name('stronaglownaprowadzacy');
+
+
+    Route::get('/prowadzacy/konsultacje', [ProwadzacyController::class, 'mojekonsultacje']);
+    Route::post('/prowadzacy/konsultacja/usun/{idRezerwacja}',[ProwadzacyController::class, 'usuniecieKonsultacji']);
+    Route::get('/prowadzacy/stworzkonsultacje', [ProwadzacyController::class, 'konsultacjaform']);
 });
 
 

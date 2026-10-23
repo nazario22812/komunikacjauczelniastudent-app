@@ -61,7 +61,7 @@ export default function MenuProwadzacy(){
                     </div>
                 </Link>
                 {/* nowe menu */}
-                <Link href='/ogloszeniaiankiety' method="get" as="button" className="hover:cursor-pointer w-full">
+                <Link href='/prowadzacy/konsultacje' method="get" as="button" className="hover:cursor-pointer w-full">
                     <div className="border-b-1 border-theme-muted flex h-[30px] gap-x-[10px] items-center fustify-start">
                         <img src={Chat} alt="ogloszeniaiankiety" />
                         <span className="text-[12px]">Konsultacje</span>

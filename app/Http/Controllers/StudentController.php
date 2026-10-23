@@ -389,6 +389,7 @@ class StudentController extends Controller
         ->get()
         ->toArray();
 
+        
 
         return Inertia::render('Student/Konsultacje',[
             'konsultacje' => $rezerwowanekonsultacje
