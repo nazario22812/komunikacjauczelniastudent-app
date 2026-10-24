@@ -29,13 +29,15 @@ class Prowadzacy extends Model
         return $this->belongsToMany(Przedmiot::class, 'prowadzacy_has_przedmiot', 'Prowadzacy_idProwadzacy', 'Przedmiot_idPrzedmiot');
     }
 
-   public function rezerwacja(){
+    public function rezerwacja(){
         return $this->hasMany(Rezerwacja::class, 'Prowadzacy_idProwadzacy', 'idProwadzacy');
     }
 
     public function zajecie(){
-        return $this->hasMany(Zajecie::class, 'Prowadzacy_idProwadzacy', 'idProwadzacy');
+        return $this->belongsToMany(Zajecie::class, 'prowadzacy_has_zajecie', 'Prowadzacy_idProwadzacy', 'Zajęcie_idZajęcie');
     }
+
+
     public function kurs(){
         return $this->hasMany(Kurs::class, 'Prowadzacy_idProwadzacy', 'idProwadzacy');
     }

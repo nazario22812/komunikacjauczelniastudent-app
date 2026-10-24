@@ -34,7 +34,9 @@ class Zajecie extends Model
         return $this->belongsTo(PlanZajec::class, 'PlanZajec_idPlanZajec', 'idPlanZajec');
     }
 
-    
+    public function prowadzacy(){
+        return $this->belongsToMany(Prowadzacy::class, 'prowadzacy_has_zajecie', 'Prowadzacy_idProwadzacy', 'Zajęcie_idZajęcie');
+    }
 
     public function rezerwacja(){
         return $this->hasMany(Rezerwacja::class, 'Zajęcie_idZajęcie', 'idZajęcie');

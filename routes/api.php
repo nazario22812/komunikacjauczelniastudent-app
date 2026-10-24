@@ -3,6 +3,7 @@
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProwadzacyController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -74,6 +75,11 @@ Route::middleware(['auth:sanctum', 'role:prowadzacy'])->group(function (){
     Route::get('/stronaglowna/prowadzacy', function () {
         return Inertia::render('Prowadzacy/StronaGlowna');
     })->name('stronaglownaprowadzacy_mob');
+
+    Route::get('/prowadzacy/konsultacje', [ProwadzacyController::class, 'mojekonsultacje']);
+    Route::post('/prowadzacy/konsultacja/usun/{idRezerwacja}',[ProwadzacyController::class, 'usuniecieKonsultacji']);
+    Route::get('/prowadzacy/stworzkonsultacje', [ProwadzacyController::class, 'konsultacjaform']);
+    Route::post('/prowadzacy/tworzeniekonsultacji', [ProwadzacyController::class, 'stworzkonsultacje']);
 });
 
 
