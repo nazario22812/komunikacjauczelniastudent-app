@@ -17,7 +17,7 @@ class Rezerwacja extends Model
         'GodzinaRozpoczecia',
         'GodzinaZakonczenia',
         'typWydarzenia',
-        'statusWydarzenia',
+        'statusRezerwacji',
         'Zajęcie_idZajęcie',
         'Zajęcie_PlanZajec_idPlanZajec',
         'Prowadzacy_idProwadzacy',

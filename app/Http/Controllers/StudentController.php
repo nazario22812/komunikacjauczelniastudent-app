@@ -83,7 +83,7 @@ class StudentController extends Controller
         $prowadzacy = $zadanie->kurs->prowadzacy->User_idUser;
 
         $temat = "Masz zadanie do sprawdzania";
-        $tresc = $user->name . "" . $user->surname . " wysłał pliki do sprawdzenia zadania " . $zadanie->nazwaZadania . "do kursu" . $zadanie->kurs->nazwa;
+        $tresc = $user->name . " " . $user->surname . " wysłał pliki do sprawdzenia zadania " . $zadanie->nazwaZadania . " do kursu " . $zadanie->kurs->nazwa;
         
 
         $istniejacynazwy = Plik::where('Zadanie_idZadanie', $idZadanie)->pluck('nazwa')->toArray();
@@ -356,16 +356,11 @@ class StudentController extends Controller
     }
 
     public function konsultacje(Request $request){
-//         SELECT `prowadzacy`.`TytulNaukowy`, `user`.`name`, `user`.`surname`, `sala`.`numerSali`,`budynek`.`nazwa`, `rezerwacja`.*
-// FROM `rezerwacja`
-// INNER JOIN `sala` ON `rezerwacja`.`Sala_idSala` = `sala`.`idSala` 
-// INNER JOIN `budynek` ON `rezerwacja`.`Sala_Budynek_idBudynek` = `budynek`.`idBudynek`
-// INNER JOIN `prowadzacy` ON `rezerwacja`.`Prowadzacy_idProwadzacy` = `prowadzacy`.`idProwadzacy`
-// LEFT JOIN `user` ON `prowadzacy`.`User_idUser` = `user`.`idUser`
+
         $user = $request->user();
-        $student = Student::with('grupastudenta')->where('User_idUser', $user->idUser)->first();
-        $idgrupy =  $student->grupastudenta->where('typGrupy', 'Laboratoryjna')->value('idGrupaStudenta');
-        $planzajec = Planzajec::where('GrupaStudenta_idGrupaStudenta', $idgrupy)->first();
+        // $student = Student::with('grupastudenta')->where('User_idUser', $user->idUser)->first();
+        // $idgrupy =  $student->grupastudenta->where('typGrupy', 'Laboratoryjna')->value('idGrupaStudenta');
+        // $planzajec = Planzajec::where('GrupaStudenta_idGrupaStudenta', $idgrupy)->first();
         
         $datadzisziejsza = date('y-m-d');
         $rezerwowanekonsultacje = Rezerwacja::select(
@@ -385,11 +380,13 @@ class StudentController extends Controller
             $join->on('rezerwacja.Prowadzacy_idProwadzacy', '=', 'prowadzacy.idProwadzacy');
         })
         ->leftjoin('user', 'prowadzacy.User_idUser', '=', 'user.idUser')
-        ->where([['rezerwacja.Zajęcie_PlanZajec_idPlanZajec', $planzajec->idPlanZajec], ['rezerwacja.typWydarzenia', 'Konsultacje'], ['rezerwacja.data', '>=' , $datadzisziejsza]])
+        // ->where([['rezerwacja.Zajęcie_PlanZajec_idPlanZajec', $planzajec->idPlanZajec], ['rezerwacja.typWydarzenia', 'Konsultacje'], ['rezerwacja.data', '>=' , $datadzisziejsza]])
+        ->where([['rezerwacja.typWydarzenia', 'Konsultacje'], ['rezerwacja.data', '>=' , $datadzisziejsza]])
+
         ->get()
         ->toArray();
 
-        
+
 
         return Inertia::render('Student/Konsultacje',[
             'konsultacje' => $rezerwowanekonsultacje

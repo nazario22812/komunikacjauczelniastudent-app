@@ -8,9 +8,46 @@ use Illuminate\Http\Request;
 use App\Models\Rezerwacja;
 use App\Models\Sala;
 use Inertia\Inertia;
+use App\Models\Komunikat;
+use App\Models\Student;
+
 class ProwadzacyController extends Controller
 {
     //
+
+    public function stworzkonsultacje(Request $request){
+        $user = $request->user();
+        $prowadzacy = Prowadzacy::where('User_idUser', $user->idUser)->first();
+        $rezerwacja = Rezerwacja::where([['data', $request->data], ['GodzinaRozpoczecia', $request->godpocz], ['GodzinaZakonczenia', $request->godkon], ['Sala_idSala', $request->sala], ['Sala_Budynek_idBudynek', $request->budynek]])->exists();
+        $listastudentow = Student::get();
+        if(!$rezerwacja){
+            Rezerwacja::create([
+                'data' => $request->data,
+                'GodzinaRozpoczecia' => $request->godpocz,
+                'GodzinaZakonczenia' => $request->godkon,
+                'typWydarzenia' => 'Konsultacje',
+                'statusRezerwacji' => 'Zatwierdzona',
+                'Zajęcie_idZajęcie' => null,
+                'Zajęcie_PlanZajec_idPlanZajec' => null,
+                'Prowadzacy_idProwadzacy' => $prowadzacy->idProwadzacy,
+                'Sala_idSala' => $request->sala,
+                'Sala_Budynek_idBudynek' => $request->budynek               
+            ]);
+
+            $komunikat = Komunikat::create([
+                'temat' => 'Nowa konsultacja',
+                'tresc' => 'Pojawiła się nowa konusltacja, sprawdź w zakładce moje konsultacje',
+                'czyOgloszenie' => 0
+            ]);
+
+            foreach ($listastudentow as $student) {
+                $komunikat->user()->attach($student->User_idUser);
+            }
+                    // $komunikat->user()->attach($prowadzacy);
+            return redirect()->back()->with('status', 'utworzona nowa rezerwacja');
+        }
+        return redirect()->back()->with('error', 'rezerwacja juz istnieje');
+    }
 
     public function konsultacjaform(Request $request){
         $budynki = Budynek::select('idBudynek','nazwa')->get()->toArray();

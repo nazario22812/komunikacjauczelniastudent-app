@@ -1,12 +1,11 @@
-import React, { useState } from "react";
-import { Head, useForm } from "@inertiajs/react";
+import React, { useState, useEffect } from "react";
+import { Head, useForm, usePage } from "@inertiajs/react";
 import MenuProwadzacy from "../../Components/MenuProwadzacy";
 import BackButton from "../../Components/BackButton";
 import Form from 'react-bootstrap/Form';
+import { ToastContainer, toast } from "react-toastify";
 
 function Content({ budynki, sali }) {
-
-
 
     const [wybranyBudynek, setwybranyBudynek] = useState('');
     const [wybranaSala, setwybranaSala] = useState('');
@@ -22,6 +21,12 @@ function Content({ budynki, sali }) {
         sala: ''
     });
     
+    const stworzkonsultacje = (e) => {
+        e.preventDefault();
+
+        post('/prowadzacy/tworzeniekonsultacji');
+    }
+
     return (
         <div className="bg-theme-page w-full p-[10px] h-screen flex flex-col box-border">
             <div className="bg-theme-page w-full flex shrink-0 h-[40px] mx-auto text-center border-b-[0.3px] border-theme-muted p-[10px] rounded-t-[10px]">
@@ -35,9 +40,8 @@ function Content({ budynki, sali }) {
                     <div className="w-full text-center text-theme-text font-bold text-[58px]">
                         <span>Nowa konsultacja</span>
                     </div>
-                    {/* onSubmit={wyslijpodanie} */}
-                    <form >
-                        <div className="px-[40px] py-[16px] w-full ">
+                    <form onSubmit={stworzkonsultacje}>
+                        <div className="px-[40px] py-[16px] w-full">
 
                             <div className="w-full grid grid-cols-2">
                                 <div className="px-5 grid grid-rows-3 text-theme-muted">
@@ -80,7 +84,7 @@ function Content({ budynki, sali }) {
                             <button
                                 disabled={processing}    
                                 type="submit"
-                                className="w-[20%] h-[60px] text-[32px] block mx-auto text-theme-text bg-theme-orange rounded-[15px] hover:cursor-pointer active:bg-theme-orange"
+                                className="w-[20%] h-[60px] my-20 text-[32px] block mx-auto text-theme-text bg-theme-orange rounded-[15px] hover:cursor-pointer active:bg-theme-orange"
                             >
                                 Wyślij
                             </button>
@@ -93,8 +97,42 @@ function Content({ budynki, sali }) {
 }
 
 export default function Konsultacjaform({ budynki, sali }) {
+    const props = usePage().props;
+
+    const message = props.flash?.status || props.status;
+    const error = props.flash?.error || props.error;
+    useEffect(() => {
+        if (message) {
+            toast.info(message, {
+                position: "bottom-right",
+                autoClose: 5000,
+                theme: "dark",
+                      
+            });
+        }
+        if(error) {
+            toast.error(error, {
+                position: "bottom-right",
+                autoClose: 5000,
+                theme: "dark"
+            })
+        }
+    }, [message, error])
+
     return (
         <div className="flex">
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick={false}
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+            />
             <Head title="Nowa konsultacja" />
             <MenuProwadzacy />
             <Content budynki={budynki} sali={sali}/>

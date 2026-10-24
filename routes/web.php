@@ -82,6 +82,7 @@ Route::middleware(['auth', 'role:prowadzacy'])->group(function (){
     Route::get('/prowadzacy/konsultacje', [ProwadzacyController::class, 'mojekonsultacje']);
     Route::post('/prowadzacy/konsultacja/usun/{idRezerwacja}',[ProwadzacyController::class, 'usuniecieKonsultacji']);
     Route::get('/prowadzacy/stworzkonsultacje', [ProwadzacyController::class, 'konsultacjaform']);
+    Route::post('/prowadzacy/tworzeniekonsultacji', [ProwadzacyController::class, 'stworzkonsultacje']);
 });
 
 

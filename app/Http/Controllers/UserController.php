@@ -99,7 +99,7 @@ class UserController extends Controller
     public function powiadomienia(Request $request){
         $user = $request->user();
         // $powiadomienia = User::with('komunikat')->where('User_idUser', $user->idUser)->get();
-        $powiadomienia = $user->komunikat()->where('czyOgloszenie', 0)->orderby('idKomunikat', 'desc')->get()->toArray();
+        $powiadomienia = $user->komunikat()->where('czyOgloszenie', 0)->orderBy('idKomunikat', 'desc')->get()->toArray();
 
         $role = '';
         if($user->isStudent()){
