@@ -53,6 +53,14 @@ class ProwadzacyController extends Controller
         $budynki = Budynek::select('idBudynek','nazwa')->get()->toArray();
         $sali = Sala::select('idSala', 'numerSali', 'Budynek_idBudynek')->get()->toArray();
         // dd($sali);
+
+        if($request->expectsJson()){
+            return response()->json([
+                'budynki' => $budynki,
+                'sali' => $sali,    
+            ]);
+        }
+
         return Inertia::render('Prowadzacy/Konsultacjaform', [
             'budynki' => $budynki,
             'sali' => $sali,
@@ -85,6 +93,11 @@ class ProwadzacyController extends Controller
 
         // dd($rezerwowanekonsultacje);
 
+        if($request->expectsJson()){
+            return response()->json([
+                'rezerwowanekonsultacje' => $rezerwowanekonsultacje,
+            ]);
+        }
 
         return Inertia::render('Prowadzacy/Konsultacje',[
             'rezerwowanekonsultacje' => $rezerwowanekonsultacje,
