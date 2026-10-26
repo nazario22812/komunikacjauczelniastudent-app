@@ -15,6 +15,45 @@ class ProwadzacyController extends Controller
 {
     //
 
+    public function usuniecieRezerwacji(Request $request, $idRezerwacja){
+        Rezerwacja::where('idRezerwacja', $idRezerwacja)->delete();
+        return redirect()->back()->with('status', 'Rezerwacja została usunięta');
+    }
+
+    public function mojerezerwacje(Request $request){
+        $user = $request->user();
+        $prowadzacy = Prowadzacy::where('User_idUser', $user->idUser)->first();
+
+        // $datadzisziejsza = date('y-m-d');
+        $rezerwowanesale = Rezerwacja::select(
+            'sala.numerSali',
+            'budynek.nazwa',
+            'rezerwacja.*'
+        )->join('sala', function($join){
+            $join->on('rezerwacja.Sala_idSala', '=', 'sala.idSala');
+        })
+        ->join('budynek', function($join){
+            $join->on('rezerwacja.Sala_Budynek_idBudynek', '=', 'budynek.idBudynek');
+        })
+        ->where([['Prowadzacy_idProwadzacy', $prowadzacy->idProwadzacy ], ['rezerwacja.typWydarzenia', '!=' , 'Konsultacje'], ['rezerwacja.typWydarzenia', '!=', 'Zajęcia']])
+        ->get()
+        ->toArray();
+
+
+        // dd($rezerwowanekonsultacje);
+
+        if($request->expectsJson()){
+            return response()->json([
+                'rezerwowanesale' => $rezerwowanesale,
+            ]);
+        }
+
+        return Inertia::render('Prowadzacy/Rezerwacje',[
+            'rezerwowanesale' => $rezerwowanesale,
+        ]);
+
+    }
+
     public function stworzkonsultacje(Request $request){
         $user = $request->user();
         $prowadzacy = Prowadzacy::where('User_idUser', $user->idUser)->first();
@@ -43,7 +82,6 @@ class ProwadzacyController extends Controller
             foreach ($listastudentow as $student) {
                 $komunikat->user()->attach($student->User_idUser);
             }
-                    // $komunikat->user()->attach($prowadzacy);
             return redirect()->back()->with('status', 'utworzona nowa rezerwacja');
         }
         return redirect()->back()->with('error', 'rezerwacja juz istnieje');
