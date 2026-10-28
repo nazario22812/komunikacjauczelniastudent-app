@@ -30,7 +30,7 @@ function Content({ rezerwowanesale }){
             </div>
             <div className="w-full flex-1 min-h-0 pt-3 pb-2 px-4 rounded-b-[10px] flex flex-col relative ">
                 <div className="bg-theme-surface w-full h-[15%] mx-auto rounded-t-[15px] px-[12px] flex text-left items-center" > 
-                    <Link href="/prowadzacy/stworzkonsultacje" method="get" as="button" className="text-theme-text font-bold text-[36px] hover:cursor-pointer">Zarezerwuj salę</Link>    
+                    <Link href="/prowadzacy/zarezerwujsale" method="get" as="button" className="text-theme-text font-bold text-[36px] hover:cursor-pointer">Zarezerwuj salę</Link>    
                 </div>   
                 <div className="bg-theme-slate w-full h-full mx-auto p-5 rounded-b-[15px] overflow-y-auto pr-2 custom-scrollbar">
                     {rezerwowanesale && rezerwowanesale.length > 0 ? (

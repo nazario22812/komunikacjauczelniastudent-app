@@ -15,6 +15,24 @@ class ProwadzacyController extends Controller
 {
     //
 
+    public function rezerwacjeform(Request $request){
+        $budynki = Budynek::select('idBudynek','nazwa')->get()->toArray();
+        $sali = Sala::select('idSala', 'numerSali', 'Budynek_idBudynek')->get()->toArray();
+        // dd($sali);
+
+        if($request->expectsJson()){
+            return response()->json([
+                'budynki' => $budynki,
+                'sali' => $sali,    
+            ]);
+        }
+
+        return Inertia::render('Prowadzacy/Rezerwacjaform', [
+            'budynki' => $budynki,
+            'sali' => $sali,
+        ]);
+    }
+
     public function usuniecieRezerwacji(Request $request, $idRezerwacja){
         Rezerwacja::where('idRezerwacja', $idRezerwacja)->delete();
         return redirect()->back()->with('status', 'Rezerwacja została usunięta');

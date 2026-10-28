@@ -9,6 +9,8 @@ function Content({ budynki, sali }) {
 
     const [wybranyBudynek, setwybranyBudynek] = useState('');
     const [wybranaSala, setwybranaSala] = useState('');
+    const [wybranyTyp, setwybranyTyp] = useState('');
+    const [zaznaczonyCheck, setzaznaczonyCheck] = useState(false);
     const filtersal = sali?.filter(
         (s) => String(s.Budynek_idBudynek) === String(wybranyBudynek)
     )
@@ -18,7 +20,8 @@ function Content({ budynki, sali }) {
         godpocz: '',
         godkon: '',
         budynek: '',
-        sala: ''
+        sala: '',
+        typ: '' 
     });
     
     const stworzkonsultacje = (e) => {
@@ -26,6 +29,7 @@ function Content({ budynki, sali }) {
 
         post('/prowadzacy/tworzeniekonsultacji');
     }
+
 
     return (
         <div className="bg-theme-page w-full p-[10px] h-screen flex flex-col box-border">
@@ -41,9 +45,9 @@ function Content({ budynki, sali }) {
                         <span>Nowa rezerwacja</span>
                     </div>
                     <form onSubmit={stworzkonsultacje}>
-                        <div className="px-[40px] py-[16px] w-full">
+                        <div className="px-[40px] py-[16px] w-full overflow-y-auto pr-2 custom-scrollbar">
 
-                            <div className="w-full grid grid-cols-2">
+                            <div className="w-full grid grid-cols-2 border-b-[0.3px] border-theme-muted">
                                 <div className="px-5 grid grid-rows-3 text-theme-muted">
                                     <div className="py-5">
                                         <span>Data</span>
@@ -77,10 +81,40 @@ function Content({ budynki, sali }) {
                                             ))}
                                         </Form.Select>
                                     </div>
+                                    <div className="py-5">
+                                        <span>Typ</span>
+                                        {/* <input type="text" placeholder="Np. poprawa, odróbka" onChange={(e) => setData('typ', e.target.value)} required className="w-full bg-theme-surface rounded-[15px] text-[16px] px-3 py-2 text-theme-muted border border-theme-muted "/> */}
+                                        <Form.Select required value={wybranyTyp} onChange={(e) => {setwybranyTyp(e.target.value); setData('typ', e.target.value)}} className="w-full bg-theme-surface  border border-theme-muted rounded-[15px] text-theme-text h-[60%]">
+                                            <option value="">Wybierz typ rezerwacji</option>
+                                            <option value="Egzamin">Egzamin</option>
+                                            <option value="Zaliczenie">Zaliczenie</option>
+                                            <option value="Odrabianie">Odrabianie</option>
+                                            <option value="Poprawa">Poprawa</option>
+                                            <option value="Inne">Inne</option>
+                                        </Form.Select>
+                                    </div>
                                 </div>
                             </div>
-
+                            {/* dla konkretnej grupy, dla kierunka, dla wydzialu */}
+                            <div className="w-full">
+                                <div className="">
+                                    <label className="text-theme-text">
+                                        <input 
+                                            type="checkbox"  
+                                            checked={zaznaczonyCheck} 
+                                            onChange={(e) => setzaznaczonyCheck(e.target.checked)} 
+                                        /> Dla konkretnej grupy
+                                    </label>
+                                    
+                                </div>
+                            </div>
                             
+                            {zaznaczonyCheck && (
+                                <div className="w-full mx-auto border-[0.3px] border-theme-muted p-5 rounded-[15px]">
+                                    test
+                                </div>
+                            )}
+
                             <button
                                 disabled={processing}    
                                 type="submit"
@@ -96,7 +130,7 @@ function Content({ budynki, sali }) {
     );
 }
 
-export default function Rezerwacjaform({ budynki, sali }) {
+export default function Rezerwacja({ budynki, sali }) {
     const props = usePage().props;
 
     const message = props.flash?.status || props.status;
