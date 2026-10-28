@@ -386,7 +386,7 @@ class StudentController extends Controller
         ->get()
         ->toArray();
 
-        if($request->expectsJson){
+        if($request->expectsJson()){
             return response()->json([
                 'konsultacje' => $rezerwowanekonsultacje
             ]);
