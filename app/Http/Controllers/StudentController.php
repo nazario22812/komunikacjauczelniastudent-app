@@ -386,7 +386,11 @@ class StudentController extends Controller
         ->get()
         ->toArray();
 
-
+        if($request->expectsJson){
+            return response()->json([
+                'konsultacje' => $rezerwowanekonsultacje
+            ]);
+        }
 
         return Inertia::render('Student/Konsultacje',[
             'konsultacje' => $rezerwowanekonsultacje
