@@ -54,7 +54,7 @@ function Content({ rezerwowanesale }){
                             </table>
                         ):(
                             <div className="w-full mx-auto text-center mt-10 text-[24px] text-theme-muted">
-                                <span>Brak konsultacji</span>
+                                <span>Brak rezerwacji</span>
                             </div>
                         )}
                 </div> 

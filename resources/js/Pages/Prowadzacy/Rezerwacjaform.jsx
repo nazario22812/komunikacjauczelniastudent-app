@@ -5,11 +5,13 @@ import BackButton from "../../Components/BackButton";
 import Form from 'react-bootstrap/Form';
 import { ToastContainer, toast } from "react-toastify";
 
-function Content({ budynki, sali }) {
+function Content({ budynki, sali , zajecia}) {
 
     const [wybranyBudynek, setwybranyBudynek] = useState('');
     const [wybranaSala, setwybranaSala] = useState('');
     const [wybranyTyp, setwybranyTyp] = useState('');
+    const [wybraneZajecie, setwybraneZajecie] = useState('');
+
     const [zaznaczonyCheck, setzaznaczonyCheck] = useState(false);
     const filtersal = sali?.filter(
         (s) => String(s.Budynek_idBudynek) === String(wybranyBudynek)
@@ -21,13 +23,14 @@ function Content({ budynki, sali }) {
         godkon: '',
         budynek: '',
         sala: '',
-        typ: '' 
+        typ: '', 
+        zajecie: null
     });
     
     const stworzkonsultacje = (e) => {
         e.preventDefault();
 
-        post('/prowadzacy/tworzeniekonsultacji');
+        post('/prowadzacy/tworzenierezerwacji');
     }
 
 
@@ -96,22 +99,38 @@ function Content({ budynki, sali }) {
                                 </div>
                             </div>
                             {/* dla konkretnej grupy, dla kierunka, dla wydzialu */}
-                            <div className="w-full">
+                            <div className="w-full mt-3">
                                 <div className="">
                                     <label className="text-theme-text">
                                         <input 
                                             type="checkbox"  
                                             checked={zaznaczonyCheck} 
-                                            onChange={(e) => setzaznaczonyCheck(e.target.checked)} 
-                                        /> Dla konkretnej grupy
+                                            
+                                            onChange={
+                                                (e) =>{ 
+                                                    const isChecked = e.target.checked;
+                                                    setzaznaczonyCheck(e.target.checked)
+                                                   
+                                                    if(!isChecked){
+                                                        setData('zajecie', null)
+                                                    }
+                                                }
+                                            } 
+                                        /> Dla konkretnych zajęć
                                     </label>
                                     
                                 </div>
                             </div>
                             
                             {zaznaczonyCheck && (
-                                <div className="w-full mx-auto border-[0.3px] border-theme-muted p-5 rounded-[15px]">
-                                    test
+                                <div className="w-full h-[100px] mx-auto  border-[0.3px] border-theme-muted p-5 rounded-[15px]">
+                                    <span className="text-theme-muted">Zajęcie</span>
+                                    <Form.Select value={wybraneZajecie} onChange={(e) => {setwybraneZajecie(e.target.value); setData('zajecie', e.target.value) }} className="w-full bg-theme-surface  border border-theme-muted rounded-[15px] text-theme-text h-[60%]">
+                                        <option value="">Wybierz zajęcie</option>
+                                        {zajecia.map((zajecie) => (
+                                            <option key={zajecie.idZajęcie} value={zajecie.idZajęcie}>{zajecie.NazwaPrzedmiotu}</option>
+                                        ))}
+                                    </Form.Select>
                                 </div>
                             )}
 
@@ -130,7 +149,7 @@ function Content({ budynki, sali }) {
     );
 }
 
-export default function Rezerwacja({ budynki, sali }) {
+export default function Rezerwacja({ budynki, sali, zajecia }) {
     const props = usePage().props;
 
     const message = props.flash?.status || props.status;
@@ -169,7 +188,7 @@ export default function Rezerwacja({ budynki, sali }) {
             />
             <Head title="Nowa rezerwacja" />
             <MenuProwadzacy />
-            <Content budynki={budynki} sali={sali}/>
+            <Content budynki={budynki} sali={sali} zajecia={zajecia}/>
         </div>
     );
 }

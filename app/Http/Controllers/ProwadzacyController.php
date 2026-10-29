@@ -10,26 +10,86 @@ use App\Models\Sala;
 use Inertia\Inertia;
 use App\Models\Komunikat;
 use App\Models\Student;
+use App\Models\Zajecie;
 
 class ProwadzacyController extends Controller
 {
     //
+    public function stworzrezerwacje(Request $request){
+        $user = $request->user();
+        $prowadzacy = Prowadzacy::where('User_idUser', $user->idUser)->first();
+        $rezerwacja = Rezerwacja::where([['data', $request->data], ['GodzinaRozpoczecia', $request->godpocz], ['GodzinaZakonczenia', $request->godkon], ['Sala_idSala', $request->sala], ['Sala_Budynek_idBudynek', $request->budynek]])->exists();
+        $listastudentow = Student::get();
+        if(!$rezerwacja){
+            if($request->zajecie != null){
+                $znalezionezjecie = Zajecie::where('idZajęcie', $request->zajecie)->first();
+                Rezerwacja::create([
+                    'data' => $request->data,
+                    'GodzinaRozpoczecia' => $request->godpocz,
+                    'GodzinaZakonczenia' => $request->godkon,
+                    'typWydarzenia' => $request->typ,
+                    'statusRezerwacji' => 'Wysłana',
+                    'Zajęcie_idZajęcie' => $znalezionezjecie->idZajęcie,
+                    'Zajęcie_PlanZajec_idPlanZajec' => $znalezionezjecie->PlanZajec_idPlanZajec,
+                    'Prowadzacy_idProwadzacy' => $prowadzacy->idProwadzacy,
+                    'Sala_idSala' => $request->sala,
+                    'Sala_Budynek_idBudynek' => $request->budynek               
+                ]);
+
+
+            }else{
+                Rezerwacja::create([
+                    'data' => $request->data,
+                    'GodzinaRozpoczecia' => $request->godpocz,
+                    'GodzinaZakonczenia' => $request->godkon,
+                    'typWydarzenia' => $request->typ,
+                    'statusRezerwacji' => 'Wysłana',
+                    'Zajęcie_idZajęcie' => null,
+                    'Zajęcie_PlanZajec_idPlanZajec' => null,
+                    'Prowadzacy_idProwadzacy' => $prowadzacy->idProwadzacy,
+                    'Sala_idSala' => $request->sala,
+                    'Sala_Budynek_idBudynek' => $request->budynek               
+                ]);
+
+            }
+
+            
+
+            return redirect()->back()->with('status', 'utworzona nowa rezerwacja');
+        }
+        return redirect()->back()->with('error', 'rezerwacja juz istnieje');
+    }
 
     public function rezerwacjeform(Request $request){
+        $user = $request->user();
+        $prowadzacy = Prowadzacy::where('User_idUser', $user->idUser)->first();
+
         $budynki = Budynek::select('idBudynek','nazwa')->get()->toArray();
         $sali = Sala::select('idSala', 'numerSali', 'Budynek_idBudynek')->get()->toArray();
         // dd($sali);
 
+
+        $zajecia = $prowadzacy->zajecie()
+        ->join('przedmiot', function($join){
+            $join->on('zajęcie.Przedmiot_idPrzedmiot', '=', 'przedmiot.idPrzedmiot');
+        })
+        ->select(
+            'zajęcie.*',
+            'przedmiot.nazwa as NazwaPrzedmiotu'
+        )
+        ->get()->toArray();
         if($request->expectsJson()){
             return response()->json([
                 'budynki' => $budynki,
                 'sali' => $sali,    
+                'zajecia' => $zajecia
             ]);
         }
 
         return Inertia::render('Prowadzacy/Rezerwacjaform', [
             'budynki' => $budynki,
             'sali' => $sali,
+            'zajecia' => $zajecia
         ]);
     }
 
