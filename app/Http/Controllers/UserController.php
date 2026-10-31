@@ -201,6 +201,7 @@ class UserController extends Controller
         ->join('sala', function($join){
             $join->on('rezerwacja.Sala_idSala', '=', 'sala.idSala');
         })
+        
         ->join('prowadzacy', function($join){
             $join->on('rezerwacja.Prowadzacy_idProwadzacy', '=', 'prowadzacy.idProwadzacy');    
         })
@@ -297,7 +298,12 @@ class UserController extends Controller
                 'zajęcie.TypZajec',
                 'zajęcie.Parzystosc',
                 'przedmiot.nazwa as nazwa_przedmiotu',
+                'sala.idSala',
                 'sala.numerSali',
+                'budynek.idBudynek',
+                'budynek.nazwa as nazwa_budynku',
+                'budynek.ulica',
+                'budynek.nrBudynku',
                 'user.name',
                 'user.surname',
                 'prowadzacy.TytulNaukowy',
@@ -308,6 +314,9 @@ class UserController extends Controller
             })
             ->join('sala', function($join){
                 $join->on('rezerwacja.Sala_idSala', '=', 'sala.idSala');
+            })
+            ->join('budynek', function($join){
+             $join->on('sala.Budynek_idBudynek', '=', 'budynek.idBudynek');
             })
             ->join('prowadzacy', function($join){
                 $join->on('rezerwacja.Prowadzacy_idProwadzacy', '=', 'prowadzacy.idProwadzacy');    
@@ -330,7 +339,15 @@ class UserController extends Controller
                     'extendedProps' => [
                         'typ' => $item->TypZajec,
                         'parzystosc' => $item->Parzystosc,
+
+                        'idSala' => $item->idSala,
                         'numersali' => $item->numerSali,
+
+                        'idBudynek' => $item->idBudynek,
+                        'nazwaBudynku' => $item->nazwa_budynku,
+                        'ulica' => $item->ulica,
+                        'nrBudynku' => $item->nrBudynku,
+
                         'imie' => substr($item->name, 0, 1),
                         'nazwisko' => $item->surname,
                         'tytulNaukowy' => $item->TytulNaukowy,
