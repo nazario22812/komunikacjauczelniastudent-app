@@ -15,6 +15,41 @@ use App\Models\Zajecie;
 class ProwadzacyController extends Controller
 {
     //
+
+    public function wystawienieocen(Request $request){
+        // dd($request->all());
+        $user = $request->user();
+        $prowadzacy = Prowadzacy::where('User_idUser', $user->idUser)->first();
+        
+
+        $zajecia = $prowadzacy->zajecie()
+        ->join('przedmiot', function($join){
+            $join->on('zajęcie.Przedmiot_idPrzedmiot', '=', 'przedmiot.idPrzedmiot');
+        })
+        ->select(
+            'zajęcie.*',
+            'przedmiot.nazwa as NazwaPrzedmiotu'
+        )
+        ->get()->toArray();
+
+        $studenci = [];
+        $wybranezajecie = $request->input('zajecie_id');
+        
+        if($wybranezajecie){
+            $zajecie = Zajecie::with('planzajec.grupastudenta.grupastudenta.user')->find($wybranezajecie);
+            // dd($zajecie?->planzajec?->grupastudenta?->grupastudenta);
+            $studenci = $zajecie?->planzajec?->grupastudenta?->grupastudenta ?? [];
+        }
+
+        // dd($zajecia);
+        return Inertia::render('Prowadzacy/WystawienieOcen',[
+            'zajecia' => $zajecia,
+            'studenci' => $studenci,
+            'selectedZajecieId' => $wybranezajecie,
+        ]);   
+    }
+
+
     public function stworzrezerwacje(Request $request){
         $user = $request->user();
         $prowadzacy = Prowadzacy::where('User_idUser', $user->idUser)->first();

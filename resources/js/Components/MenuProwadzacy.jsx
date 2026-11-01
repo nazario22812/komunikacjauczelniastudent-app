@@ -74,7 +74,7 @@ export default function MenuProwadzacy(){
                     </div>
                 </Link>
                 
-                <Link href='/ogloszeniaiankiety' method="get" as="button" className="hover:cursor-pointer w-full">
+                <Link href='/prowadzacy/wystawienieocen' method="get" as="button" className="hover:cursor-pointer w-full">
                     <div className="border-b-1 border-theme-muted flex h-[30px] gap-x-[10px] items-center fustify-start">
                         <img src={Reward} alt="ogloszeniaiankiety" />
                         <span className="text-[12px]">Wystawienie ocen</span>

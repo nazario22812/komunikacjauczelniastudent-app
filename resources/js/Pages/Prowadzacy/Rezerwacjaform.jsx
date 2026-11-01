@@ -128,7 +128,7 @@ function Content({ budynki, sali , zajecia}) {
                                     <Form.Select value={wybraneZajecie} onChange={(e) => {setwybraneZajecie(e.target.value); setData('zajecie', e.target.value) }} className="w-full bg-theme-surface  border border-theme-muted rounded-[15px] text-theme-text h-[60%]">
                                         <option value="">Wybierz zajęcie</option>
                                         {zajecia.map((zajecie) => (
-                                            <option key={zajecie.idZajęcie} value={zajecie.idZajęcie}>{zajecie.NazwaPrzedmiotu}</option>
+                                            <option key={zajecie.idZajęcie} value={zajecie.idZajęcie}>{zajecie.NazwaPrzedmiotu}, {zajecie.TypZajec}</option>
                                         ))}
                                     </Form.Select>
                                 </div>

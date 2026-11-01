@@ -31,7 +31,7 @@ class Zajecie extends Model
     
 
     public function planzajec(){
-        return $this->belongsTo(PlanZajec::class, 'PlanZajec_idPlanZajec', 'idPlanZajec');
+        return $this->belongsTo(Planzajec::class, 'PlanZajec_idPlanZajec', 'idPlanZajec');
     }
 
     public function prowadzacy(){
