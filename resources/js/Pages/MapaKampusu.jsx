@@ -106,7 +106,7 @@ function Content({sale}){
                                 {filtersale.map((item, index) => (
                                     <li key={index} className="p-2 text-theme-text text-sm hover:bg-theme-slate-3 cursor-pointer border-b border-theme-black last:border-b-0"
                                     onClick={() => handleSelectSuggestion(item)}>
-                                        <span className="font-bold">{item.numerSali}</span>
+                                        <span className="font-bold">{item.numerSali}, {item.nazwa}</span>
                                     </li>
                                 ))}
                             </ul>

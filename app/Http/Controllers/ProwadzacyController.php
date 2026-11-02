@@ -17,6 +17,14 @@ class ProwadzacyController extends Controller
     //
     public function wystawienieoceny(Request $request, $wybranyprzedmiot ,$idStudent, $wybranaocena){
         dd($wybranyprzedmiot);
+
+        /*
+        1.proverka czy byla wystawlena ocenka
+        2. jezeli da to update ocenki
+        3.jezeli nie to create ocenki
+        4.wyslaty komunikat studentowi ocenka wystawlena
+        5.return do toastiw
+        */
     }
 
     public function wystawienieocen(Request $request){

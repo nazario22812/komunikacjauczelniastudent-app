@@ -75,7 +75,6 @@ function Content({ zajecia, selectedZajecieId, studenci }) {
         );
     };
 
-    console.log(zajecia)
     return (
         <div className="bg-theme-page w-full p-[10px] h-screen flex flex-col box-border">
             <div className="bg-theme-page w-full flex shrink-0 h-[40px] mx-auto text-center border-b-[0.3px] border-theme-muted p-[10px] rounded-t-[10px]">
