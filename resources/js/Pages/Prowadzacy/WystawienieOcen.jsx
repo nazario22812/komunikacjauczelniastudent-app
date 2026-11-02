@@ -4,9 +4,66 @@ import MenuProwadzacy from "../../Components/MenuProwadzacy";
 import BackButton from "../../Components/BackButton";
 import Form from "react-bootstrap/Form";
 
+
+function StudentRow({ student, wybranyprzedmiot }) {
+    const [wybranaocena, setwybranaocena] = useState("Niedostatecznie");
+    return (
+        <tr
+            key={student.idStudent}
+            className="border-b border-theme-muted/50"
+        >
+            <td className="p-2">
+                {student.index}
+            </td>
+            <td className="p-2">
+                {student.user.name}{" "}
+                {student.user.surname}
+            </td>
+            <td>
+                {student.existingOcena || "Brak"}
+            </td>
+            <td className="p-2">
+                <Form.Select
+                    value={wybranaocena}
+                    onChange={(e) => {
+                        setwybranaocena(
+                            e.target.value,
+                        );
+
+                    }}
+                    className="w-full bg-theme-surface  border border-theme-muted rounded-[15px] text-theme-text h-[60%]"
+                >
+
+                    <option value="Niedostatecznie">Niedostatecznie</option>
+                    <option value="Dostatecznie">Dostatecznie</option>
+                    <option value="Dostatecznie plus">Dostatecznie plus</option>
+                    <option value="Dobrze">Dobrze</option>
+                    <option value="Dobrze plus">Dobrze plus</option>
+                    <option value="Bardzo dobrze">Bardzo dobrze</option>
+
+                </Form.Select>
+            </td>
+            <td className="p-2">
+                {/* <button type="button" onClick={() => router.post(`/student/kurs/redagujzadanie/${zadanie.idZadanie}/${file.idPlik}`)} className="shrink-0 text-red-400 hover:text-red-300"> */}
+                {/* Usuń
+                                                    </button> */}
+                {/* Route::post('/prowadzacy/ocenekoncowe/wystawienieoceny/{idPrzedmiot}/{idStudent}/{wybranaocena}', [ProwadzacyController::class, 'wystawienieoceny']); */}
+
+                <button
+                    className="w-[50px] bg-theme-orange p-2 text-[22px] rounded-[10px] font-bold hover:cursor-pointer"
+                    type="button"
+                    onClick={() => router.post(`/prowadzacy/ocenekoncowe/wystawienieoceny/${wybranyprzedmiot}/${student.idStudent}/${wybranaocena}`)}
+                >
+                    +
+                </button>
+            </td>
+        </tr>
+    );
+
+}
+
 function Content({ zajecia, selectedZajecieId, studenci }) {
-    const [wybranyprzedmiot, setwybranyprzedmiot] = useState("");
-    const [wybranaocena, setwybranaocena] = useState("");
+    const [wybranyprzedmiot, setwybranyprzedmiot] = useState(selectedZajecieId || "");
     const handleZajecieChange = (e) => {
         router.get(
             "/prowadzacy/wystawienieocen",
@@ -17,7 +74,8 @@ function Content({ zajecia, selectedZajecieId, studenci }) {
             },
         );
     };
-    console.log(studenci);
+
+    console.log(zajecia)
     return (
         <div className="bg-theme-page w-full p-[10px] h-screen flex flex-col box-border">
             <div className="bg-theme-page w-full flex shrink-0 h-[40px] mx-auto text-center border-b-[0.3px] border-theme-muted p-[10px] rounded-t-[10px]">
@@ -66,50 +124,19 @@ function Content({ zajecia, selectedZajecieId, studenci }) {
                                             <th className="p-2">
                                                 Imię i Nazwisko
                                             </th>
+                                            <th>
+                                                Obecna ocena
+                                            </th>
                                             <th className="p-2">Ocena</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {studenci.map((student) => (
-                                            <tr
+                                            <StudentRow
                                                 key={student.idStudent}
-                                                className="border-b border-theme-muted/50"
-                                            >
-                                                <td className="p-2">
-                                                    {student.index}
-                                                </td>
-                                                <td className="p-2">
-                                                    {student.user.name}{" "}
-                                                    {student.user.surname}
-                                                </td>
-                                                <td className="p-2">
-                                                    <Form.Select
-                                                        value={wybranaocena}
-                                                        onChange={(e) => {
-                                                            setwybranaocena(
-                                                                e.target.value,
-                                                            );
-                                                        }}
-                                                        className="w-full bg-theme-surface  border border-theme-muted rounded-[15px] text-theme-text h-[60%]"
-                                                    >
-                                                        <option value="">
-                                                            Wybierz ocenę
-                                                        </option>
-                                                        <option value="Niedostatecznie">Niedostatecznie</option>
-                                                        <option value="Dostatecznie">Dostatecznie</option>
-                                                        <option value="Dostatecznie plus">Dostatecznie plus</option>
-                                                        <option value="Dobrze">Dobrze</option>
-                                                        <option value="Dobrze plus">Dobrze plus</option>
-                                                        <option value="Bardzo dobrze">Bardzo dobrze</option>
-                                                        
-                                                    </Form.Select>
-                                                </td>
-                                                <td className="p-2">
-                                                    <button className="w-[50px] bg-theme-orange p-2 text-[22px] rounded-[10px] font-bold hover:cursor-pointer">
-                                                        +
-                                                    </button>
-                                                </td>
-                                            </tr>
+                                                student={student}
+                                                wybranyprzedmiot={wybranyprzedmiot}
+                                            />
                                         ))}
                                     </tbody>
                                 </table>

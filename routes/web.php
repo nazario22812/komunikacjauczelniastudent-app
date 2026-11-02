@@ -89,6 +89,7 @@ Route::middleware(['auth', 'role:prowadzacy'])->group(function (){
     Route::get('/prowadzacy/zarezerwujsale', [ProwadzacyController::class, 'rezerwacjeform']);
     Route::post('/prowadzacy/tworzenierezerwacji', [ProwadzacyController::class, 'stworzrezerwacje']);
     Route::get('/prowadzacy/wystawienieocen', [ProwadzacyController::class, 'wystawienieocen']);
+    Route::post('/prowadzacy/ocenekoncowe/wystawienieoceny/{wybranyprzedmiot}/{idStudent}/{wybranaocena}', [ProwadzacyController::class, 'wystawienieoceny']);
 });
 
 

@@ -11,10 +11,13 @@ use Inertia\Inertia;
 use App\Models\Komunikat;
 use App\Models\Student;
 use App\Models\Zajecie;
-
+use App\Models\Ocena;
 class ProwadzacyController extends Controller
 {
     //
+    public function wystawienieoceny(Request $request, $wybranyprzedmiot ,$idStudent, $wybranaocena){
+        dd($wybranyprzedmiot);
+    }
 
     public function wystawienieocen(Request $request){
         // dd($request->all());
@@ -39,6 +42,26 @@ class ProwadzacyController extends Controller
             $zajecie = Zajecie::with('planzajec.grupastudenta.grupastudenta.user')->find($wybranezajecie);
             // dd($zajecie?->planzajec?->grupastudenta?->grupastudenta);
             $studenci = $zajecie?->planzajec?->grupastudenta?->grupastudenta ?? [];
+            
+            if ($studenci->isNotEmpty() && $zajecie) {
+                $przedmiotId = $zajecie->Przedmiot_idPrzedmiot;
+                $typZajec = $zajecie->TypZajec;
+
+                foreach ($studenci as $student) {
+                    $istniejacaOcena = Ocena::where([['idStudent', $student->idStudent], ['idPrzedmiot', $przedmiotId], ['czyKoncowa', 1], ['typZajec', $typZajec]])
+                    ->first();
+
+                    $student->existingOcena = $istniejacaOcena?->skalaOceny ?? '';
+                }
+            }
+        }
+
+        if($request->expectsJson()){
+            return response()->json([
+                'zajecia' => $zajecia,
+                'studenci' => $studenci,
+                'selectedZajecieId' => $wybranezajecie,    
+            ]);
         }
 
         // dd($zajecia);
