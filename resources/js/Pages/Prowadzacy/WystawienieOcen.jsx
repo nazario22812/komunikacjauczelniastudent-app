@@ -3,6 +3,7 @@ import { Head, router, useForm, usePage } from "@inertiajs/react";
 import MenuProwadzacy from "../../Components/MenuProwadzacy";
 import BackButton from "../../Components/BackButton";
 import Form from "react-bootstrap/Form";
+import { ToastContainer, toast } from "react-toastify";
 
 
 function StudentRow({ student, wybranyprzedmiot }) {
@@ -160,8 +161,37 @@ export default function WystawienieOcen({
     selectedZajecieId,
     studenci,
 }) {
+
+
+     const props = usePage().props;
+    
+        const message = props.flash?.status || props.status;
+        useEffect(() => {
+            if (message) {
+                toast.info(message, {
+                    position: "bottom-right",
+                    autoClose: 5000,
+                    theme: "dark",
+                          
+                });
+            }
+        }, [message])
+
+
     return (
         <div className="flex">
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick={false}
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+            />
             <Head title="Wystawienie ocen" />
             <MenuProwadzacy />
             <Content

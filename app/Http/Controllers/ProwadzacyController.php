@@ -12,19 +12,52 @@ use App\Models\Komunikat;
 use App\Models\Student;
 use App\Models\Zajecie;
 use App\Models\Ocena;
+use App\Models\Przedmiot;
+
 class ProwadzacyController extends Controller
 {
     //
     public function wystawienieoceny(Request $request, $wybranyprzedmiot ,$idStudent, $wybranaocena){
-        dd($wybranyprzedmiot);
 
-        /*
-        1.proverka czy byla wystawlena ocenka
-        2. jezeli da to update ocenki
-        3.jezeli nie to create ocenki
-        4.wyslaty komunikat studentowi ocenka wystawlena
-        5.return do toastiw
-        */
+        $zajecie = Zajecie::where('idZajęcie', $wybranyprzedmiot)->first();
+        $przedmiot = Przedmiot::where('idPrzedmiot', $zajecie->Przedmiot_idPrzedmiot)->first();
+        $student = Student::where('idStudent', $idStudent)->first();
+        $istniejacaOcena = Ocena::where([['idStudent', $idStudent], ['idPrzedmiot', $przedmiot->idPrzedmiot], ['czyKoncowa', 1], ['typZajec', $zajecie->TypZajec]])
+        ->first();
+        
+
+        $temat = '';
+        $tresc = '';
+        if ($istniejacaOcena) {
+            $istniejacaOcena->skalaOceny = $wybranaocena;
+            $istniejacaOcena->save();
+        
+            $temat = 'Aktualizacja oceny';
+            $tresc = 'Twoja ocena końcowa z przedmiotu ' . $przedmiot->nazwa . ' ' . $zajecie->TypZajec . ' została zaktualizowana na ' . $wybranaocena . '. Sprawdź w zakładce moje oceny.';
+        } else {
+            Ocena::create([
+                'idStudent' => $idStudent,
+                'idPrzedmiot' => $przedmiot->idPrzedmiot,
+                'skalaOceny' => $wybranaocena,
+                'czyKoncowa' => 1,
+                'typZajec' => $zajecie->TypZajec,
+                'Semester' => $student->semester
+            ]);
+
+            $temat = 'Wystawienie oceny';
+            $tresc = 'Twoja ocena końcowa z przedmiotu ' . $przedmiot->nazwa . ' ' . $zajecie->TypZajec . ' została wystawiona jako ' . $wybranaocena . '. Sprawdź w zakładce moje oceny.';
+        }
+        
+        
+        $komunikat = Komunikat::create([
+            'temat' => $temat,
+            'tresc' => $tresc,
+            'czyOgloszenie' => 0
+        ]);        
+
+        $komunikat->user()->attach($student->User_idUser);
+        return redirect()->back()->with('status', 'Ocena została wystawiona');
+
     }
 
     public function wystawienieocen(Request $request){
