@@ -22,6 +22,16 @@ class ProwadzacyController extends Controller
 {
     //
 
+    public function usunstudentazkursu(Request $request, $idStudent, $idKurs){
+        $kurs = Kurs::find($idKurs);
+        if ($kurs) {
+            $kurs->student()->detach($idStudent);
+            return redirect()->back()->with('status', 'Student został usunięty z kursu');
+        } else {
+            return redirect()->back()->with('error', 'Nie znaleziono kursu');
+        }
+    }
+
     public function kurs(Request $request, $nazwa, $idkurs){
 
 

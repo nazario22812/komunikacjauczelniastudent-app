@@ -5,31 +5,42 @@ import BackButton from "../../Components/BackButton";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import MenuProwadzacy from "../../Components/MenuProwadzacy";
+import { ToastContainer, toast } from "react-toastify";
 
 
-function Materialy({materialy}){
+function Materialy({ materialy }) {
     return (
-        <table className="w-[100%] h-full">
-            <tbody className="w-[100%] overflow-y-auto pr-2 custom-scrollbar">
-                    {materialy && materialy.length > 0 ? (
-                        <div>
-                            {materialy.map((material) => (
-                                <tr key={material.id} className="w-full ">
-                                    <td className="w-full">
-                                        <a href={`/storage/${material.nazwa}`} target="_blank" className="text-[22px] text-theme-muted ">🔗{material.nazwa}, </a>
-                                    </td>
-                                </tr>
-                            ))}
-                        </div>
-                    ):
-                    (
-                        <div className="w-full mx-auto text-center mt-10 text-[24px] text-theme-muted">
-                            <span>Brak materiałów</span>
-                        </div>
-                    )}
-                    
-            </tbody>
-        </table>
+        <div className="w-full h-full p-4 overflow-y-auto custom-scrollbar flex flex-col gap-3">
+            {materialy && materialy.length > 0 ? (
+                materialy.map((material) => {
+                    const fileName = material.nazwa.split('/').pop();
+
+                    return (
+                        <a
+                            key={material.id}
+                            href={`/storage/${material.nazwa}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-between p-3 bg-theme-surface border border-theme-muted/30 rounded-[12px] hover:border-theme-orange transition-all duration-200 group"
+                        >
+                            <div className="flex items-center gap-3">
+                                <span className="text-[24px]">📄</span>
+                                <span className="text-[16px] text-theme-text font-medium group-hover:text-theme-orange transition-colors">
+                                    {fileName}
+                                </span>
+                            </div>
+                            <span className="text-theme-muted text-[14px] group-hover:translate-x-1 transition-transform">
+                                Otwórz 
+                            </span>
+                        </a>
+                    );
+                })
+            ) : (
+                <div className="w-full mx-auto text-center mt-10 text-[20px] text-theme-muted">
+                    <span>Brak materiałów</span>
+                </div>
+            )}
+        </div>
     );
 }
 
@@ -92,7 +103,8 @@ function Zadania({ zadania }){
                 <tbody className="divide-y divide-gray-800 text-[14px]">
                     {zadania && zadania.length > 0 ? (
                         zadania.map((zadanie) => (
-                            <tr key={zadanie.id} onClick={() => router.get(`/student/kurs/${zadanie.idZadanie}`)} className="hover:bg-theme-dark-slate/50 transition-colors cursor-pointer">
+                            // onClick={() => router.get(`/student/kurs/${zadanie.idZadanie}`)}
+                            <tr key={zadanie.id}  className="hover:bg-theme-dark-slate/50 transition-colors cursor-pointer">
                                 <td  className="p-3 font-medium text-theme-text">{zadanie.nazwaZadania || '—'}</td>
                             </tr>
                         ))
@@ -109,7 +121,7 @@ function Zadania({ zadania }){
     );
 }
 
-function Studenty({studenci}){
+function Studenty({studenci, kurs}){
     return(
         <div className="overflow-x-auto rounded-[10px] border border-gray-700/60">
             <table className="w-full text-left border-collapse">
@@ -127,7 +139,7 @@ function Studenty({studenci}){
                                 <td  className="p-3 font-medium text-theme-text">{student.index}</td>
                                 <td  className="p-3 font-medium text-theme-text">{student.user.name || '—'} {student.user.surname || '—'}</td>
                                 <td>
-                                    <button type="button" onClick={() => router.post(``)} className="shrink-0 text-red-400 hover:text-red-300 hover:cursor-pointer">
+                                    <button type="button" onClick={() => router.post(`/prowadzacy/usunstudentazkursu/${student.idStudent}/${kurs.idkurs}`)} className="shrink-0 text-red-400 hover:text-red-300 hover:cursor-pointer">
                                         Usuń
                                     </button>
                                 </td>
@@ -191,7 +203,7 @@ function Content({ kurs, materialy, sylabus, literatura, przedmiot, zadania, stu
                                 <Sylabusplusliteratura sylabus={sylabus} literatura={literatura} przedmiot={przedmiot} kurs={kurs}/>
                             </TabPanel>
                             <TabPanel className="hidden bg-theme-surface h-full rounded-b-[10px]  theme-text">
-                                <Studenty studenci={studenci}/>
+                                <Studenty studenci={studenci} kurs={kurs}/>
                             </TabPanel>
                         </Tabs>
                     </div>
@@ -203,12 +215,44 @@ function Content({ kurs, materialy, sylabus, literatura, przedmiot, zadania, stu
     );
 }
 
-export default function MojeKursy({ auth, kurs, materialy, sylabus, literatura, przedmiot, zadania, studenci }) {
+export default function Kurs({ auth, kurs, materialy, sylabus, literatura, przedmiot, zadania, studenci }) {
+    const props = usePage().props;
     
+    const message = props.flash?.status || props.status;
+    const error = props.flash?.error || props.error;
+    useEffect(() => {
+        if (message) {
+            toast.info(message, {
+                position: "bottom-right",
+                autoClose: 5000,
+                theme: "dark",
+                       
+            });
+        }
+        if(error) {
+            toast.error(error, {
+                position: "bottom-right",
+                autoClose: 5000,
+                theme: "dark"
+            })
+        }
+    }, [message, error])
+
     return (
         
         <div className="flex">
-           
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick={false}
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+            />
             <Head title="Moje kursy"/>
             <MenuProwadzacy/>
             <Content kurs={kurs} materialy={materialy} sylabus={sylabus} literatura={literatura} przedmiot={przedmiot} zadania={zadania} studenci={studenci}/>

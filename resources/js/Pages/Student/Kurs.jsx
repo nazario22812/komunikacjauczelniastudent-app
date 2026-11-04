@@ -7,29 +7,40 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
 
-function Materialy({materialy}){
+
+function Materialy({ materialy }) {
     return (
-        <table className="w-[100%] h-full">
-            <tbody className="w-[100%] overflow-y-auto pr-2 custom-scrollbar">
-                    {materialy && materialy.length > 0 ? (
-                        <div>
-                            {materialy.map((material) => (
-                                <tr key={material.id} className="w-full ">
-                                    <td className="w-full">
-                                        <a href={`/storage/${material.nazwa}`} target="_blank" className="text-[22px] text-theme-muted ">🔗{material.nazwa}, </a>
-                                    </td>
-                                </tr>
-                            ))}
-                        </div>
-                    ):
-                    (
-                        <div className="w-full mx-auto text-center mt-10 text-[24px] text-theme-muted">
-                            <span>Brak materiałów</span>
-                        </div>
-                    )}
-                    
-            </tbody>
-        </table>
+        <div className="w-full h-full p-4 overflow-y-auto custom-scrollbar flex flex-col gap-3">
+            {materialy && materialy.length > 0 ? (
+                materialy.map((material) => {
+                    const fileName = material.nazwa.split('/').pop();
+
+                    return (
+                        <a
+                            key={material.id}
+                            href={`/storage/${material.nazwa}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-between p-3 bg-theme-surface border border-theme-muted/30 rounded-[12px] hover:border-theme-orange transition-all duration-200 group"
+                        >
+                            <div className="flex items-center gap-3">
+                                <span className="text-[24px]">📄</span>
+                                <span className="text-[16px] text-theme-text font-medium group-hover:text-theme-orange transition-colors">
+                                    {fileName}
+                                </span>
+                            </div>
+                            <span className="text-theme-muted text-[14px] group-hover:translate-x-1 transition-transform">
+                                Otwórz 
+                            </span>
+                        </a>
+                    );
+                })
+            ) : (
+                <div className="w-full mx-auto text-center mt-10 text-[20px] text-theme-muted">
+                    <span>Brak materiałów</span>
+                </div>
+            )}
+        </div>
     );
 }
 
