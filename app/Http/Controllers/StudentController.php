@@ -48,6 +48,11 @@ class StudentController extends Controller
         $user = request()->user();
         $student = Student::where('User_idUser', $user->idUser)->first();
         $zadania = $student->zadanie()->with(['kurs.przedmiot', 'kurs.prowadzacy.user'])->withPivot('status')->get()->toArray();
+        if($request->expectsJson()){
+            return response()->json([
+            'zadania' => $zadania
+            ]);
+        }
         return Inertia::render('Student/Mojezadania', [
             'zadania' => $zadania
         ]);
@@ -126,6 +131,13 @@ class StudentController extends Controller
         $pliki = Plik::where('Zadanie_idZadanie', $idZadanie)->get()->toArray();
         $ocena = Ocena::where([['Zadanie_idZadanie', $idZadanie], ['idStudent', $student->idStudent]])->first();
         // dd($zadanie);
+        if($request->expectsJson()){
+            return response()->json([
+            'zadanie' => $zadanie,
+            'pliki' => $pliki ? $pliki : null,
+            'ocena' => $ocena ? $ocena : null
+            ]);
+        }
         return Inertia::render('Student/Zadanie',[
             'zadanie' => $zadanie,
             'pliki' => $pliki ? $pliki : null,
@@ -179,9 +191,17 @@ class StudentController extends Controller
 
 
         $zadania = Zadanie::where('kurs_idkurs', $idkurs)->get()->toArray();
-
-    
-
+        if($request->expectsJson()){
+            return response()->json([
+                'kurs' => $kurs,
+            'materialy' => $materialy,
+            'przedmiot' => $przedmiot,
+            'sylabus' => $sylabus,
+            'literatura' => $literatura,
+            'oceny' => $oceny,
+            'zadania' => $zadania
+            ]);
+        }
         // dd($oceny);
         return Inertia::render('Student/Kurs', [
             'kurs' => $kurs,
@@ -213,16 +233,6 @@ class StudentController extends Controller
         $semestrykursow = Kurs::select('Semester')->distinct()->orderby('Semester', 'desc')->where('Kierunek_idKierunek', $student->Kierunek_idKierunek)->get()->toArray();
         $kierunek = Kierunek::where('idKierunek', $student->Kierunek_idKierunek)->first();
         // dd($przedmiotykursow);
-        
-        if($request->expectsJson()){
-            return response()->json([
-                'mojekursy' => $listakursow,
-                'wszystkiekursy' => $listawszystkichkursow,
-                'listasemestrow' => $semestrykursow,
-                'kierunekstudenta' => $kierunek
-            ]);
-        }
-
         return Inertia::render('Student/Mojekursy',[
             'mojekursy' => $listakursow,
             'wszystkiekursy' => $listawszystkichkursow,
