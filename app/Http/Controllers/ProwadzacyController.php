@@ -18,9 +18,54 @@ use App\Models\Kurs;
 use App\Models\Plik;
 use App\Models\Sylabus;
 use App\Models\Zadanie;
+use Illuminate\Support\Facades\Storage;
+
 class ProwadzacyController extends Controller
 {
     //
+
+    public function dodajmaterialy(Request $request, $idKurs){
+        $user = $request->user();
+        
+        if (!$request->hasFile('pliks')) {
+            return redirect()->back()->with('error', 'Nie wybrano pliku');
+        }
+
+        foreach($request->file('pliks') as $uploadedFile ){
+            if (!$uploadedFile || !$uploadedFile->isValid()) {
+               continue;
+            }
+            $originalnazwa = $uploadedFile->getClientOriginalName();
+            $sciezka = $uploadedFile->storeAs('materialy', $originalnazwa, 'public');
+            $typ = $uploadedFile->getMimeType();
+            $size = $uploadedFile->getSize();
+            $data = date("Y-m-d H:i:s");
+
+            Plik::create([
+                'nazwa' => $sciezka,
+                'typ' => $typ,
+                'rozmiar' => $size,
+                'dataTworzenia' => $data,
+                'Kurs_idkurs' => $idKurs
+            ]);
+        }
+
+        return redirect()->back()->with('status', 'Materiały zostały dodane');   
+    }
+
+    public function usunmaterial(Request $request, $idKurs, $idPlik){
+        $plik = Plik::where([['idPlik', $idPlik], ['Kurs_idKurs', $idKurs]])->first();
+        if ($plik) {
+            if(Storage::disk('public')->exists($plik->nazwa)){
+                Storage::disk('public')->delete($plik->nazwa);
+                $plik->delete();
+            }
+            $plik->delete();
+            return redirect()->back()->with('status', 'Materiał został usunięty');
+        } else {
+            return redirect()->back()->with('error', 'Nie znaleziono materiału');
+        }
+    }
 
     public function usunstudentazkursu(Request $request, $idStudent, $idKurs){
         $kurs = Kurs::find($idKurs);

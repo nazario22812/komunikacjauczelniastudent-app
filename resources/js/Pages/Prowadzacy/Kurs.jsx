@@ -1,38 +1,245 @@
-import React, { useEffect } from "react";
-import { Head, Link, router, usePage } from "@inertiajs/react";
+import React, { useEffect, useState } from "react";
+import { Head, Link, router, usePage, useForm } from "@inertiajs/react";
 import BackButton from "../../Components/BackButton";
 
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import 'react-tabs/style/react-tabs.css';
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import "react-tabs/style/react-tabs.css";
 import MenuProwadzacy from "../../Components/MenuProwadzacy";
 import { ToastContainer, toast } from "react-toastify";
+import { useDropzone } from "react-dropzone";
+
+function Materialy({ materialy, kursId }) {
+    const initialFiles = [];
+
+    const [isEditing, setIsEditing] = useState(false);
+    const { data, setData, post, processing, errors } = useForm({
+        pliks: initialFiles,
+    });
+    const handleDelete = (idPlik) => {
+        if (confirm("Czy na pewno chcesz usunąć ten materiał?")) {
+            router.post(`/prowadzacy/usunmaterialy/${kursId}/${idPlik}`, {
+                preserveState: true,
+                preserveScroll: true,
+            });
+        }
+    };
+    const [pliks, setpliks] = useState(initialFiles);
+
+    const removeFile = (indexToRemove) => {
+        const updatedFiles = pliks.filter(
+            (_, index) => index !== indexToRemove,
+        );
+
+        setpliks(updatedFiles);
+        setData("pliks", updatedFiles);
+    };
 
 
-function Materialy({ materialy }) {
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        post(`/prowadzacy/dodajmaterialy/${kursId}`, {
+            forceFormData: true,
+            onSuccess: () => {
+                setpliks([]);
+                setData("pliks", []);
+            },
+        });
+    }
+
+    const onDrop = (acceptedFiles) => {
+        setpliks((previousFiles) => {
+            const safePreviousFiles = Array.isArray(previousFiles)
+                ? previousFiles
+                : [];
+
+            const newFiles = acceptedFiles.filter(
+                (newFile) =>
+                    !safePreviousFiles.some(
+                        (file) =>
+                            file.name === newFile.name &&
+                            file.size === newFile.size &&
+                            file.lastModified === newFile.lastModified,
+                    ),
+            );
+
+            const updatedFiles = [...safePreviousFiles, ...newFiles];
+            setData("pliks", updatedFiles);
+            return updatedFiles;
+        });
+    };
+    const { getRootProps, getInputProps, isDragActive, fileRejections } =
+        useDropzone({
+            onDrop,
+            multiple: true,
+            accept: {
+                "image/jpeg": [".jpg", ".jpeg"],
+                "image/png": [".png"],
+                "application/pdf": [".pdf"],
+                "application/zip": [".zip"],
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+                    [".docx"],
+                "application/msword": [".doc"],
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+                    [".xlsx"],
+                "application/vnd.ms-excel": [".xls"],
+            },
+        });
+
     return (
         <div className="w-full h-full p-4 overflow-y-auto custom-scrollbar flex flex-col gap-3">
+            <div className="w-full flex justify-between items-center mb-2">
+                <button
+                    type="button"
+                    onClick={() => setIsEditing(!isEditing)}
+                    className={`fixed right-[5%] px-4 py-2 rounded-[10px] font-medium text-white transition-all ${
+                        isEditing
+                            ? "bg-red-600 hover:bg-red-700"
+                            : "bg-theme-orange hover:opacity-90"
+                    }`}
+                >
+                    {isEditing ? "Zakończ edytowanie" : "Edytuj"}
+                </button>
+                {isEditing && (
+                    <button
+                        type="button"
+                        onClick={handleSubmit}
+                        className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-[10px] font-medium transition-all"
+                    >
+                        Zapisz zmiany
+                    </button>
+                )}
+            </div>
+
+            {isEditing && (
+                <section className="w-full min-h-[180px] mx-auto flex flex-col gap-4">
+                    <div
+                        {...getRootProps({
+                            className: `
+                                dropzone
+                                w-full min-h-[180px]
+                                flex flex-col items-center justify-center
+                                gap-3 p-6
+                                bg-theme-surface
+                                border-2 border-dashed border-theme-muted
+                                rounded-[15px]
+                                text-theme-text text-center
+                                cursor-pointer
+                                transition-all duration-200
+                                hover:border-orange-500
+                                hover:bg-theme-accent-ink-2
+                                focus:outline-none focus:ring-2
+                                focus:ring-orange-500
+                                ${isDragActive ? "border-orange-500 bg-theme-accent-ink scale-[1.01]" : ""}
+                            `,
+                        })}
+                    >
+                        <input {...getInputProps()} />
+
+                        <div className="text-4xl">📂</div>
+
+                        {isDragActive ? (
+                            <p className="text-orange-400 font-semibold text-lg">
+                                Upuść pliki tutaj...
+                            </p>
+                        ) : (
+                            <>
+                                <p className="text-lg font-semibold">
+                                    Przeciągnij i upuść pliki
+                                </p>
+
+                                <p className="text-sm text-theme-light">
+                                    lub kliknij, aby wybrać z komputera
+                                </p>
+                            </>
+                        )}
+                    </div>
+
+                    {pliks && pliks.length > 0 ? (
+                        <aside className="w-full h-[30%]">
+                            <h4 className="text-theme-text text-lg font-semibold mb-3">
+                                Wybrane pliki ({pliks.length})
+                            </h4>
+
+                            <ul className="h-full flex flex-col gap-2 overflow-y-auto pr-2 custom-scrollbar">
+                                {pliks.map((file, index) => (
+                                    <li
+                                        key={`${file.name || file.nazwa}-${file.lastModified}-${index}`}
+                                        className="flex items-center gap-3 p-3 bg-theme-surface border border-white/20 rounded-xl text-theme-light"
+                                    >
+                                        <span className="text-xl">📎</span>
+
+                                        <div className="flex-1 min-w-0">
+                                            <p className="break-all">
+                                                {file.name ||
+                                                    (file.nazwa
+                                                        ? file.nazwa
+                                                              .split("/")
+                                                              .pop()
+                                                        : "")}
+                                            </p>
+
+                                            <p className="text-xs text-theme-muted">
+                                                {(file.size / 1024).toFixed(1)}{" "}
+                                                KB
+                                            </p>
+                                        </div>
+
+                                        <button
+                                            type="button"
+                                            onClick={() => removeFile(index)}
+                                            className="shrink-0 text-red-400 hover:text-red-300 hover:cursor-pointer px-2 py-1 text-sm transition-colors"
+                                        >
+                                            Usuń
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
+                        </aside>
+                    ) : (
+                        <div></div>
+                    )}
+                </section>
+            )}
+
             {materialy && materialy.length > 0 ? (
                 materialy.map((material) => {
-                    const fileName = material.nazwa.split('/').pop();
+                    const fileName = material.nazwa.split("/").pop();
 
                     return (
-                        <a
+                        <div
                             key={material.id}
-                            href={`/storage/${material.nazwa}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
                             className="flex items-center justify-between p-3 bg-theme-surface border border-theme-muted/30 rounded-[12px] hover:border-theme-orange transition-all duration-200 group"
                         >
-                            <div className="flex items-center gap-3">
+                            <a
+                                href={`/storage/${material.nazwa}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-3 flex-1"
+                            >
                                 <span className="text-[24px]">📄</span>
                                 <span className="text-[16px] text-theme-text font-medium group-hover:text-theme-orange transition-colors">
                                     {fileName}
                                 </span>
+                            </a>
+
+                            <div className="flex items-center gap-3">
+                                {isEditing ? (
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            handleDelete(material.idPlik)
+                                        }
+                                        className=" text-red-400  hover:text-white px-3 py-1 rounded-[8px] text-[14px] transition-all"
+                                    >
+                                        Usuń
+                                    </button>
+                                ) : (
+                                    <span className="text-theme-text text-[14px] group-hover:translate-x-1 transition-transform">
+                                        Otwórz
+                                    </span>
+                                )}
                             </div>
-                            <span className="text-theme-muted text-[14px] group-hover:translate-x-1 transition-transform">
-                                Otwórz 
-                            </span>
-                        </a>
+                        </div>
                     );
                 })
             ) : (
@@ -44,11 +251,13 @@ function Materialy({ materialy }) {
     );
 }
 
-function Sylabusplusliteratura({sylabus, literatura, przedmiot, kurs}){
+function Sylabusplusliteratura({ sylabus, literatura, przedmiot, kurs }) {
     return (
         <div className="w-[100%] h-full m-5 overflow-y-auto pr-2 custom-scrollbar text-theme-text">
             <div className="mb-2 ">
-                <span className="font-bold text-[22px]">Informacje o przedmiocie</span>
+                <span className="font-bold text-[22px]">
+                    Informacje o przedmiocie
+                </span>
                 <div className="bg-theme-slate p-5 rounded-[10px] w-[60%]">
                     <p>Przedmiot: {przedmiot.nazwa}</p>
                     <p>Semester: {kurs.Semester}</p>
@@ -56,7 +265,7 @@ function Sylabusplusliteratura({sylabus, literatura, przedmiot, kurs}){
                     <p>Liczba godzin: {sylabus.iloscGodzin}</p>
                     {sylabus.czyEgzamin === 1 ? (
                         <p>Egzamin: Tak</p>
-                    ):(
+                    ) : (
                         <p>Egzamin: Nie</p>
                     )}
                 </div>
@@ -68,18 +277,25 @@ function Sylabusplusliteratura({sylabus, literatura, przedmiot, kurs}){
                 </div>
             </div>
             <div className="mb-2 ">
-                <span className="font-bold text-[22px]">Warunki zaliczenia</span>
+                <span className="font-bold text-[22px]">
+                    Warunki zaliczenia
+                </span>
                 <div className="bg-theme-slate p-5 rounded-[10px] w-[60%]">
                     <p>{sylabus.warunkiZaliczenia}</p>
-                </div>        
+                </div>
             </div>
             <div>
                 <span className="font-bold text-[22px]">Literatura</span>
                 <div className="bg-theme-slate p-5 rounded-[10px] w-[60%]">
                     {literatura.map((ksiazka) => (
-                        <div key={ksiazka.id} className="border-b border-theme-page pb-1">
+                        <div
+                            key={ksiazka.id}
+                            className="border-b border-theme-page pb-1"
+                        >
                             <p className="text-[18px]">{ksiazka.nazwa}</p>
-                            <p className="text-[14px] font-thin">{ksiazka.opis}</p>
+                            <p className="text-[14px] font-thin">
+                                {ksiazka.opis}
+                            </p>
                         </div>
                     ))}
                 </div>
@@ -88,11 +304,8 @@ function Sylabusplusliteratura({sylabus, literatura, przedmiot, kurs}){
     );
 }
 
-
-
-function Zadania({ zadania }){
-    return(
-        
+function Zadania({ zadania }) {
+    return (
         <div className="overflow-x-auto rounded-[10px] border border-gray-700/60">
             <table className="w-full text-left border-collapse">
                 <thead>
@@ -104,13 +317,21 @@ function Zadania({ zadania }){
                     {zadania && zadania.length > 0 ? (
                         zadania.map((zadanie) => (
                             // onClick={() => router.get(`/student/kurs/${zadanie.idZadanie}`)}
-                            <tr key={zadanie.id}  className="hover:bg-theme-dark-slate/50 transition-colors cursor-pointer">
-                                <td  className="p-3 font-medium text-theme-text">{zadanie.nazwaZadania || '—'}</td>
+                            <tr
+                                key={zadanie.id}
+                                className="hover:bg-theme-dark-slate/50 transition-colors cursor-pointer"
+                            >
+                                <td className="p-3 font-medium text-theme-text">
+                                    {zadanie.nazwaZadania || "—"}
+                                </td>
                             </tr>
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="5" className="p-4 text-theme-text text-theme-muted">
+                            <td
+                                colSpan="5"
+                                className="p-4 text-theme-text text-theme-muted"
+                            >
                                 Brak zadań
                             </td>
                         </tr>
@@ -121,8 +342,8 @@ function Zadania({ zadania }){
     );
 }
 
-function Studenty({studenci, kurs}){
-    return(
+function Studenty({ studenci, kurs }) {
+    return (
         <div className="overflow-x-auto rounded-[10px] border border-gray-700/60">
             <table className="w-full text-left border-collapse">
                 <thead>
@@ -134,12 +355,27 @@ function Studenty({studenci, kurs}){
                 <tbody className="divide-y divide-gray-800 text-[14px]">
                     {studenci && studenci.length > 0 ? (
                         studenci.map((student) => (
-                            
-                            <tr key={student.idStudent} className="hover:bg-theme-dark-slate/50 transition-colors">
-                                <td  className="p-3 font-medium text-theme-text">{student.index}</td>
-                                <td  className="p-3 font-medium text-theme-text">{student.user.name || '—'} {student.user.surname || '—'}</td>
+                            <tr
+                                key={student.idStudent}
+                                className="hover:bg-theme-dark-slate/50 transition-colors"
+                            >
+                                <td className="p-3 font-medium text-theme-text">
+                                    {student.index}
+                                </td>
+                                <td className="p-3 font-medium text-theme-text">
+                                    {student.user.name || "—"}{" "}
+                                    {student.user.surname || "—"}
+                                </td>
                                 <td>
-                                    <button type="button" onClick={() => router.post(`/prowadzacy/usunstudentazkursu/${student.idStudent}/${kurs.idkurs}`)} className="shrink-0 text-red-400 hover:text-red-300 hover:cursor-pointer">
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            router.post(
+                                                `/prowadzacy/usunstudentazkursu/${student.idStudent}/${kurs.idkurs}`,
+                                            )
+                                        }
+                                        className="shrink-0 text-red-400 hover:text-red-300 hover:cursor-pointer"
+                                    >
                                         Usuń
                                     </button>
                                 </td>
@@ -147,8 +383,11 @@ function Studenty({studenci, kurs}){
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="5" className="p-4 text-theme-text text-theme-muted">
-                                Brak studentów 
+                            <td
+                                colSpan="5"
+                                className="p-4 text-theme-text text-theme-muted"
+                            >
+                                Brak studentów
                             </td>
                         </tr>
                     )}
@@ -158,66 +397,114 @@ function Studenty({studenci, kurs}){
     );
 }
 
-function Content({ kurs, materialy, sylabus, literatura, przedmiot, zadania, studenci }){
-   
-
-    
+function Content({
+    kurs,
+    materialy,
+    sylabus,
+    literatura,
+    przedmiot,
+    zadania,
+    studenci,
+}) {
     return (
-        
-       <div className="bg-theme-page w-full p-[10px] h-screen flex flex-col box-border">
+        <div className="bg-theme-page w-full p-[10px] h-screen flex flex-col box-border">
             <div className="bg-theme-page w-full flex shrink-0 h-[40px] mx-auto text-center border-b-[0.3px] border-theme-muted p-[10px] rounded-t-[10px]">
-                <BackButton back={ () => window.history.back()} />
-                <span className="font-bold text-[16px] text-theme-text w-full">Kurs</span>
+                <BackButton back={() => window.history.back()} />
+                <span className="font-bold text-[16px] text-theme-text w-full">
+                    Kurs
+                </span>
             </div>
             <div className="w-full flex-1 min-h-0 pt-3 pb-2 px-4 rounded-b-[10px] flex flex-col relative ">
-                <div className="bg-theme-surface w-full h-[15%] mx-auto rounded-t-[15px] px-[12px] flex text-left items-center" > 
+                <div className="bg-theme-surface w-full h-[15%] mx-auto rounded-t-[15px] px-[12px] flex text-left items-center">
                     <div>
-                        <span className="text-theme-text font-bold text-[36px] ">{kurs.nazwa}</span><br />
-                        <span className="text-theme-text font-thin text-[20px] ">{kurs.prowadzacy.TytulNaukowy} {kurs.prowadzacy.user.name} {kurs.prowadzacy.user.surname}</span>   
+                        <span className="text-theme-text font-bold text-[36px] ">
+                            {kurs.nazwa}
+                        </span>
+                        <br />
+                        <span className="text-theme-text font-thin text-[20px] ">
+                            {kurs.prowadzacy.TytulNaukowy}{" "}
+                            {kurs.prowadzacy.user.name}{" "}
+                            {kurs.prowadzacy.user.surname}
+                        </span>
                     </div>
-                    
-                </div>   
+                </div>
                 <div className="bg-theme-slate w-full h-full mx-auto p-5 rounded-b-[15px] ">
-                    
                     <div className="w-[100%]">
-                        <Tabs className="w-full flex flex-col h-full" selectedTabPanelClassName="!block"> 
+                        <Tabs
+                            className="w-full flex flex-col h-full"
+                            selectedTabPanelClassName="!block"
+                        >
                             <TabList className="flex border-b border-theme-muted space-x-8 text-theme-text  cursor-pointer list-none text-center">
-                                <Tab className="w-full" selectedClassName="!border-0 !bg-theme-surface !rounded-t-[10px]">Materiały</Tab>
-                                <Tab className="w-full" selectedClassName="!border-0 !bg-theme-surface !rounded-t-[10px]">Zadania</Tab>
+                                <Tab
+                                    className="w-full"
+                                    selectedClassName="!border-0 !bg-theme-surface !rounded-t-[10px]"
+                                >
+                                    Materiały
+                                </Tab>
+                                <Tab
+                                    className="w-full"
+                                    selectedClassName="!border-0 !bg-theme-surface !rounded-t-[10px]"
+                                >
+                                    Zadania
+                                </Tab>
                                 {/* <Tab className="w-full" selectedClassName="!border-0 !bg-theme-surface !rounded-t-[10px]">Oceny</Tab> */}
-                                <Tab className="w-full" selectedClassName="!border-0 !bg-theme-surface !rounded-t-[10px]">Dodatkowa informacja</Tab>
-                                <Tab className="w-full" selectedClassName="!border-0 !bg-theme-surface !rounded-t-[10px]">Użytkowniki</Tab>
-
+                                <Tab
+                                    className="w-full"
+                                    selectedClassName="!border-0 !bg-theme-surface !rounded-t-[10px]"
+                                >
+                                    Dodatkowa informacja
+                                </Tab>
+                                <Tab
+                                    className="w-full"
+                                    selectedClassName="!border-0 !bg-theme-surface !rounded-t-[10px]"
+                                >
+                                    Użytkowniki
+                                </Tab>
                             </TabList>
 
                             <TabPanel className="hidden bg-theme-surface h-[100%] rounded-b-[10px] theme-text p-5">
-                                <Materialy materialy={materialy}/>
+                                <Materialy
+                                    materialy={materialy}
+                                    kursId={kurs.idkurs}
+                                />
                             </TabPanel>
                             <TabPanel className="hidden bg-theme-surface h-full rounded-b-[10px]  theme-text">
-                                <Zadania zadania={zadania}/>
+                                <Zadania zadania={zadania} />
                             </TabPanel>
-                             {/* <TabPanel className="hidden bg-theme-surface h-full rounded-b-[10px]  theme-text">
+                            {/* <TabPanel className="hidden bg-theme-surface h-full rounded-b-[10px]  theme-text">
                                 <Oceny oceny={oceny}/>
                             </TabPanel> */}
-                             <TabPanel className="hidden bg-theme-surface h-full rounded-b-[10px]  theme-text">
-                                <Sylabusplusliteratura sylabus={sylabus} literatura={literatura} przedmiot={przedmiot} kurs={kurs}/>
+                            <TabPanel className="hidden bg-theme-surface h-full rounded-b-[10px]  theme-text">
+                                <Sylabusplusliteratura
+                                    sylabus={sylabus}
+                                    literatura={literatura}
+                                    przedmiot={przedmiot}
+                                    kurs={kurs}
+                                />
                             </TabPanel>
                             <TabPanel className="hidden bg-theme-surface h-full rounded-b-[10px]  theme-text">
-                                <Studenty studenci={studenci} kurs={kurs}/>
+                                <Studenty studenci={studenci} kurs={kurs} />
                             </TabPanel>
                         </Tabs>
                     </div>
-                    
-                </div> 
-            </div>        
+                </div>
+            </div>
         </div>
-        
     );
 }
 
-export default function Kurs({ auth, kurs, materialy, sylabus, literatura, przedmiot, zadania, studenci }) {
+export default function Kurs({
+    auth,
+    kurs,
+    materialy,
+    sylabus,
+    literatura,
+    przedmiot,
+    zadania,
+    studenci,
+}) {
     const props = usePage().props;
-    
+
     const message = props.flash?.status || props.status;
     const error = props.flash?.error || props.error;
     useEffect(() => {
@@ -226,20 +513,18 @@ export default function Kurs({ auth, kurs, materialy, sylabus, literatura, przed
                 position: "bottom-right",
                 autoClose: 5000,
                 theme: "dark",
-                       
             });
         }
-        if(error) {
+        if (error) {
             toast.error(error, {
                 position: "bottom-right",
                 autoClose: 5000,
-                theme: "dark"
-            })
+                theme: "dark",
+            });
         }
-    }, [message, error])
+    }, [message, error]);
 
     return (
-        
         <div className="flex">
             <ToastContainer
                 position="bottom-right"
@@ -253,9 +538,17 @@ export default function Kurs({ auth, kurs, materialy, sylabus, literatura, przed
                 pauseOnHover
                 theme="dark"
             />
-            <Head title="Moje kursy"/>
-            <MenuProwadzacy/>
-            <Content kurs={kurs} materialy={materialy} sylabus={sylabus} literatura={literatura} przedmiot={przedmiot} zadania={zadania} studenci={studenci}/>
+            <Head title="Moje kursy" />
+            <MenuProwadzacy />
+            <Content
+                kurs={kurs}
+                materialy={materialy}
+                sylabus={sylabus}
+                literatura={literatura}
+                przedmiot={przedmiot}
+                zadania={zadania}
+                studenci={studenci}
+            />
         </div>
     );
 }

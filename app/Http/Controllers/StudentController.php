@@ -79,7 +79,7 @@ class StudentController extends Controller
         $user = $request->user();
         $student = Student::where('User_idUser', $user->idUser)->first();
         
-        if($request->file('pliks') == null){
+        if(!$request->hasFile('pliks')){
             return redirect('/student/kurs/' . $idZadanie)->with('error', 'Nie wybrano pliku');
         }
         $pliki = Plik::where('Zadanie_idZadanie', $idZadanie)->get()->toArray();
