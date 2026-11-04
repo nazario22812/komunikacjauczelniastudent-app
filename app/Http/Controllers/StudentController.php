@@ -180,6 +180,8 @@ class StudentController extends Controller
 
         $zadania = Zadanie::where('kurs_idkurs', $idkurs)->get()->toArray();
 
+    
+
         // dd($oceny);
         return Inertia::render('Student/Kurs', [
             'kurs' => $kurs,
@@ -211,6 +213,16 @@ class StudentController extends Controller
         $semestrykursow = Kurs::select('Semester')->distinct()->orderby('Semester', 'desc')->where('Kierunek_idKierunek', $student->Kierunek_idKierunek)->get()->toArray();
         $kierunek = Kierunek::where('idKierunek', $student->Kierunek_idKierunek)->first();
         // dd($przedmiotykursow);
+        
+        if($request->expectsJson()){
+            return response()->json([
+                'mojekursy' => $listakursow,
+                'wszystkiekursy' => $listawszystkichkursow,
+                'listasemestrow' => $semestrykursow,
+                'kierunekstudenta' => $kierunek
+            ]);
+        }
+
         return Inertia::render('Student/Mojekursy',[
             'mojekursy' => $listakursow,
             'wszystkiekursy' => $listawszystkichkursow,

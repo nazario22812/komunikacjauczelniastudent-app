@@ -13,10 +13,63 @@ use App\Models\Student;
 use App\Models\Zajecie;
 use App\Models\Ocena;
 use App\Models\Przedmiot;
-
+use App\Models\Literatura;
+use App\Models\Kurs;
+use App\Models\Plik;
+use App\Models\Sylabus;
+use App\Models\Zadanie;
 class ProwadzacyController extends Controller
 {
     //
+
+    public function kurs(Request $request, $nazwa, $idkurs){
+
+
+        $user = $request->user();
+        $prowadzacy = Prowadzacy::where('User_idUser', $user->idUser)->first();
+
+        $kurs = Kurs::where('idKurs', $idkurs)->with(['prowadzacy.user', 'przedmiot', 'student.user'])->first();
+        $materialy = Plik::where('Kurs_idKurs', $idkurs)->get()->toArray();
+
+        $przedmiot = Przedmiot::where('idPrzedmiot', $kurs->Przedmiot_idPrzedmiot)->first();
+        $sylabus = Sylabus::where('Przedmiot_idPrzedmiot', $przedmiot->idPrzedmiot)->first();
+        $literatura = Literatura::where('Sylabus_idSylabus', $sylabus->idSylabus)->get()->toArray();
+
+        
+        $zadania = Zadanie::where('kurs_idkurs', $idkurs)->get()->toArray();
+
+        $studenci = $kurs->student()->with('user')->orderby('index', 'asc')->get()->toArray();
+        //dd($studenci);
+        // dd($oceny);
+        return Inertia::render('Prowadzacy/Kurs', [
+            'kurs' => $kurs,
+            'materialy' => $materialy,
+            'przedmiot' => $przedmiot,
+            'sylabus' => $sylabus,
+            'literatura' => $literatura,
+            'zadania' => $zadania,
+            'studenci' => $studenci
+        ]);
+    }
+
+    public function mojekursy(Request $request){
+        $user = $request->user();
+        $prowadzacy = Prowadzacy::where('User_idUser', $user->idUser)->first();
+        $listakursow = $prowadzacy->kurs()->get()->toArray();
+        
+
+        if ($request->expectsJson()){
+            return response()->json([
+                'mojekursy' => $listakursow,
+            ]);
+        }
+
+        return Inertia::render('Prowadzacy/MojeKursy',[
+                'mojekursy' => $listakursow,
+        
+            ]);
+    }
+
     public function wystawienieoceny(Request $request, $wybranyprzedmiot ,$idStudent, $wybranaocena){
 
         $zajecie = Zajecie::where('idZajęcie', $wybranyprzedmiot)->first();

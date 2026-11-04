@@ -90,6 +90,10 @@ Route::middleware(['auth', 'role:prowadzacy'])->group(function (){
     Route::post('/prowadzacy/tworzenierezerwacji', [ProwadzacyController::class, 'stworzrezerwacje']);
     Route::get('/prowadzacy/wystawienieocen', [ProwadzacyController::class, 'wystawienieocen']);
     Route::post('/prowadzacy/ocenekoncowe/wystawienieoceny/{wybranyprzedmiot}/{idStudent}/{wybranaocena}', [ProwadzacyController::class, 'wystawienieoceny']);
+    Route::get('/prowadzacy/mojekursy', [ProwadzacyController::class, 'mojekursy']);
+    Route::get('/prowadzacy/mojekursy/{nazwa}/{idkurs}', [ProwadzacyController::class, 'kurs'])->name('prowadzacy.kurs');
+
+
 });
 
 

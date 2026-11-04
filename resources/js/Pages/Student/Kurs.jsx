@@ -35,7 +35,7 @@ function Materialy({materialy}){
 
 function Sylabusplusliteratura({sylabus, literatura, przedmiot, kurs}){
     return (
-        <div className="w-[100%] h-full m-5 overflow-y-auto pr-2 custom-scrollbar">
+        <div className="w-[100%] h-full m-5 overflow-y-auto pr-2 custom-scrollbar text-theme-text">
             <div className="mb-2 ">
                 <span className="font-bold text-[22px]">Informacje o przedmiocie</span>
                 <div className="bg-theme-slate p-5 rounded-[10px] w-[60%]">
