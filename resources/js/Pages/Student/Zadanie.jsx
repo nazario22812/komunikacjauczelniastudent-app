@@ -89,7 +89,7 @@ function Content({ zadanie, pliki = null, ocena = null }) {
                 <div className="bg-theme-slate w-full h-full mx-auto pt-[35px] pb-[10px] px-[75px] rounded-[15px] relative overflow-y-auto pr-2 custom-scrollbar">
                     <div className="w-full text-center text-theme-text font-bold text-[58px]">
                         <span>{zadanie.nazwaZadania}</span><br />
-                        <span className="text-[20px] font-thin">termin oddania: {zadanie.TerminOddania}</span><br />
+                        <span className="text-[20px] font-thin">termin oddania: {zadanie.TerminOddania || 'N/D'}</span><br />
                         {zadanie.CzyNaOcene == 1 ? (
                             <div className="w-[60%] mx-auto  flex justify-between items-center">
                                 {ocena != null ? (
@@ -97,12 +97,12 @@ function Content({ zadanie, pliki = null, ocena = null }) {
                                 ) : (
                                     <span className="text-[22px] font-thin">Nie ocenione</span>
                                 )}
-                                <span className="text-[22px] font-thin">Status: {zadanie.pivot.status}</span>
                             </div>   
                         ): (
                             <></>
                         )}
-                        
+                        <span className="text-[22px] font-thin">Status: {zadanie.pivot.status}</span>
+
                          
                     </div>
                     <form onSubmit={wyslijzadanie}>

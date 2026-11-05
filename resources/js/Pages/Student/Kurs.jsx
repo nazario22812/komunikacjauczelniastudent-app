@@ -46,10 +46,10 @@ function Materialy({ materialy }) {
 
 function Sylabusplusliteratura({sylabus, literatura, przedmiot, kurs}){
     return (
-        <div className="w-[100%] h-full m-5 text-theme-text">
+        <div className="w-full text-theme-text">
             <div className="mb-2 ">
                 <span className="font-bold text-[22px]">Informacje o przedmiocie</span>
-                <div className="bg-theme-slate p-5 rounded-[10px] w-[60%]">
+                <div className="bg-theme-slate p-5 rounded-[10px] w-full">
                     <p>Przedmiot: {przedmiot.nazwa}</p>
                     <p>Semester: {kurs.Semester}</p>
                     <p>ECTS: {przedmiot.punktyECTS}</p>
@@ -63,19 +63,19 @@ function Sylabusplusliteratura({sylabus, literatura, przedmiot, kurs}){
             </div>
             <div className="mb-2 ">
                 <span className="font-bold text-[22px]">Opis przedmiotu</span>
-                <div className="bg-theme-slate p-5 rounded-[10px] w-[60%]">
+                <div className="bg-theme-slate p-5 rounded-[10px] w-full">
                     <p>{sylabus.opisPrzedmiotu}</p>
                 </div>
             </div>
             <div className="mb-2 ">
                 <span className="font-bold text-[22px]">Warunki zaliczenia</span>
-                <div className="bg-theme-slate p-5 rounded-[10px] w-[60%]">
+                <div className="bg-theme-slate p-5 rounded-[10px] w-full">
                     <p>{sylabus.warunkiZaliczenia}</p>
                 </div>        
             </div>
             <div>
                 <span className="font-bold text-[22px]">Literatura</span>
-                <div className="bg-theme-slate p-5 rounded-[10px] w-[60%]">
+                <div className="bg-theme-slate p-5 rounded-[10px] w-full">
                     {literatura.map((ksiazka) => (
                         <div key={ksiazka.id} className="border-b border-theme-page pb-1">
                             <p className="text-[18px]">{ksiazka.nazwa}</p>
@@ -177,8 +177,11 @@ function Content({ kurs, materialy, sylabus, literatura, przedmiot, oceny, zadan
                 </div>   
                     <div className="bg-theme-slate w-full flex-1 min-h-0 flex flex-col p-5 rounded-b-[15px]">                    
                     
-                        <div className="w-[100%]">
-                        <Tabs className="w-full flex flex-col h-full" selectedTabPanelClassName="!block"> 
+                        <div className="w-full flex-1 min-h-0 flex flex-col">
+                        <Tabs
+                            className="w-full flex flex-col flex-1 min-h-0"
+                            selectedTabPanelClassName="!block"
+                        >
                             <TabList className="flex border-b border-theme-muted space-x-8 text-theme-text  cursor-pointer list-none text-center">
                                 <Tab className="w-full" selectedClassName="!border-0 !bg-theme-surface !rounded-t-[10px]">Materiały</Tab>
                                 <Tab className="w-full" selectedClassName="!border-0 !bg-theme-surface !rounded-t-[10px]">Zadania</Tab>
@@ -186,16 +189,16 @@ function Content({ kurs, materialy, sylabus, literatura, przedmiot, oceny, zadan
                                 <Tab className="w-full" selectedClassName="!border-0 !bg-theme-surface !rounded-t-[10px]">Dodatkowa informacja</Tab>
                             </TabList>
 
-                            <TabPanel className="hidden bg-theme-surface h-[100%] rounded-b-[10px] theme-text p-5   overflow-y-auto custom-scrollbar">
+                            <TabPanel className="hidden w-full flex-1 min-h-0 bg-theme-surface rounded-b-[10px] theme-text p-5 overflow-y-auto custom-scrollbar">
                                 <Materialy materialy={materialy}/>
                             </TabPanel>
-                            <TabPanel className="hidden bg-theme-surface h-full rounded-b-[10px]  theme-text p-5 overflow-y-auto custom-scrollbar">
+                            <TabPanel className="hidden w-full flex-1 min-h-0 bg-theme-surface rounded-b-[10px] theme-text p-5 overflow-y-auto custom-scrollbar">
                                 <Zadania zadania={zadania}/>
                             </TabPanel>
-                             <TabPanel className="hidden bg-theme-surface h-full rounded-b-[10px]  theme-text p-5 overflow-y-auto custom-scrollbar">
+                             <TabPanel className="hidden w-full flex-1 min-h-0 bg-theme-surface rounded-b-[10px] theme-text p-5 overflow-y-auto custom-scrollbar">
                                 <Oceny oceny={oceny}/>
                             </TabPanel>
-                             <TabPanel className="hidden bg-theme-surface h-full rounded-b-[10px]  theme-text p-5 overflow-y-auto custom-scrollbar">
+                             <TabPanel className="hidden w-full flex-1 min-h-0 bg-theme-surface rounded-b-[10px] theme-text p-5 overflow-y-auto custom-scrollbar">
                                 <Sylabusplusliteratura sylabus={sylabus} literatura={literatura} przedmiot={przedmiot} kurs={kurs}/>
                             </TabPanel>
                         </Tabs>

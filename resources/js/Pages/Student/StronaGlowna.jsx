@@ -104,7 +104,7 @@ function Content({ kursy, powiadomienie, wszystkiekursy, zadanie }){
                                         <div className="w-full h-[80%] text-theme-text text-[18px]  bg-theme-lavender p-2 rounded-[10px]">
                                             <span>Kurs: {zadanie.kurs.nazwa}</span><br />    
                                             <span>Status: {zadanie.pivot.status}</span><br />
-                                            <span>Termin oddania: {zadanie.TerminOddania}</span>
+                                            <span>Termin oddania: {zadanie.TerminOddania || 'N/D'}</span>
                                         </div>
                                     </>
                                 ): (

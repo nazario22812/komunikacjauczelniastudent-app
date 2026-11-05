@@ -25,7 +25,7 @@ class ProwadzacyController extends Controller
     //
     public function dodajzadanie(Request $request, $kursId){
         
-        Zadanie::create([
+        $zadanie = Zadanie::create([
             'nazwaZadania' => $request->input('nazwaZadania'),
             'tresc' => $request->input('opis'),
             'TerminOddania' => $request->input('termin'),
@@ -33,8 +33,14 @@ class ProwadzacyController extends Controller
             'kurs_idkurs' => $kursId
         ]);
 
-        //dodaty znachodzenia wsuch studentow z kursu i dodanie im zadania do tabeli student_has_zadanie
-            
+        $studenty = Student::get();
+        foreach($studenty as $student){
+            if($student->kurs()->where('idKurs', $kursId)->exists()){
+                $studentazadanie = $student->zadanie();
+                $studentazadanie->attach($zadanie->idZadanie, ['status'=> 'Nie wysłane']);
+                
+            }
+        }
 
         return redirect()->back()->with('status', 'Zadanie zostało dodane');
     }
