@@ -86,7 +86,7 @@ function Materialy({ materialy, kursId }) {
         });
 
     return (
-        <div className="w-full h-full p-4 overflow-y-auto custom-scrollbar flex flex-col gap-3">
+        <div className="w-full h-full p-4 flex flex-col gap-3">
             <div className="w-full flex justify-between items-center mb-2">
                 <button
                     type="button"
@@ -160,7 +160,7 @@ function Materialy({ materialy, kursId }) {
                                 Wybrane pliki ({pliks.length})
                             </h4>
 
-                            <ul className="h-full flex flex-col gap-2 overflow-y-auto pr-2 custom-scrollbar">
+                            <ul className="h-full flex flex-col gap-2 ">
                                 {pliks.map((file, index) => (
                                     <li
                                         key={`${file.name || file.nazwa}-${file.lastModified}-${index}`}
@@ -304,33 +304,149 @@ function Sylabusplusliteratura({ sylabus, literatura, przedmiot, kurs }) {
     );
 }
 
-function Zadania({ zadania }) {
+function Zadania({ zadania, kursId }) {
+    const [isEditing, setIsEditing] = useState(false);
+
+    const { data, setData, post, processing, reset } = useForm({
+        nazwaZadania: "",
+        opis: "",
+        termin: "",
+        czyNaOcene: 1, 
+    });
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        post(`/prowadzacy/dodajzadanie/${kursId}`, {
+            preserveState: true,
+            preserveScroll: true,
+            onSuccess: () => {
+                reset(); 
+            },
+        });
+    };
+
+    const handleDelete = (idZadanie) => {
+        if (confirm("Czy na pewno chcesz usunąć to zadanie?")) {
+            router.post(`/prowadzacy/usunzadanie/${kursId}/${idZadanie}`, {
+                preserveState: true,
+                preserveScroll: true,
+            });
+        }
+    };
+
     return (
-        <div className="overflow-x-auto rounded-[10px] border border-gray-700/60">
+        <div className="h-full overflow-x-auto rounded-[10px]  p-4">
+            <div className="w-full py-4 flex justify-between items-center ">
+                <button
+                    type="button"
+                    onClick={() => setIsEditing(!isEditing)}
+                    className={`fixed right-[5%]  px-4 py-2 rounded-[10px] font-medium text-white transition-all  ${
+                        isEditing
+                            ? "bg-red-600 hover:bg-red-700"
+                            : "bg-theme-orange hover:opacity-90"
+                    }`}
+                >
+                    {isEditing ? "Zakończ edytowanie" : "Edytuj"}
+                </button>
+            </div>
+
+            {isEditing && (
+                <form onSubmit={handleSubmit} className="mb-6 p-4 bg-theme-surface border border-theme-orange rounded-[12px] flex flex-col gap-4">
+                    <h4 className="text-theme-text text-lg font-semibold">Dodaj nowe zadanie</h4>
+                    
+                    <div className="flex flex-col gap-1">
+                        <label className="text-sm text-theme-muted">Nazwa zadania</label>
+                        <input
+                            type="text"
+                            value={data.nazwaZadania}
+                            onChange={(e) => setData("nazwaZadania", e.target.value)}
+                            className="p-2 bg-theme-slate border border-theme-muted rounded-[8px] text-theme-text"
+                            required
+                        />
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                        <label className="text-sm text-theme-muted">Opis</label>
+                        <textarea
+                            value={data.opis}
+                            onChange={(e) => setData("opis", e.target.value)}
+                            className="p-2 bg-theme-slate border border-theme-muted rounded-[8px] text-theme-text"
+                            rows="4"
+                        />
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                        <label className="text-sm text-theme-muted">Termin oddania</label>
+                        <input
+                            type="date"
+                            value={data.termin}
+                            onChange={(e) => setData("termin", e.target.value)}
+                            className="p-2 bg-theme-slate border border-theme-muted rounded-[8px] text-theme-text"
+                        />
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                        <input
+                            type="checkbox"
+                            id="czyNaOcene"
+                            {...data.czyNaOcene && data.czyNaOcene === 1 ? { checked: true } : {}}
+                            onChange={(e) =>{
+                                if (e.target.checked) {
+                                    setData("czyNaOcene", 1);
+                                }else {
+                                    setData("czyNaOcene", 0);
+                                }
+                            }  }
+                            className="w-4 h-4 accent-theme-orange"
+                        />
+                        <label htmlFor="czyNaOcene" className="text-sm text-theme-text">Czy na ocenę?</label>
+                    </div>
+
+                    <button
+                        type="submit"
+                        disabled={processing}
+                        className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-[10px] font-medium transition-all w-fit"
+                    >
+                        {processing ? "Zapisywanie..." : "Zapisz zadanie"}
+                    </button>
+                </form>
+            )}
+
             <table className="w-full text-left border-collapse">
                 <thead>
                     <tr className="border-b border-gray-700 text-theme-muted text-[14px]">
                         <th className="p-3 font-medium">Nazwa Zadania</th>
+                        {isEditing && <th className="p-3 font-medium text-right">Akcje</th>}
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-800 text-[14px]">
                     {zadania && zadania.length > 0 ? (
                         zadania.map((zadanie) => (
-                            // onClick={() => router.get(`/student/kurs/${zadanie.idZadanie}`)}
                             <tr
-                                key={zadanie.id}
-                                className="hover:bg-theme-dark-slate/50 transition-colors cursor-pointer"
+                                key={zadanie.id || zadanie.idZadanie}
+                                className="hover:bg-theme-dark-slate/50 transition-colors"
                             >
                                 <td className="p-3 font-medium text-theme-text">
                                     {zadanie.nazwaZadania || "—"}
                                 </td>
+                                {isEditing && (
+                                    <td className="p-3 text-right">
+                                        <button
+                                            type="button"
+                                            onClick={() => handleDelete(zadanie.idZadanie)}
+                                            className="text-red-400 hover:text-white px-3 py-1 rounded-[8px] text-[14px] transition-all"
+                                        >
+                                            Usuń
+                                        </button>
+                                    </td>
+                                )}
                             </tr>
                         ))
                     ) : (
                         <tr>
                             <td
-                                colSpan="5"
-                                className="p-4 text-theme-text text-theme-muted"
+                                colSpan={isEditing ? 2 : 1}
+                                className="p-4 text-theme-text text-theme-muted text-center"
                             >
                                 Brak zadań
                             </td>
@@ -341,7 +457,6 @@ function Zadania({ zadania }) {
         </div>
     );
 }
-
 function Studenty({ studenci, kurs }) {
     return (
         <div className="overflow-x-auto rounded-[10px] border border-gray-700/60">
@@ -428,8 +543,8 @@ function Content({
                         </span>
                     </div>
                 </div>
-                <div className="bg-theme-slate w-full h-full mx-auto p-5 rounded-b-[15px] ">
-                    <div className="w-[100%]">
+                    <div className="bg-theme-slate w-full flex-1 min-h-0 flex flex-col p-5 rounded-b-[15px]">                    
+                        <div className="w-[100%] ">
                         <Tabs
                             className="w-full flex flex-col h-full"
                             selectedTabPanelClassName="!block"
@@ -462,19 +577,19 @@ function Content({
                                 </Tab>
                             </TabList>
 
-                            <TabPanel className="hidden bg-theme-surface h-[100%] rounded-b-[10px] theme-text p-5">
+                            <TabPanel className="hidden bg-theme-surface h-[100%] rounded-b-[10px] theme-text p-5 overflow-y-auto custom-scrollbar">
                                 <Materialy
                                     materialy={materialy}
                                     kursId={kurs.idkurs}
                                 />
                             </TabPanel>
-                            <TabPanel className="hidden bg-theme-surface h-full rounded-b-[10px]  theme-text">
-                                <Zadania zadania={zadania} />
+                            <TabPanel className="hidden bg-theme-surface h-full rounded-b-[10px]  theme-text p-5 overflow-y-auto custom-scrollbar">
+                                <Zadania zadania={zadania} kursId={kurs.idkurs} />
                             </TabPanel>
                             {/* <TabPanel className="hidden bg-theme-surface h-full rounded-b-[10px]  theme-text">
                                 <Oceny oceny={oceny}/>
                             </TabPanel> */}
-                            <TabPanel className="hidden bg-theme-surface h-full rounded-b-[10px]  theme-text">
+                            <TabPanel className="hidden bg-theme-surface h-full rounded-b-[10px]  theme-text p-5 overflow-y-auto custom-scrollbar">
                                 <Sylabusplusliteratura
                                     sylabus={sylabus}
                                     literatura={literatura}
@@ -482,7 +597,7 @@ function Content({
                                     kurs={kurs}
                                 />
                             </TabPanel>
-                            <TabPanel className="hidden bg-theme-surface h-full rounded-b-[10px]  theme-text">
+                            <TabPanel className="hidden bg-theme-surface h-full rounded-b-[10px]  theme-text p-5 overflow-y-auto custom-scrollbar">
                                 <Studenty studenci={studenci} kurs={kurs} />
                             </TabPanel>
                         </Tabs>

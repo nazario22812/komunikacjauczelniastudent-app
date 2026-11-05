@@ -23,6 +23,31 @@ use Illuminate\Support\Facades\Storage;
 class ProwadzacyController extends Controller
 {
     //
+    public function dodajzadanie(Request $request, $kursId){
+        
+        Zadanie::create([
+            'nazwaZadania' => $request->input('nazwaZadania'),
+            'tresc' => $request->input('opis'),
+            'TerminOddania' => $request->input('termin'),
+            'CzyNaOcene' => $request->input('czyNaOcene'),
+            'kurs_idkurs' => $kursId
+        ]);
+
+        //dodaty znachodzenia wsuch studentow z kursu i dodanie im zadania do tabeli student_has_zadanie
+            
+
+        return redirect()->back()->with('status', 'Zadanie zostało dodane');
+    }
+    public function usunzadanie(Request $request, $kursId, $idZadanie){
+        $zadanie = Zadanie::where([['idZadanie', $idZadanie], ['kurs_idkurs', $kursId]])->first();
+        
+        if ($zadanie) {
+            $zadanie->delete();
+            return redirect()->back()->with('status', 'Zadanie zostało usunięte');
+        } else {
+            return redirect()->back()->with('error', 'Nie znaleziono zadania');
+        }
+    }
 
     public function dodajmaterialy(Request $request, $idKurs){
         $user = $request->user();

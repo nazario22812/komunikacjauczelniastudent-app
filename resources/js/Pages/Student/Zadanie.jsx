@@ -90,14 +90,19 @@ function Content({ zadanie, pliki = null, ocena = null }) {
                     <div className="w-full text-center text-theme-text font-bold text-[58px]">
                         <span>{zadanie.nazwaZadania}</span><br />
                         <span className="text-[20px] font-thin">termin oddania: {zadanie.TerminOddania}</span><br />
-                        <div className="w-[60%] mx-auto  flex justify-between items-center">
-                            {ocena != null ? (
-                                <span className="text-[22px] font-thin">Ocena: {ocena.skalaOceny}</span>
-                            ) : (
-                                <span className="text-[22px] font-thin">Nie ocenione</span>
-                            )}
-                            <span className="text-[22px] font-thin">Status: {zadanie.pivot.status}</span>
-                        </div>
+                        {zadanie.CzyNaOcene == 1 ? (
+                            <div className="w-[60%] mx-auto  flex justify-between items-center">
+                                {ocena != null ? (
+                                    <span className="text-[22px] font-thin">Ocena: {ocena.skalaOceny}</span>
+                                ) : (
+                                    <span className="text-[22px] font-thin">Nie ocenione</span>
+                                )}
+                                <span className="text-[22px] font-thin">Status: {zadanie.pivot.status}</span>
+                            </div>   
+                        ): (
+                            <></>
+                        )}
+                        
                          
                     </div>
                     <form onSubmit={wyslijzadanie}>
