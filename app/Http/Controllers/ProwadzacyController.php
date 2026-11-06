@@ -23,6 +23,20 @@ use Illuminate\Support\Facades\Storage;
 class ProwadzacyController extends Controller
 {
     //
+
+
+    public function otworzzadanie(Request $request, $idZadanie){
+        // dd($idZadanie);
+
+        $studenci = Student::with('user')->whereHas('zadanie', function ($query) use ($idZadanie) {
+            $query->where('Zadanie_idZadanie', $idZadanie);
+        })
+        ->get();        
+        return Inertia::render('Prowadzacy/SprawdzenieZadania',[
+            'studenci' => $studenci,
+        ]);
+    }
+
     public function dodajzadanie(Request $request, $kursId){
         
         $zadanie = Zadanie::create([

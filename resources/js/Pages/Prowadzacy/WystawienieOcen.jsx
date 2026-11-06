@@ -45,11 +45,7 @@ function StudentRow({ student, wybranyprzedmiot }) {
                 </Form.Select>
             </td>
             <td className="p-2">
-                {/* <button type="button" onClick={() => router.post(`/student/kurs/redagujzadanie/${zadanie.idZadanie}/${file.idPlik}`)} className="shrink-0 text-red-400 hover:text-red-300"> */}
-                {/* Usuń
-                                                    </button> */}
-                {/* Route::post('/prowadzacy/ocenekoncowe/wystawienieoceny/{idPrzedmiot}/{idStudent}/{wybranaocena}', [ProwadzacyController::class, 'wystawienieoceny']); */}
-
+                
                 <button
                     className="w-[50px] bg-theme-orange p-2 text-[22px] rounded-[10px] font-bold hover:cursor-pointer"
                     type="button"

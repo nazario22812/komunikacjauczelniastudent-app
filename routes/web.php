@@ -97,6 +97,7 @@ Route::middleware(['auth', 'role:prowadzacy'])->group(function (){
     Route::post('/prowadzacy/dodajmaterialy/{idKurs}', [ProwadzacyController::class, 'dodajmaterialy']);
     Route::post('/prowadzacy/usunzadanie/{kursId}/{idZadanie}', [ProwadzacyController::class, 'usunzadanie']);
     Route::post('/prowadzacy/dodajzadanie/{kursId}', [ProwadzacyController::class, 'dodajzadanie']);
+    Route::get('/prowadzacy/otworzzadanie/{idZadanie}', [ProwadzacyController::class, 'otworzzadanie']);
 });
 
 

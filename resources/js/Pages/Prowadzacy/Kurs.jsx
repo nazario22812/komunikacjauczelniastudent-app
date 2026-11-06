@@ -424,7 +424,8 @@ function Zadania({ zadania, kursId }) {
                         zadania.map((zadanie) => (
                             <tr
                                 key={zadanie.id || zadanie.idZadanie}
-                                className="hover:bg-theme-dark-slate/50 transition-colors"
+                                className="hover:bg-theme-dark-slate/50 transition-colors hover:cursor-pointer"
+                                onClick={() => router.get(`/prowadzacy/otworzzadanie/${zadanie.idZadanie}`)}
                             >
                                 <td className="p-3 font-medium text-theme-text">
                                     {zadanie.nazwaZadania || "—"}
