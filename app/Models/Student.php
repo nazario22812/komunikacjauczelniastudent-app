@@ -57,4 +57,8 @@ class Student extends Model
     public function kurs(){
         return $this->belongsToMany(Kurs::class, 'kurs_has_student', 'Student_idStudent', 'Kurs_idkurs');
     }
+
+    public function plik(){
+        return $this->hasMany(Plik::class, 'Student_idStudent', 'idStudent');
+    }
 }

@@ -187,8 +187,7 @@ function Content({ zadanie, pliki = null, ocena = null }) {
 
                                                         <div className="flex-1 min-w-0">
                                                             <p  className="break-all">
-                                                                {file.nazwa.split('/').pop()}
-                                                            </p>
+                                                                {file?.nazwa ? file.nazwa.split('/').pop() : (file?.name || 'Brak nazwy')}                                                            </p>
 
                                                             <p className="text-xs text-theme-muted">
                                                                 {( file.size / 1024 ).toFixed( 1, )}{" "}KB

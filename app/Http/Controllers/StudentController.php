@@ -107,7 +107,8 @@ class StudentController extends Controller
                 'typ' => $typ,
                 'rozmiar' => $size,
                 'dataTworzenia' => $data,
-                'Zadanie_idZadanie' => $idZadanie
+                'Zadanie_idZadanie' => $idZadanie,
+                'Student_idStudent' => $student->idStudent
             ]);
         }
 
@@ -265,11 +266,9 @@ class StudentController extends Controller
         ->where([['ocena.idStudent', $student->idStudent], ['ocena.CzyKoncowa', 1]])
         ->get()
         ->toArray();
-        // SELECT DISTINCT `Semester` FROM `ocena` ORDER BY `Semester` DESC;
         $semestry = Ocena::select('Semester')->distinct()->orderby('Semester', 'desc')->where([['idStudent', $student->idStudent], ['ocena.CzyKoncowa', 1]])->get()->toArray();
         $studentsem = $student->semester;
-        // substr($item->GodzinaZakonczenia, 0, 5) ,
-        // dd($semestry);
+       
 
         if($request->expectsJson()){
             return response()->json([

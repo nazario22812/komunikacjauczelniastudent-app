@@ -35,4 +35,7 @@ class Plik extends Model
         return $this->belongsTo(Zadanie::class, 'Zadanie_idZadanie', 'idZadanie');
     }
 
+    public function student(){
+        return $this->belongsTO(Student::class, 'Student_idStudent', 'idStudent');
+    }
 }
