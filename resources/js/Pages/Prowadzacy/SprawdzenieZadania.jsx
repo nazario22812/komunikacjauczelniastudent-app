@@ -113,11 +113,9 @@ function Content({ studenci, idZadanie, student_id, pliks }) {
                                             <button
                                                 className="w-[70%] bg-theme-orange mx-auto p-2 mt-2 text-[22px] text-theme-text rounded-[10px] font-bold hover:cursor-pointer"
                                                 type="button"
-                                                //onClick={() =>
-                                                    // router.post(
-                                                    //     `/prowadzacy/ocenekoncowe/wystawienieoceny/${wybranyprzedmiot}/${student.idStudent}/${wybranaocena}`,
-                                                    // )
-                                                //}
+                                                onClick={() => {
+                                                    router.post(`/prowadzacy/ocenieniezadania/${idZadanie}/${student_id}/${wybranaocena}`)
+                                                }}
                                             >
                                                 Zapisz ocenę
                                             </button>
@@ -195,30 +193,23 @@ export default function SprawdzenieZadania({
     student_id,
     pliks,
 }) {
-    // const props = usePage().props;
+    const props = usePage().props;
 
-    // const message = props.flash?.status || props.status;
-    // const error = props.flash?.error || props.error;
-    // useEffect(() => {
-    //     if (message) {
-    //         toast.info(message, {
-    //             position: "bottom-right",
-    //             autoClose: 5000,
-    //             theme: "dark",
-    //         });
-    //     }
-    //     if (error) {
-    //         toast.error(error, {
-    //             position: "bottom-right",
-    //             autoClose: 5000,
-    //             theme: "dark",
-    //         });
-    //     }
-    // }, [message, error]);
+    const message = props.flash?.status || props.status;
+    const error = props.flash?.error || props.error;
+    useEffect(() => {
+        if (message) {
+            toast.info(message, {
+                position: "bottom-right",
+                autoClose: 5000,
+                theme: "dark",
+            });
+        }
+    }, [message]);
 
     return (
         <div className="flex">
-            {/* <ToastContainer
+            <ToastContainer
                 position="bottom-right"
                 autoClose={5000}
                 hideProgressBar={false}
@@ -229,7 +220,7 @@ export default function SprawdzenieZadania({
                 draggable
                 pauseOnHover
                 theme="dark"
-            /> */}
+            />
             <Head title="Moje kursy" />
             <MenuProwadzacy />
             <Content

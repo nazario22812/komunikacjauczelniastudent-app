@@ -24,12 +24,32 @@ class ProwadzacyController extends Controller
 {
     //
 
+    public function ocenieniezadania(Request $request, $idZadanie, $student_id, $wybranaocena){
+        $znaleziony = Student::where('idStudent', $student_id)->first();
+        
+        $zadanie = Zadanie::where('idZadanie', $idZadanie)->first();
+        $kurs = Kurs::where('idKurs', $zadanie->kurs_idkurs)->first();
+        Ocena::create([
+            'Semester' => $znaleziony->semester,
+            'skalaOceny' => $wybranaocena,
+            'czyKoncowa' => 0,
+            'idStudent' => $student_id,
+            'idPrzedmiot' => $kurs->Przedmiot_idPrzedmiot,
+            'Zadanie_idZadanie' => $idZadanie,
+
+        ]);
+
+        $znaleziony->zadanie()->updateExistingPivot($idZadanie, ['status' => 'Ocenione']);
+        return redirect()->back()->with('status', 'Ocena została wystawiona');
+    }
+
 
     public function otworzzadanie(Request $request, $idZadanie){
         // dd($idZadanie);
 
         $studenci = Student::with('user')->whereHas('zadanie', function ($query) use ($idZadanie) {
-            $query->where('Zadanie_idZadanie', $idZadanie);
+            $query->where('student_has_zadanie.Zadanie_idZadanie', $idZadanie)
+                ->where('student_has_zadanie.status', '!=', 'Ocenione');
         })
         ->get();
 
