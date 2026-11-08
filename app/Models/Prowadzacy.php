@@ -25,10 +25,7 @@ class Prowadzacy extends Model
     }
 
 
-    public function przedmiot(){
-        return $this->belongsToMany(Przedmiot::class, 'prowadzacy_has_przedmiot', 'Prowadzacy_idProwadzacy', 'Przedmiot_idPrzedmiot');
-    }
-
+   
     public function rezerwacja(){
         return $this->hasMany(Rezerwacja::class, 'Prowadzacy_idProwadzacy', 'idProwadzacy');
     }

@@ -19,7 +19,8 @@ class Plik extends Model
         'dataTworzenia',
         'Podanie_idPodanie',
         'Kurs_idkurs',
-        'Zadanie_idZadanie'
+        'Zadanie_idZadanie',
+        'Student_idStudent'
     ];
 
    

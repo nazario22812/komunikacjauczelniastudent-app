@@ -6,10 +6,11 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import MenuProwadzacy from "../../Components/MenuProwadzacy";
 import { ToastContainer, toast } from "react-toastify";
-import { useDropzone } from "react-dropzone";
-import { id } from "rolldown/filter";
+import Form from "react-bootstrap/Form";
 
-function Content({ studenci, idZadanie, student_id , pliks}) {
+function Content({ studenci, idZadanie, student_id, pliks }) {
+    const [wybranaocena, setwybranaocena] = useState("Niedostatecznie");
+
     const handleZadanieClick = (studentId) => {
         router.get(
             `/prowadzacy/otworzzadanie/${idZadanie}`,
@@ -39,25 +40,30 @@ function Content({ studenci, idZadanie, student_id , pliks}) {
                                 <table className="w-full text-center border-collapse">
                                     <tbody className="divide-y divide-gray-800 text-[14px] ">
                                         {studenci && studenci.length > 0 ? (
-                                            studenci.map((student) => (
-                                                <tr
-                                                    key={student.idStudent}
-                                                    className="border-b  border-gray-700/50  hover:bg-theme-dark-slate/50 transition-colors text-[20px] hover:cursor-pointer"
-                                                    onClick={(e) =>
-                                                        handleZadanieClick(
-                                                            student.idStudent,
-                                                        )
-                                                    }
-                                                >
-                                                    <td className="p-3 font-medium text-theme-text">
-                                                        {student.index}
-                                                    </td>
-                                                    <td className="p-3 font-medium text-theme-text">
-                                                        {student.user.name}{" "}
-                                                        {student.user.surname}
-                                                    </td>
-                                                </tr>
-                                            ))
+                                            <>
+                                                {studenci.map((student) => (
+                                                    <tr
+                                                        key={student.idStudent}
+                                                        className="border-b  border-gray-700/50  hover:bg-theme-dark-slate/50 transition-colors text-[20px] hover:cursor-pointer"
+                                                        onClick={(e) =>
+                                                            handleZadanieClick(
+                                                                student.idStudent,
+                                                            )
+                                                        }
+                                                    >
+                                                        <td className="p-3 font-medium text-theme-text">
+                                                            {student.index}
+                                                        </td>
+                                                        <td className="p-3 font-medium text-theme-text">
+                                                            {student.user.name}{" "}
+                                                            {
+                                                                student.user
+                                                                    .surname
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </>
                                         ) : (
                                             <tr>
                                                 <td className="p-4 text-theme-text text-theme-muted text-center">
@@ -69,62 +75,109 @@ function Content({ studenci, idZadanie, student_id , pliks}) {
                                 </table>
                             </form>
 
-                            <div className="h-full rounded-[10px] border border-gray-700/60 overflow-y-auto pr-2 custom-scrollbar">
+                            <div className="h-full rounded-[10px] border border-gray-700/60">
                                 {student_id ? (
-                                    <div>
-                                        {pliks && pliks.length > 0 ? (
-                                            <aside className="w-full">
-                                                <h4 className="text-theme-text text-lg font-semibold mb-3">
-                                                    Wybrane pliki (
-                                                    {pliks.length})
-                                                </h4>
+                                    <div className="w-full h-full">
+                                        <div className="p-4 h-[30%] items-center flex flex-col justify-center border-b border-gray-700/60 mb-2">
+                                            <span className="text-theme-text">
+                                                Wybierz ocenę
+                                            </span>
+                                            <Form.Select
+                                                value={wybranaocena}
+                                                onChange={(e) => {
+                                                    setwybranaocena(
+                                                        e.target.value,
+                                                    );
+                                                }}
+                                                className="w-full h-[50px] bg-theme-surface  border border-theme-muted rounded-[15px] text-theme-text"
+                                            >
+                                                <option value="Niedostatecznie">
+                                                    Niedostatecznie
+                                                </option>
+                                                <option value="Dostatecznie">
+                                                    Dostatecznie
+                                                </option>
+                                                <option value="Dostatecznie plus">
+                                                    Dostatecznie plus
+                                                </option>
+                                                <option value="Dobrze">
+                                                    Dobrze
+                                                </option>
+                                                <option value="Dobrze plus">
+                                                    Dobrze plus
+                                                </option>
+                                                <option value="Bardzo dobrze">
+                                                    Bardzo dobrze
+                                                </option>
+                                            </Form.Select>
+                                            <button
+                                                className="w-[70%] bg-theme-orange mx-auto p-2 mt-2 text-[22px] text-theme-text rounded-[10px] font-bold hover:cursor-pointer"
+                                                type="button"
+                                                //onClick={() =>
+                                                    // router.post(
+                                                    //     `/prowadzacy/ocenekoncowe/wystawienieoceny/${wybranyprzedmiot}/${student.idStudent}/${wybranaocena}`,
+                                                    // )
+                                                //}
+                                            >
+                                                Zapisz ocenę
+                                            </button>
+                                        </div>
+                                        <div className="h-[70%] overflow-y-auto pr-2 custom-scrollbar">
+                                            {pliks && pliks.length > 0 ? (
+                                                <aside className="w-full">
+                                                    <ul className="flex flex-col gap-2">
+                                                        {pliks.map(
+                                                            (file, index) => (
+                                                                <li
+                                                                    key={`${file.nazwa}-${file.lastModified}-${index}`}
+                                                                    className="flex items-center gap-3 p-3 bg-theme-surface border border-white/20 rounded-xl text-theme-light"
+                                                                >
+                                                                    <span className="text-xl">
+                                                                        📎
+                                                                    </span>
 
-                                                <ul className="flex flex-col gap-2">
-                                                    {pliks.map(
-                                                        (file, index) => (
-                                                            <li
-                                                                key={`${file.nazwa}-${file.lastModified}-${index}`}
-                                                                className="flex items-center gap-3 p-3 bg-theme-surface border border-white/20 rounded-xl text-theme-light"
-                                                            >
-                                                                <span className="text-xl">
-                                                                    📎
-                                                                </span>
+                                                                    <div className="flex-1 min-w-0">
+                                                                        <a
+                                                                            href={`/storage/${file.nazwa}`}
+                                                                            target="_blank"
+                                                                            className="break-all"
+                                                                        >
+                                                                            {file?.nazwa
+                                                                                ? file.nazwa
+                                                                                      .split(
+                                                                                          "/",
+                                                                                      )
+                                                                                      .pop()
+                                                                                : file?.name ||
+                                                                                  "Brak nazwy"}{" "}
+                                                                        </a>
 
-                                                                <div className="flex-1 min-w-0">
-                                                                    <p className="break-all">
-                                                                        {file?.nazwa
-                                                                            ? file.nazwa
-                                                                                  .split(
-                                                                                      "/",
-                                                                                  )
-                                                                                  .pop()
-                                                                            : file?.name ||
-                                                                              "Brak nazwy"}{" "}
-                                                                    </p>
-
-                                                                    <p className="text-xs text-theme-muted">
-                                                                        {(
-                                                                            file.size /
-                                                                            1024
-                                                                        ).toFixed(
-                                                                            1,
-                                                                        )}{" "}
-                                                                        KB
-                                                                    </p>
-                                                                </div>
-                                                            </li>
-                                                        ),
-                                                    )}
-                                                </ul>
-                                            </aside>
-                                        ) : (
-                                            <div className="w-full mx-auto text-center mt-10 text-[24px] text-theme-muted">
-                                                <span>Brak plików</span>
-                                            </div>
-                                        )}
+                                                                        <p className="text-xs text-theme-muted">
+                                                                            {(
+                                                                                file.size /
+                                                                                1024
+                                                                            ).toFixed(
+                                                                                1,
+                                                                            )}{" "}
+                                                                            KB
+                                                                        </p>
+                                                                    </div>
+                                                                </li>
+                                                            ),
+                                                        )}
+                                                    </ul>
+                                                </aside>
+                                            ) : (
+                                                <div className="w-full mx-auto text-center mt-10 text-[24px] text-theme-muted">
+                                                    <span>Brak plików</span>
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                 ) : (
-                                    <></>
+                                    <div className="w-full mx-auto text-center mt-10 text-[24px] text-theme-muted">
+                                        <span>Wybierz studenta</span>
+                                    </div>
                                 )}
                             </div>
                         </div>
@@ -140,7 +193,7 @@ export default function SprawdzenieZadania({
     studenci,
     idZadanie,
     student_id,
-    pliks
+    pliks,
 }) {
     // const props = usePage().props;
 

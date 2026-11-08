@@ -129,7 +129,7 @@ class StudentController extends Controller
         $user = $request->user();
         $student = Student::where('User_idUser', $user->idUser)->first();
         $zadanie = $student->zadanie()->where('Zadanie_idZadanie', $idZadanie)->with(['kurs.przedmiot', 'kurs.prowadzacy.user'])->withPivot('status')->first();
-        $pliki = Plik::where('Zadanie_idZadanie', $idZadanie)->get()->toArray();
+        $pliki = Plik::where([['Zadanie_idZadanie', $idZadanie], ['Student_idStudent', $student->idStudent]])->get()->toArray();
         $ocena = Ocena::where([['Zadanie_idZadanie', $idZadanie], ['idStudent', $student->idStudent]])->first();
         // dd($zadanie);
         if($request->expectsJson()){
@@ -248,21 +248,21 @@ class StudentController extends Controller
         $ocenykoncowe = Ocena::select(
             'ocena.*',
             'przedmiot.nazwa',
-            'przedmiot.typ',
-            'prowadzacy.TytulNaukowy',
-            'user.name AS wykladowca_imie',
-            'user.surname AS wykladowca_nazwisko'
+            //'przedmiot.typ',
+            //'prowadzacy.TytulNaukowy',
+            //'user.name AS wykladowca_imie',
+            //'user.surname AS wykladowca_nazwisko'
         )
         ->join('przedmiot', function($join){
             $join->on('ocena.idPrzedmiot', '=', 'przedmiot.idPrzedmiot');
         })
-        ->join('prowadzacy_has_przedmiot', function($join){
-            $join->on('przedmiot.idPrzedmiot', '=', 'prowadzacy_has_przedmiot.przedmiot_idPrzedmiot');
-        })
-        ->join('prowadzacy', function($join){
-            $join->on('prowadzacy_has_przedmiot.prowadzacy_idProwadzacy', '=', 'prowadzacy.idProwadzacy');
-        })
-        ->leftjoin('user', 'prowadzacy.User_idUser', '=', 'user.idUser')
+        // ->leftjoin('prowadzacy_has_przedmiot', function($join){
+        //     $join->on('przedmiot.idPrzedmiot', '=', 'prowadzacy_has_przedmiot.przedmiot_idPrzedmiot');
+        // })
+        // ->leftjoin('prowadzacy', function($join){
+        //     $join->on('prowadzacy_has_przedmiot.prowadzacy_idProwadzacy', '=', 'prowadzacy.idProwadzacy');
+        // })
+        // ->leftjoin('user', 'prowadzacy.User_idUser', '=', 'user.idUser')
         ->where([['ocena.idStudent', $student->idStudent], ['ocena.CzyKoncowa', 1]])
         ->get()
         ->toArray();

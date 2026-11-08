@@ -17,9 +17,7 @@ class Przedmiot extends Model
         'typ'
     ];
 
-    public function prowadzacy(){
-        return $this->belongsToMany(Prowadzacy::class, 'prowadzacy_has_przedmiot',  'Prowadzacy_idProwadzacy','Przedmiot_idPrzedmiot');
-    }
+    
 
     public function sylabus(){
         return $this->hasOne(Sylabus::class, 'Przedmiot_idPrzedmiot', 'idPrzedmiot');

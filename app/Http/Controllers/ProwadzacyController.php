@@ -39,21 +39,12 @@ class ProwadzacyController extends Controller
         $pliks = []; 
 
         if ($wybranystudent) {
-            $student = Student::with(['zadanie' => function ($query) use ($idZadanie) {
-                $query->where('zadanie.idZadanie', $idZadanie)->with('plik');
-            }])
-            ->where('idStudent', $wybranystudent)
-            ->first();
-
-            if ($student && $student->zadanie) {
-                foreach ($student->zadanie as $zadanieItem) {
-                    if ($zadanieItem->plik) {
-                        $pliks = array_merge($pliks, $zadanieItem->plik->toArray());
-                    }
-                }
-            }
+            $pliks = Plik::where('Zadanie_idZadanie', $idZadanie)
+                ->where('Student_idStudent', $wybranystudent)
+                ->get()
+                ->toArray();
         }
-
+        // dd($wybranystudent, $idZadanie, $pliks);
         return Inertia::render('Prowadzacy/SprawdzenieZadania',[
             'studenci' => $studenci,
             'idZadanie' => $idZadanie,
