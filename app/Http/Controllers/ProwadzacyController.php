@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Budynek;
+use App\Models\Kierunek;
 use App\Models\Prowadzacy;
 use Illuminate\Http\Request;
 use App\Models\Rezerwacja;
@@ -23,6 +24,19 @@ use Illuminate\Support\Facades\Storage;
 class ProwadzacyController extends Controller
 {
     //
+    public function tworzeniekursu(Request $request){
+
+        $przedmioty = Przedmiot::get()->toArray();
+        $kierunki = Kierunek::get()->toArray();
+
+        // dump($przedmioty);
+        // dd($kierunki);
+
+        return Inertia::render('Prowadzacy/TworzenieKursu', [
+            'przedmioty' => $przedmioty,
+            'kierunki' => $kierunki
+        ]);
+    }
 
     public function ocenieniezadania(Request $request, $idZadanie, $student_id, $wybranaocena){
         $znaleziony = Student::where('idStudent', $student_id)->first();

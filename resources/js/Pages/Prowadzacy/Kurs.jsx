@@ -542,6 +542,10 @@ function Content({
                             {kurs.prowadzacy.user.name}{" "}
                             {kurs.prowadzacy.user.surname}
                         </span>
+                        <br />
+                        <span className="text-theme-text font-thin text-[20px] ">
+                            kod do kursu: <span className="font-bold">{kurs.kod}</span>
+                        </span>
                     </div>
                 </div>
                     <div className="bg-theme-slate w-full flex-1 min-h-0 flex flex-col p-5 rounded-b-[15px]">                    

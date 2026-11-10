@@ -60,7 +60,10 @@ function Content({ mojekursy }){
             
 
             <div className="fixed right-1 bottom-1 z-30 ">
-                <button className="bg-theme-orange rounded-[50px] p-5 m-5 text-theme-text text-[22px] font-bold hover:cursor-pointer ">
+                <button 
+                    className="bg-theme-orange rounded-[50px] p-5 m-5 text-theme-text text-[22px] font-bold hover:cursor-pointer "
+                    onClick={() => router.get('/prowadzacy/tworzeniekursu')}
+                >
                     +
                 </button>
             </div>
