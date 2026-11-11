@@ -73,6 +73,7 @@ class ProwadzacyController extends Controller
         
         $zadanie = Zadanie::where('idZadanie', $idZadanie)->first();
         $kurs = Kurs::where('idKurs', $zadanie->kurs_idkurs)->first();
+
         Ocena::create([
             'Semester' => $znaleziony->semester,
             'skalaOceny' => $wybranaocena,
@@ -96,7 +97,7 @@ class ProwadzacyController extends Controller
                 ->where('student_has_zadanie.status', '!=', 'Ocenione');
         })
         ->get();
-
+        $zadanie = Zadanie::where('idZadanie', $idZadanie)->first();
         $wybranystudent = $request->input('student_id');
 
 
@@ -113,7 +114,9 @@ class ProwadzacyController extends Controller
             'studenci' => $studenci,
             'idZadanie' => $idZadanie,
             'student_id' => $wybranystudent,  
-            'pliks' => $pliks
+            'pliks' => $pliks,
+            'terminOddania' => $zadanie->TerminOddania
+
         ]);
     }
 

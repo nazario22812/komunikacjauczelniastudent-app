@@ -8,9 +8,9 @@ import MenuProwadzacy from "../../Components/MenuProwadzacy";
 import { ToastContainer, toast } from "react-toastify";
 import Form from "react-bootstrap/Form";
 
-function Content({ studenci, idZadanie, student_id, pliks }) {
+function Content({ studenci, idZadanie, student_id, pliks, terminOddania }) {
     const [wybranaocena, setwybranaocena] = useState("Niedostatecznie");
-
+    
     const handleZadanieClick = (studentId) => {
         router.get(
             `/prowadzacy/otworzzadanie/${idZadanie}`,
@@ -21,6 +21,7 @@ function Content({ studenci, idZadanie, student_id, pliks }) {
             },
         );
     };
+
     return (
         <div className="bg-theme-page w-full p-[10px] h-screen flex flex-col box-border">
             <div className="bg-theme-page w-full flex shrink-0 h-[40px] mx-auto text-center border-b-[0.3px] border-theme-muted p-[10px] rounded-t-[10px]">
@@ -78,7 +79,10 @@ function Content({ studenci, idZadanie, student_id, pliks }) {
                             <div className="h-full rounded-[10px] border border-gray-700/60">
                                 {student_id ? (
                                     <div className="w-full h-full">
-                                        <div className="p-4 h-[30%] items-center flex flex-col justify-center border-b border-gray-700/60 mb-2">
+                                        <div className="p-4 h-[30%] items-center flex flex-col gap-3 justify-center border-b border-gray-700/60 mb-2">
+                                            <span className="text-theme-text text-[22px]">
+                                                Termin oddania: {terminOddania || 'Brak'}
+                                            </span>
                                             <span className="text-theme-text">
                                                 Wybierz ocenę
                                             </span>
@@ -192,6 +196,7 @@ export default function SprawdzenieZadania({
     idZadanie,
     student_id,
     pliks,
+    terminOddania
 }) {
     const props = usePage().props;
 
@@ -228,6 +233,7 @@ export default function SprawdzenieZadania({
                 idZadanie={idZadanie}
                 student_id={student_id}
                 pliks={pliks}
+                terminOddania={terminOddania}
             />
         </div>
     );
