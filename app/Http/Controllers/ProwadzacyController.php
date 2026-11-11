@@ -24,6 +24,36 @@ use Illuminate\Support\Facades\Storage;
 class ProwadzacyController extends Controller
 {
     //
+
+    public function stworzKurs(Request $request){
+        $user = $request->user();
+        $prowadzacy = Prowadzacy::where('User_idUser', $user->idUser)->first();
+
+        $kurs = Kurs::where([['nazwa' , $request->input('nazwa')],
+        ['Semester', $request->input('semester')],
+        ['Przedmiot_idPrzedmiot', $request->input('przedmiot')],
+        ['Kierunek_idKierunek', $request->input('kierunek')], 
+        ['Prowadzacy_idProwadzacy', $prowadzacy->idProwadzacy], 
+        ])->first();
+
+
+        if($kurs){
+            return redirect()->back()->with('error', 'Taki kurs już istnieje');
+        }
+
+        // dd($request->all());
+        $nowykurs = Kurs::create([
+            'nazwa' => $request->input('nazwa'),
+            'kod' => $request->input('kod'),
+            'Semester' => $request->input('semester'),
+            'Przedmiot_idPrzedmiot' => $request->input('przedmiot'),
+            'Prowadzacy_idProwadzacy' => $prowadzacy->idProwadzacy,
+            'Kierunek_idKierunek' => $request->input('kierunek')
+        ]);
+        $status = 'Kurs ' . $request->input('nazwa') . ' został utworzony';
+        return redirect()->back()->with('status', $status);
+    }
+
     public function tworzeniekursu(Request $request){
 
         $przedmioty = Przedmiot::get()->toArray();

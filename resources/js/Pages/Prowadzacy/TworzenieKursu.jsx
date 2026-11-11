@@ -4,6 +4,7 @@ import MenuProwadzacy from "../../Components/MenuProwadzacy";
 import BackButton from "../../Components/BackButton";
 import Form from "react-bootstrap/Form";
 import { InputMask, useMask } from "@react-input/mask";
+import { ToastContainer, toast } from "react-toastify";
 
 function Content({ przedmioty, kierunki }) {
     const [wybranyPrzedmiot, setwybranyPrzedmiot] = useState("");
@@ -19,11 +20,10 @@ function Content({ przedmioty, kierunki }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if(confirm("Czy na pewno chcesz utworzyć kurs?")) {
-            // post
+        if (confirm("Czy na pewno chcesz utworzyć kurs?")) {
+            post('/prowadzacy/tworzeniekursu');
         }
-        
-    }
+    };
 
     const kodref = useMask({
         mask: "______",
@@ -43,7 +43,7 @@ function Content({ przedmioty, kierunki }) {
                     <div className="w-full text-center text-theme-text font-bold text-[58px]">
                         <span>Nowy kurs</span>
                     </div>
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <div className="px-[20px] py-[5px] w-full h-[85%] overflow-y-auto pr-2 custom-scrollbar">
                             {/* nazwa, kod, semester, przedmiot, prowadzacy, kierunek */}
                             <div className="w-full grid grid-cols-2">
@@ -170,8 +170,41 @@ function Content({ przedmioty, kierunki }) {
 }
 
 export default function TworzenieKursu({ przedmioty, kierunki }) {
+    const props = usePage().props;
+
+    const message = props.flash?.status || props.status;
+    const error = props.flash?.error || props.error;
+    useEffect(() => {
+        if (message) {
+            toast.info(message, {
+                position: "bottom-right",
+                autoClose: 5000,
+                theme: "dark",
+            });
+        }
+        if (error) {
+            toast.error(error, {
+                position: "bottom-right",
+                autoClose: 5000,
+                theme: "dark",
+            });
+        }
+    }, [message, error]);
+
     return (
         <div className="flex">
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick={false}
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+            />
             <Head title="Tworzenie kursu" />
             <MenuProwadzacy />
             <Content przedmioty={przedmioty} kierunki={kierunki} />

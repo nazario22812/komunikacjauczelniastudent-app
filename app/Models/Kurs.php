@@ -15,6 +15,7 @@ class Kurs extends Model
     protected $fillable = [
         'nazwa',
         'kod',
+        'Semester',
         'Przedmiot_idPrzedmiot',
         'Prowadzacy_idProwadzacy',
         'Kierunek_idKierunek'
