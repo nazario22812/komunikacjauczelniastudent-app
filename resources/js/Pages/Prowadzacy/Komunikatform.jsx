@@ -39,7 +39,7 @@ function Content({ kursy, kierunki, grupy }) {
                     Nowy komunikat
                 </span>
             </div>
-            <div className="w-full flex-1 min-h-0 pt-3 pb-2 px-1 rounded-b-[10px] flex flex-col relative ">
+            <div className="w-full flex-1 h-[80%] pt-3 pb-2 px-1 rounded-b-[10px] flex flex-col relative ">
                 <div className="bg-theme-slate w-full h-full mx-auto pt-[20px] pb-[10px] px-5 rounded-[15px] relative overflow-y-auto pr-2 custom-scrollbar">
                     <div className="w-full text-center text-theme-text font-bold text-[48px] mb-4">
                         <span>Nowy komunikat</span>
