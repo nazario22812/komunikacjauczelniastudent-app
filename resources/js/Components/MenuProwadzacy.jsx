@@ -86,7 +86,7 @@ export default function MenuProwadzacy(){
                         <span className="text-[12px]">Moje kursy</span>
                     </div>
                 </Link>
-                <Link href='/ogloszeniaiankiety' method="get" as="button" className="hover:cursor-pointer w-full">
+                <Link href='/prowadzacy/komunikaty' method="get" as="button" className="hover:cursor-pointer w-full">
                     <div className="border-b-1 border-theme-muted flex h-[30px] gap-x-[10px] items-center fustify-start">
                         <img src={Bell} alt="ogloszeniaiankiety" />
                         <span className="text-[12px]">Komunikaty</span>

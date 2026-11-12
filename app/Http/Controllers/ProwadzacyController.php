@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Budynek;
+use App\Models\Grupastudenta;
 use App\Models\Kierunek;
 use App\Models\Prowadzacy;
 use Illuminate\Http\Request;
@@ -24,6 +25,66 @@ use Illuminate\Support\Facades\Storage;
 class ProwadzacyController extends Controller
 {
     //
+
+    public function komunikatypost(Request $request){
+        $targetType = $request->input('target_type');
+        $targetId = $request->input('target_id');
+        $students = collect();
+
+        $komunikat = Komunikat::create([
+            'temat' => $request->input('tytul'),
+            'tresc' => $request->input('tresc'),
+            'czyOgloszenie' => 0
+        ]);
+    
+        if ($targetType === 'kierunek') {
+            $students = Student::where('Kierunek_idKierunek', $targetId)->get();
+
+        } elseif ($targetType === 'kurs') {
+            $kurs = Kurs::find($targetId);
+            if ($kurs) {
+                $students = $kurs->student; 
+            }
+
+        } elseif ($targetType === 'grupa') {
+            $grupa = GrupaStudenta::find($targetId);
+            if ($grupa) {
+                $students = $grupa->grupastudenta; 
+            }
+
+        } elseif ($targetType === 'student') {
+            $student = Student::where('index', $targetId)->first();
+            if ($student) {
+                $students = collect([$student]);
+            }
+            else{
+                return redirect()->back()->with('error', 'Nie znaleziono studenta');
+            }
+        }
+        
+        foreach ($students as $student) {
+            if ($student->User_idUser) {
+                $komunikat->user()->attach($student->User_idUser);
+
+            }
+        }
+        
+        return redirect()->back()->with('status', 'Komunikat został pomyślnie wysłany!');
+    }
+
+    public function komunikaty(Request $request){
+        $user = $request->user();
+        $prowadzacy = Prowadzacy::where('User_idUser', $user->idUser)->first();
+        $kierunki = Kierunek::get()->toArray();
+        $kursy = Kurs::where('Prowadzacy_idProwadzacy', $prowadzacy->idProwadzacy)->get()->toArray();
+        $grupy = Grupastudenta::get()->toArray();
+        return Inertia::render('Prowadzacy/Komunikatform',[
+            'kierunki' => $kierunki,
+            'kursy' => $kursy,
+            'grupy' => $grupy
+
+        ]);
+    }
 
     public function stworzKurs(Request $request){
         $user = $request->user();

@@ -8,7 +8,7 @@ import MenuDziekanat from "../Components/MenuDziekanat";
 
 function Content({ ogloszenia, ankiety }){
     return (
-        <div className="bg-theme-page w-full p-[10px] h-screen flex flex-col box-border">
+        <div className="bg-theme-page w-[95%] p-[10px] h-screen flex flex-col box-border">
             <div className="bg-theme-page w-full flex shrink-0 h-[40px] mx-auto text-center border-b-[0.3px] border-theme-muted p-[10px] rounded-t-[10px]">
                 <BackButton back={ () => window.history.back()} />
                 <span className="font-bold text-[16px] text-theme-text w-full">Ogłoszenia i ankiety</span>
