@@ -30,8 +30,35 @@ class ProwadzacyController extends Controller
         $user = $request->user();
         $prowadzacy = Prowadzacy::where('User_idUser', $user->idUser)->first();
         $listakursow = Kurs::where('Prowadzacy_idProwadzacy', $prowadzacy->idProwadzacy)->orderBy('idkurs', 'desc')->limit(5)->get()->toArray();
+        $datadzisziejsza = date('y-m-d');
+
+        $zajecia = Rezerwacja::select(
+            'rezerwacja.*',
+            'zajęcie.*',
+            'przedmiot.*',
+            'sala.*',
+            'budynek.nazwa as NazwaBudynku'
+        )->join('zajęcie', function($join){
+            $join->on('rezerwacja.Zajęcie_idZajęcie', '=', 'zajęcie.idZajęcie');
+        })
+        ->join('przedmiot', function($join){
+            $join->on('zajęcie.Przedmiot_idPrzedmiot', '=', 'przedmiot.idPrzedmiot');
+        })
+        ->join('sala', function($join){
+            $join->on('rezerwacja.Sala_idSala', '=', 'sala.idSala');
+        })
+        ->join('budynek', function($join){
+            $join->on('sala.Budynek_idBudynek', '=', 'budynek.idBudynek');
+        })
+        ->where('rezerwacja.Prowadzacy_idProwadzacy', $prowadzacy->idProwadzacy)
+        ->where('rezerwacja.data', $datadzisziejsza)
+        ->get()
+        ->toArray();
+        // dd($zajecia);
+        
         return Inertia::render('Prowadzacy/StronaGlowna',[
-            'kursy' => $listakursow
+            'kursy' => $listakursow,
+            'zajecia'=> $zajecia
         ]);
     }
 

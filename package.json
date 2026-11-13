@@ -69,6 +69,7 @@
         "strip-ansi": "^7.2.0",
         "styled-components": "^6.5.3",
         "supports-color": "^10.2.2",
+        "swiper": "^14.4.0",
         "tapable": "^2.3.3",
         "temporal-polyfill": "^1.0.5",
         "tinyglobby": "^0.2.17",
