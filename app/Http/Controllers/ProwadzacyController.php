@@ -324,8 +324,6 @@ class ProwadzacyController extends Controller
     }
 
     public function wystawienieoceny(Request $request, $wybranyprzedmiot ,$idStudent, $wybranaocena){
-        $user = $request->user();
-        $prowadzacy = Prowadzacy::where('User_idUser', $user->idUser)->first();
         $zajecie = Zajecie::where('idZajęcie', $wybranyprzedmiot)->first();
         $przedmiot = Przedmiot::where('idPrzedmiot', $zajecie->Przedmiot_idPrzedmiot)->first();
         $student = Student::where('idStudent', $idStudent)->first();
@@ -373,15 +371,15 @@ class ProwadzacyController extends Controller
         $prowadzacy = Prowadzacy::where('User_idUser', $user->idUser)->first();
         
 
-        $zajecia = $prowadzacy->zajecie()
-        ->join('przedmiot', function($join){
-            $join->on('zajęcie.Przedmiot_idPrzedmiot', '=', 'przedmiot.idPrzedmiot');
-        })
+        $zajecia = Zajecie::join('prowadzacy_has_zajecie', 'zajęcie.idZajęcie', '=', 'prowadzacy_has_zajecie.Zajęcie_idZajęcie')
+        ->join('przedmiot', 'zajęcie.Przedmiot_idPrzedmiot', '=', 'przedmiot.idPrzedmiot')
+        ->where('prowadzacy_has_zajecie.Prowadzacy_idProwadzacy', $prowadzacy->idProwadzacy)
         ->select(
             'zajęcie.*',
             'przedmiot.nazwa as NazwaPrzedmiotu'
         )
-        ->get()->toArray();
+        ->get()
+        ->toArray();
 
         $studenci = [];
         $wybranezajecie = $request->input('zajecie_id');
