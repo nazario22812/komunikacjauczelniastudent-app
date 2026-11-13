@@ -74,9 +74,7 @@ Route::middleware(['auth', 'role:student'])->group(function (){
 
 //trasy dla prowadzacego 
 Route::middleware(['auth', 'role:prowadzacy'])->group(function (){
-    Route::get('/stronaglowna/prowadzacy', function () {
-        return Inertia::render('Prowadzacy/StronaGlowna');
-    })->name('stronaglownaprowadzacy');
+    Route::get('/stronaglowna/prowadzacy', [ProwadzacyController::class, 'stronaglowna'])->name('stronaglownaprowadzacy');
 
 
     Route::get('/prowadzacy/konsultacje', [ProwadzacyController::class, 'mojekonsultacje']);

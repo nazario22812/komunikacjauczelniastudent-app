@@ -26,6 +26,15 @@ class ProwadzacyController extends Controller
 {
     //
 
+    public function stronaglowna(Request $request){
+        $user = $request->user();
+        $prowadzacy = Prowadzacy::where('User_idUser', $user->idUser)->first();
+        $listakursow = Kurs::where('Prowadzacy_idProwadzacy', $prowadzacy->idProwadzacy)->orderBy('idkurs', 'desc')->limit(5)->get()->toArray();
+        return Inertia::render('Prowadzacy/StronaGlowna',[
+            'kursy' => $listakursow
+        ]);
+    }
+
     public function komunikatypost(Request $request){
         $targetType = $request->input('target_type');
         $targetId = $request->input('target_id');
@@ -315,7 +324,8 @@ class ProwadzacyController extends Controller
     }
 
     public function wystawienieoceny(Request $request, $wybranyprzedmiot ,$idStudent, $wybranaocena){
-
+        $user = $request->user();
+        $prowadzacy = Prowadzacy::where('User_idUser', $user->idUser)->first();
         $zajecie = Zajecie::where('idZajęcie', $wybranyprzedmiot)->first();
         $przedmiot = Przedmiot::where('idPrzedmiot', $zajecie->Przedmiot_idPrzedmiot)->first();
         $student = Student::where('idStudent', $idStudent)->first();
