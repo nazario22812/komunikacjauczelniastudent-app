@@ -42,7 +42,8 @@ function Content({ kursy, zajecia}) {
                         </button>
                     </div>
                     <div className="rounded-[10px] bg-theme-slate flex border border-theme-muted">
-                        <Swiper
+                        {zajecia && zajecia.length > 0 ? (
+                            <Swiper
                             modules={[Navigation, Pagination]}
                             spaceBetween={10}
                             slidesPerView={1}
@@ -64,6 +65,12 @@ function Content({ kursy, zajecia}) {
                                 </SwiperSlide>
                             ))}
                         </Swiper>
+                        ): (
+                            <div className="w-full mx-auto text-center mt-10 text-[24px] text-theme-muted">
+                                <span>Brak zajęć na dzisiaj</span>
+                            </div>
+                        )}
+                        
                     </div>
                 </div>
                 <div className="bg-theme-surface rounded-[10px]">
