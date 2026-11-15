@@ -34,16 +34,22 @@ function Content({ szczegoly, listaplikow }){
                         </div>
                         <div className="mt-5 w-full border border-theme-muted p-5 rounded-[10px]">
                             <span className="text-theme-muted font-bold text-[20px]">Odpowiedź</span><br />
-                            <span className="font-bold text-theme-text  text-[24px] ">{szczegoly.odpowiedz}</span>                           
+                            <span className="font-bold text-theme-text  text-[24px] ">{szczegoly.odpowiedz || "Brak"}</span>                           
                         </div>
 
                         <div className="mt-5 w-full border border-theme-muted p-5 rounded-[10px]">
                             <span className="text-theme-muted font-bold text-[20px]">Załączniki</span><br />
-                            {listaplikow.map((plik, index) => (
-                                <div key={index}>
-                                    <a href={`/storage/${plik.nazwa}`} target="_blank" className="text-[17px] text-theme-muted">🔗{plik.nazwa.split('/').pop()}, </a>
-                                </div>
-                            ))}
+                            {listaplikow.length > 0 ? (
+                                listaplikow.map((plik, index) => (
+                                    <div key={index} className="mt-2">
+                                        <a href={`/storage/${plik.nazwa}`} target="_blank" rel="noreferrer" className="text-[17px] text-blue-400 hover:underline">
+                                            🔗 {plik.nazwa.split('/').pop()}
+                                        </a>
+                                    </div>
+                                ))
+                            ) : (
+                                <span className="text-theme-muted text-[16px]">Brak załączników</span>
+                            )}
                                                     
                         </div>
                     </div>

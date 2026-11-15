@@ -44,7 +44,7 @@ function Content({ podania }){
                                 </thead>
                                 <tbody className="divide-y divide-theme-muted w-full">
                                     {podania.map((podanie) => (
-                                        <Podanierow key={podanie.id} podanie={podanie}/>
+                                        <Podanierow key={podanie.idPodanie} podanie={podanie}/>
                                     ))}
                                 </tbody>
                             </table>

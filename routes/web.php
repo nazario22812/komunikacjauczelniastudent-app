@@ -114,4 +114,7 @@ Route::middleware(['auth', 'role:pracownikdziekanatu'])->group(function (){
     })->name('stronaglownapracownikdziekanatu');
 
     Route::get('/dziekanat/podania', [DziekanatController::class, 'podania']);
+    Route::get('/dziekanat/szczegolypodania/{podanie}', [DziekanatController::class, 'szczegolypodania']);
+    Route::post('/dziekanat/szczegolypodania/{podanie}', [DziekanatController::class, 'szczegolypodaniapost']);
+
 });

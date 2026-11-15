@@ -8,7 +8,7 @@ export function Podanierow({ podanie }){
     return(
         
             <tr className="text-theme-text font-bold h-[40px] text-left text-[24px] hover:bg-theme-panel hover:cursor-pointer"
-            onClick={() => router.get(`/student/edziekanat/${podanie.idPodanie}`)}
+            onClick={() => router.get(`/dziekanat/szczegolypodania/${podanie.idPodanie}`)}
             >
                 <td className="py-[20px]">{podanie.temat}</td>
                 <td className="py-[20px]">{podanie.data}</td>
@@ -31,7 +31,7 @@ function Content({ podania }){
                 
                     <div className=" bg-theme-surface h-full px-[37px] py-[22px] rounded-[15px] overflow-y-auto pr-2 custom-scrollbar">
                         <span className="text-theme-text font-bold text-[40px]">Podania</span>
-                        {/* {podania && podania.length > 0 ? (
+                        {podania && podania.length > 0 ? (
                             <table className="w-full ">
 
                                 <thead>
@@ -43,7 +43,7 @@ function Content({ podania }){
                                 </thead>
                                 <tbody className="divide-y divide-theme-muted w-full">
                                     {podania.map((podanie) => (
-                                        <Podanierow key={podanie.id} podanie={podanie}/>
+                                        <Podanierow key={podanie.idPodanie} podanie={podanie}/>
                                     ))}
                                 </tbody>
                             </table>
@@ -51,7 +51,7 @@ function Content({ podania }){
                             <div className="w-full mx-auto text-center mt-10 text-[24px] text-theme-muted">
                                 <span>Brak podań</span>
                             </div>
-                        )} */}
+                        )}
 
                     </div>
                 
@@ -63,13 +63,13 @@ function Content({ podania }){
 }
 
 
-export default function Podania({ }) {
+export default function Podania({ podania }) {
     return (
       
         <div className="flex">
             <Head title="Podania"/>
             <MenuDziekanat/>
-            <Content/>
+            <Content podania={podania}/>
         </div>
     );
 }
