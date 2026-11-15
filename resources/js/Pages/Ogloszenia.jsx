@@ -74,7 +74,7 @@ export default function Ogłoszenia({ auth, ogloszenia, ankiety, rol }) {
         menu = <MenuProwadzacy/>
     }
     if (rol === 'Pracownik Dziekanatu'){
-        menu === <MenuDziekanat/>
+        menu = <MenuDziekanat/>
     }
     return (
         

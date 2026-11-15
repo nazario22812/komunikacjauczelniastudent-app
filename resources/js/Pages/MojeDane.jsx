@@ -163,7 +163,7 @@ export default function MojeDane({ auth, rol, name, surname, email, numerTelefon
         menu = <MenuProwadzacy/>
     }
     if (rol === 'Pracownik Dziekanatu'){
-        menu === <MenuDziekanat/>
+        menu = <MenuDziekanat/>
     }
         
 

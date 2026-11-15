@@ -444,6 +444,7 @@ class StudentController extends Controller
         ->toArray();
         // dd($platnosci);
 
+        $kontodozaplaty = $student->kontoDoZaplaty;
         $suma = 0;
         $wszystkiekwoty = Platnosc::select(
             'kwota',
@@ -497,6 +498,7 @@ class StudentController extends Controller
             ->toArray();
 
             return response()->json([
+                'kontodozaplaty' => $kontodozaplaty,
                 'zaleglosci' => $zaleglosci,
                 'oplacone' => $oplacone,
                 'suma' => $suma,
@@ -505,6 +507,7 @@ class StudentController extends Controller
         }
 
         return Inertia::render('Student/MojeFinanse',[
+            'kontodozaplaty' => $kontodozaplaty,
             'platnosci' => $platnosci,
             'suma' => $suma,
             'najblizszytermin' => substr($najblizszytermin?->termin, 0, 16) ?: null,

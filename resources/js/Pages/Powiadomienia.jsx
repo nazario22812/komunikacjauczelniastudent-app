@@ -66,7 +66,7 @@ export default function Powiadomienia({ auth, powiadomienia, rol }) {
         menu = <MenuProwadzacy/>
     }
     if (rol === 'Pracownik Dziekanatu'){
-        menu === <MenuDziekanat/>
+        menu = <MenuDziekanat/>
     }
     return (
     

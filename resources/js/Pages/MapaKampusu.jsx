@@ -169,7 +169,7 @@ export default function MapaKampusu({ auth, sale, rol }) {
         menu = <MenuProwadzacy/>
     }
     if (rol === 'Pracownik Dziekanatu'){
-        menu === <MenuDziekanat/>
+        menu = <MenuDziekanat/>
     }
     
     return (

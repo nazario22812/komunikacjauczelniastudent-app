@@ -64,7 +64,7 @@ export default function Settings({ auth,  theme = 'dark', rol }) {
         menu = <MenuProwadzacy/>
     }
     if (rol === 'Pracownik Dziekanatu'){
-        menu === <MenuDziekanat/>
+        menu = <MenuDziekanat/>
     }
 
     return (
