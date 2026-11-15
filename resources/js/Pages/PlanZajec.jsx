@@ -151,7 +151,7 @@ export default function PlanZajec({ auth, plan = null, listagrup, listakierunkow
         menu = <MenuProwadzacy/>
     }
     if (rol === 'Pracownik Dziekanatu'){
-        menu === <MenuDziekanat/>
+        menu = <MenuDziekanat/>
     }
     return (
         <div className="flex">

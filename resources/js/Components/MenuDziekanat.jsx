@@ -10,6 +10,9 @@ import Account from '@/../images/account-box-outline.png';
 import Calendar from '@/../images/calendar-month-outline-sharp.png';
 import Map from '@/../images/map-search-outline-rounded.png';
 import Bell from '@/../images/doorbell-outline.png';
+import Inbox from '@/../images/inbox-text-rounded.png';
+import List from '@/../images/list-alt-outline-sharp.png';
+import Wallet from '@/../images/wallet-sharp.png';
 
 export default function MenuDziekanat(){
     
@@ -36,24 +39,35 @@ export default function MenuDziekanat(){
 
                     </div>
                 </Link>
-                <Link href='/planzajec' method="get" as="button" className="hover:cursor-pointer w-full">    
+                <Link href='' method="get" as="button" className="hover:cursor-pointer w-full">    
                     <div className="border-b-1 border-theme-muted flex h-[30px] gap-x-[10px] items-center fustify-start">
                         <img src={Calendar} alt="planzajec" />
-                        <span className="text-[12px]">Plan Zajęć</span>
-                    </div>
-                </Link>
-                
-                <Link href='/mapa' method="get" as="button" className="hover:cursor-pointer w-full">
-                    <div className="border-b-1 border-theme-muted flex h-[30px] gap-x-[10px] items-center fustify-start">
-                        <img src={Map} alt="mapakampusu" />
-                        <span className="text-[12px]">Mapa kampusu</span>
+                        <span className="text-[12px]">Plany Zajęć</span>
                     </div>
                 </Link>
 
-                <Link href='/ogloszeniaiankiety' method="get" as="button" className="hover:cursor-pointer w-full">
+                <Link href='' method="get" as="button" className="hover:cursor-pointer w-full">
                     <div className="border-b-1 border-theme-muted flex h-[30px] gap-x-[10px] items-center fustify-start">
                         <img src={Bell} alt="ogloszeniaiankiety" />
                         <span className="text-[12px]">Ogłoszenia i ankiety</span>
+                    </div>
+                </Link>
+                <Link href='' method="get" as="button" className="hover:cursor-pointer w-full">
+                    <div className="border-b-1 border-theme-muted flex h-[30px] gap-x-[10px] items-center fustify-start">
+                        <img src={Inbox} alt="edziekanat" />
+                        <span className="text-[12px]">Podania</span>
+                    </div>
+                </Link>
+                <Link href='' method="get" as="button" className="hover:cursor-pointer w-full">
+                    <div className="border-b-1 border-theme-muted flex h-[30px] gap-x-[10px] items-center fustify-start">
+                        <img src={List} alt="edziekanat" />
+                        <span className="text-[12px]">Sylabusy</span>
+                    </div>
+                </Link>
+                <Link href='' method="get" as="button" className="hover:cursor-pointer w-full">
+                    <div className="border-b-1 border-theme-muted flex h-[30px] gap-x-[10px] items-center fustify-start">
+                        <img src={Wallet} alt="edziekanat" />
+                        <span className="text-[12px]">Finanse studentów</span>
                     </div>
                 </Link>
             </div>
