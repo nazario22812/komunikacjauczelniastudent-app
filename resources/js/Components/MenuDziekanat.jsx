@@ -52,7 +52,7 @@ export default function MenuDziekanat(){
                         <span className="text-[12px]">Ogłoszenia i ankiety</span>
                     </div>
                 </Link>
-                <Link href='' method="get" as="button" className="hover:cursor-pointer w-full">
+                <Link href='/dziekanat/podania' method="get" as="button" className="hover:cursor-pointer w-full">
                     <div className="border-b-1 border-theme-muted flex h-[30px] gap-x-[10px] items-center fustify-start">
                         <img src={Inbox} alt="edziekanat" />
                         <span className="text-[12px]">Podania</span>

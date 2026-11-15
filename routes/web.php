@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DziekanatController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProwadzacyController;
 use App\Http\Controllers\StudentController;
@@ -111,4 +112,6 @@ Route::middleware(['auth', 'role:pracownikdziekanatu'])->group(function (){
     Route::get('/stronaglowna/pracownikdziekanatu', function () {
         return Inertia::render('PracownikDziekanatu/StronaGlowna');
     })->name('stronaglownapracownikdziekanatu');
+
+    Route::get('/dziekanat/podania', [DziekanatController::class, 'podania']);
 });
