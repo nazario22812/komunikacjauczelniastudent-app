@@ -24,7 +24,7 @@ function Platnoscrow({ platnosc }){
     );
 }
 
-function Content({ platnosci, suma, najblizszytermin}){
+function Content({ platnosci, suma, najblizszytermin, kontodozaplaty}){
     return (
         <div className="bg-theme-page w-full p-[10px] h-screen flex flex-col box-border">
             <div className="bg-theme-page w-full flex shrink-0 h-[40px] mx-auto text-center border-b-[0.3px] border-theme-muted p-[10px] rounded-t-[10px]">
@@ -48,8 +48,7 @@ function Content({ platnosci, suma, najblizszytermin}){
                         
                         <div className="w-full mx-auto bg-theme-surface rounded-[15px] text-left px-[37px] py-[26px]">
                             <span className="text-[24px] text-theme-muted">Konto bankowe</span><br />
-                            <span className="text-[48px] text-theme-text font-bold">676767676767676767</span>
-                            
+                            <span className="text-[48px] text-theme-text font-bold">{kontodozaplaty || 'brak'}</span> 
                         </div>
                     </div>
                     <div className=" bg-theme-surface h-[77%] mt-5 px-[37px] py-[22px] rounded-[15px] overflow-y-auto pr-2 custom-scrollbar">
@@ -86,7 +85,7 @@ function Content({ platnosci, suma, najblizszytermin}){
 
 }
 
-export default function MojeFinanse({ auth, platnosci, suma, najblizszytermin }) {
+export default function MojeFinanse({ auth, platnosci, suma, najblizszytermin, kontodozaplaty }) {
     return (
         // <div>
         //     <p>ja student</p>
@@ -96,7 +95,7 @@ export default function MojeFinanse({ auth, platnosci, suma, najblizszytermin })
         <div className="flex">
             <Head title="Moje finanse"/>
             <MenuStudenta/>
-            <Content  platnosci={platnosci} suma={suma} najblizszytermin={najblizszytermin}/>
+            <Content  platnosci={platnosci} suma={suma} najblizszytermin={najblizszytermin} kontodozaplaty={kontodozaplaty}/>
         </div>
     );
 }

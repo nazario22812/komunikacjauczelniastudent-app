@@ -16,6 +16,7 @@ class Student extends Model
         'stopien',
         'trybStudiow',
         'rok',
+        'kontoDoZaplaty',
         'iloscPunktowEcts',
         'Specjalnosc',
         'User_idUser',
