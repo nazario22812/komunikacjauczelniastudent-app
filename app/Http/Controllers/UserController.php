@@ -15,6 +15,7 @@ use App\Models\Student;
 use App\Models\Zajecie;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use App\Models\User;
@@ -26,9 +27,12 @@ class UserController extends Controller
 
     public function ustawienia(Request $request){
         $user = $request->user();
-        $settings = json_decode($user?->Ustawienia ?? '{}', true);
+        $theme = session('theme', 'dark');
 
-        $user = $request->user();
+        if (! in_array($theme, ['dark', 'light'], true)) {
+            $theme = 'dark';
+        }
+
         $role = '';
         if($user->isStudent()){
             $role = 'Student';
@@ -42,28 +46,34 @@ class UserController extends Controller
 
         return Inertia::render('Settings', [
             'rol' => $role,
-            'theme' => $settings['theme'] ?? 'dark',
+            'theme' => $theme,
         ]);
     }
 
     public function ustawieniaTheme(Request $request){
-        $user = $request->user();
         $theme = $request->input('theme');
 
         if (! in_array($theme, ['dark', 'light'], true)) {
             $theme = 'dark';
         }
 
-        $settings = json_decode($user->Ustawienia ?? '{}', true);
-        $settings['theme'] = $theme;
+        session()->put('theme', $theme);
 
-        $user->update([
-            'Ustawienia' => json_encode($settings),
+        return redirect()->back();
+    }
+
+    public function ustawieniaHaslo(Request $request){
+        $request->validate([
+            'current_password' => ['required', 'current_password'],
+            'new_password' => ['required', 'min:8', 'confirmed'],
         ]);
 
-        session()->put('theme', $theme);
-    
-        return redirect()->back();
+        $user = $request->user();
+        $user->update([
+            'password' => Hash::make($request->input('new_password')),
+        ]);
+
+        return redirect()->back()->with('status', 'Hasło zostało zmienione.');
     }
 
     public function ogloszniaiankiety(Request $request){

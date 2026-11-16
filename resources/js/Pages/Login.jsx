@@ -77,6 +77,10 @@ export default function Login({ status }){
                     <p className="text-theme-text text-[12px] mx-auto text-center ">{errors.password}</p>
 
 
+                    {status && (
+                        <p className="text-theme-text text-[12px] text-center mt-3">{status}</p>
+                    )}
+
                     <div  className=" w-3/4 mx-auto pt-5">
                         <button className="w-full h-[35] mt-5 bg-white rounded-lg text-theme-dark-panel font-bold hover:bg-gray-300 hover:cursor-pointer active:bg-gray-500" disabled={processing}>
                             Zaloguj

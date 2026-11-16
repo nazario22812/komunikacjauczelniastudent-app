@@ -39,6 +39,7 @@ Route::middleware('guest')->group(function() {
 
 Route::middleware(['auth'])->group(function(){
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
+    Route::post('/ustawienia/haslo', [UserController::class, 'ustawieniaHaslo'])->name('ustawienia.haslo');
     Route::get('/mojedane', [UserController::class, 'mojedane']);
     Route::get('/planzajec', [UserController::class, 'planzajec'])->name('planzajec');
     Route::get('/planzajec/{grupa}', [UserController::class, 'planzajecpost'])->name('planzajec.szukaniegrupy');
