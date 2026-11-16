@@ -129,14 +129,25 @@ html, body {
   color: var(--theme-text);
 }
 
+html {
+  font-size: 15px;
+}
+
 body {
   min-height: 100vh;
+  font-size: clamp(0.82rem, 0.7vw + 0.7rem, 1rem);
+  line-height: 1.5;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 img {
   display: block;
   max-width: 100%;
   height: auto;
+  object-fit: contain;
 }
 
 img[src],
@@ -146,13 +157,17 @@ svg {
   height: auto;
 }
 
-img[alt],
-img:not([src]) {
-  max-width: 100%;
-}
-
 button, input, select, textarea {
   box-shadow: none !important;
+  font: inherit;
+}
+
+p, span, a, li, button, input, select, textarea {
+  font-size: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.2;
 }
 
 [class*='bg-gradient'],
@@ -169,26 +184,81 @@ button, input, select, textarea {
 }
 
 @media (max-width: 768px) {
-  div.flex {
-    display: block !important;
-  }
-
-  div.flex > nav,
-  div.flex > aside,
-  div.flex > *:not(nav):not(aside) {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0;
-  }
-
-  div.flex > nav,
-  div.flex > aside {
-    height: auto !important;
-    min-height: auto !important;
+  html {
+    font-size: 14px;
   }
 
   body {
+    font-size: clamp(0.8rem, 2.8vw, 1rem);
     padding-left: 0 !important;
+  }
+
+  img,
+  svg {
+    flex-shrink: 0;
+  }
+
+  [class*='bg-theme-page'][class*='w-full'][class*='p-[10px]'][class*='h-screen'][class*='flex'][class*='flex-col'] {
+    min-height: 100vh;
+    height: auto !important;
+    padding: 0.5rem !important;
+  }
+
+  [class*='w-[80%]'],
+  [class*='w-[20%]'],
+  [class*='w-[10%]'],
+  [class*='w-1/2'],
+  [class*='w-3/4'],
+  [class*='w-1/4'] {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  [class*='flex'][class*='gap-5'] {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+  }
+
+  [class*='text-[48px]'],
+  [class*='text-[40px]'],
+  [class*='text-[26px]'],
+  [class*='text-[24px]'],
+  [class*='text-[20px]'] {
+    font-size: clamp(1.15rem, 5vw, 1.8rem) !important;
+  }
+
+  [class*='text-[16px]'],
+  [class*='text-[15px]'],
+  [class*='text-[14px]'],
+  [class*='text-[13px]'],
+  [class*='text-[12px]'] {
+    font-size: clamp(0.8rem, 3.3vw, 1rem) !important;
+  }
+
+  table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  thead,
+  tbody,
+  tr {
+    display: table;
+    width: 100%;
+  }
+
+  th,
+  td {
+    min-width: 120px;
+  }
+
+  .leaflet-container {
+    min-height: 380px !important;
+    height: 50vh !important;
   }
 }
 

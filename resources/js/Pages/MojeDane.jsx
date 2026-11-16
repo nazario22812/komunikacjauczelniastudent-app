@@ -20,38 +20,38 @@ function Content({ rol, name, surname, email, numerTelefonu, kontoBankowe, DataU
             </div>
 
             <div className="bg-theme-panel w-full h-full flex-1 border-[0.3px] border-theme-muted py-10 rounded-b-[10px]">
-                <div className="w-3/4 h-full bg-theme-slate mx-auto  rounded-[15px] flex">
-                    
+                <div className="mx-auto h-full w-full rounded-[15px] bg-theme-slate p-4 md:w-3/4 md:p-0 md:pl-0">
+                     
 
-                    <div className="w-full m-10 text-left">
+                    <div className="w-full p-4 text-left md:m-10 md:p-0">
                         <div className="border-b border-theme-muted mb-3">
                             <p className="font-bold text-theme-text text-[26px] w-1/2">{rol}</p>
                         </div>
-                        <div className="flex gap-5 mb-3">
-                            <p className="font-bold text-theme-text text-[20px] w-1/2">Imie: </p>
-                            <p className="w-1/2 text-theme-text text-[16px]">{name}</p>
+                        <div className="mb-3 flex flex-col gap-2 md:flex-row md:gap-5">
+                            <p className="w-full font-bold text-theme-text text-[20px] md:w-1/2">Imie: </p>
+                            <p className="w-full text-theme-text text-[16px] md:w-1/2">{name}</p>
                         </div>
-                        <div className="flex gap-5 mb-3">
-                            <p className="font-bold text-theme-text text-[20px] w-1/2">Nazwisko: </p>                    
-                            <p className="w-1/2 text-theme-text text-[16px]">{surname}</p>
+                        <div className="mb-3 flex flex-col gap-2 md:flex-row md:gap-5">
+                            <p className="w-full font-bold text-theme-text text-[20px] md:w-1/2">Nazwisko: </p>                    
+                            <p className="w-full text-theme-text text-[16px] md:w-1/2">{surname}</p>
                         </div>
-                        <div className="flex gap-5 mb-3">
-                            <p className="font-bold text-theme-text text-[20px] w-1/2">Data urodzenia: </p>
-                            <p className="w-1/2 text-theme-text text-[16px]">{DataUrodzenia}</p>
+                        <div className="mb-3 flex flex-col gap-2 md:flex-row md:gap-5">
+                            <p className="w-full font-bold text-theme-text text-[20px] md:w-1/2">Data urodzenia: </p>
+                            <p className="w-full text-theme-text text-[16px] md:w-1/2">{DataUrodzenia}</p>
 
                         </div>
-                        <div className="flex gap-5 mb-3">
-                            <p className="font-bold text-theme-text text-[20px] w-1/2">Email: </p>
-                            <p className="w-1/2 text-theme-text text-[16px]">{email}</p>
+                        <div className="mb-3 flex flex-col gap-2 md:flex-row md:gap-5">
+                            <p className="w-full font-bold text-theme-text text-[20px] md:w-1/2">Email: </p>
+                            <p className="w-full text-theme-text text-[16px] md:w-1/2">{email}</p>
                         </div>
-                        <div className="flex gap-5 mb-3">
-                            <p className="font-bold text-theme-text text-[20px] w-1/2">Numer telefonu: </p>
-                            <p className="w-1/2 text-theme-text text-[16px]">{numerTelefonu}</p>
+                        <div className="mb-3 flex flex-col gap-2 md:flex-row md:gap-5">
+                            <p className="w-full font-bold text-theme-text text-[20px] md:w-1/2">Numer telefonu: </p>
+                            <p className="w-full text-theme-text text-[16px] md:w-1/2">{numerTelefonu}</p>
 
                         </div>
-                        <div className="flex gap-5 mb-3 border-b border-theme-muted">
-                            <p className="font-bold text-theme-text text-[20px] w-1/2">Konto bankowe: </p>
-                            <p className="w-1/2 text-theme-text text-[16px]">{kontoBankowe}</p>
+                        <div className="mb-3 flex flex-col gap-2 border-b border-theme-muted pb-2 md:flex-row md:gap-5">
+                            <p className="w-full font-bold text-theme-text text-[20px] md:w-1/2">Konto bankowe: </p>
+                            <p className="w-full text-theme-text text-[16px] md:w-1/2">{kontoBankowe}</p>
 
                         </div>
                         
