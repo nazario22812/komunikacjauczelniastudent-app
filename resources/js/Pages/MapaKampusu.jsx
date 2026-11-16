@@ -85,19 +85,19 @@ function Content({sale}){
                         </Marker>
                     )}
                 </MapContainer>
-                <div className=" absolute top-8 right-5 z-50  ml-[75%] h-[30%] w-[30%] bg-theme-slate rounded-[10px] border border-theme-muted ">
-                   
+                <div className="absolute left-3 right-3 top-3 z-50 rounded-[10px] border border-theme-muted bg-theme-slate p-3 md:left-auto md:right-5 md:top-8 md:w-[30%] md:min-w-[220px] md:max-w-[360px]">
+                    
                     <div className="mx-auto w-full text-center">
-                        <span className="w-full mx-auto text-theme-text text-[48px] font-bold  ">Mapa kampusu</span>
+                       <span className="w-full mx-auto text-theme-text text-[24px] font-bold md:text-[48px]">Mapa kampusu</span>
                     </div>
-                    <div className=" mx-auto w-full flex text-center text-theme-text mt-10 ">
-                        
+                   <div className="mx-auto mt-4 flex w-full items-stretch text-center text-theme-text md:mt-10">
+                         
                         <input type="text" placeholder="podaj numer sali (np. E201)" value={searchItem} onChange={(e) => {
                             setsearchItem(e.target.value);
                             setisOpen(true);
-                        }} className="w-full ml-15 p-1 border-t border-b border-l border-theme-muted rounded-l-[10px]"></input>
-                        <div className="mr-15 border-t border-b border-r border-theme-muted rounded-r-[10px] ">
-                            <img src={Lupa} className=" w-[38px] h-[24px] mx-auto my-2 " alt="wyszukaj" />                            
+                       }} className="w-full border border-theme-muted rounded-l-[10px] bg-theme-page p-2 text-sm text-theme-text outline-none md:ml-15 md:p-1"></input>
+                       <div className="flex items-center justify-center border border-l-0 border-theme-muted rounded-r-[10px] bg-theme-page px-2 md:mr-15">
+                           <img src={Lupa} className="h-[20px] w-[20px] md:h-[24px] md:w-[38px]" alt="wyszukaj" />                            
 
                         </div>
 
@@ -113,7 +113,7 @@ function Content({sale}){
                         )}
 
                     </div>
-                    <div className="w-full mx-auto h-[28px] px-[18px] my-3 flex items-center mt-10">
+                    <div className="mx-auto my-3 mt-10 flex h-[28px] w-full items-center px-[18px]">
                         <button  type="button" onClick={() => {
                             if (!searchItem.trim()) {
                                     toast.info('Wpisz salę', {
@@ -128,11 +128,11 @@ function Content({sale}){
                                         });
                                     return;
                                 }
-                                       
+                                        
                                 const found = sale.find(item => 
                                     item.numerSali && item.numerSali.toLowerCase() === searchItem.toLowerCase()
                                 );
-                                       
+                                        
                                 if (found) {
                                     handleSelectSuggestion(found);
                                 } 
@@ -149,7 +149,7 @@ function Content({sale}){
                                     });
                                 }                           
                                 
-                        }} className="text-[15px] h-[40px] mx-auto w-3/4  text-white bg-theme-orange rounded-[15px] hover:cursor-pointer active:bg-theme-orange">
+                        }} className="mx-auto h-[40px] w-full rounded-[15px] bg-theme-orange px-4 text-[15px] text-white hover:cursor-pointer active:bg-theme-orange md:w-3/4">
                             Wyszukaj
                         </button>
                     </div>
