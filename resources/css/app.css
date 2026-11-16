@@ -120,6 +120,53 @@
    'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
+* {
+  box-shadow: none !important;
+}
+
+html, body {
+  background-color: var(--theme-page);
+  color: var(--theme-text);
+}
+
+body {
+  min-height: 100vh;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button, input, select, textarea {
+  box-shadow: none !important;
+}
+
+[class*='bg-gradient'],
+[class*='gradient'],
+[class*='shadow-'],
+[class*='drop-shadow'],
+[class*='ring-'],
+[class*='backdrop-blur'],
+[class*='from-'],
+[class*='via-'],
+[class*='to-'] {
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 768px) {
+  .flex {
+    flex-direction: column;
+  }
+
+  .flex > * {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0;
+  }
+}
+
 @layer utilities {
   .bg-theme-dark-page { background-color: var(--theme-dark-page); }
   .bg-theme-dark-surface { background-color: var(--theme-dark-surface); }

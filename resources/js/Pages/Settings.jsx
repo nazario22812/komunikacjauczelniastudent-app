@@ -53,14 +53,14 @@ function Content({ theme = 'dark'  }){
             </div>
 
             <div className="w-full flex-1 min-h-0 pt-4 pb-2 px-4 rounded-b-[16px] flex flex-col relative">
-                <div className="bg-theme-slate w-full h-full mx-auto rounded-[20px] border border-theme-muted/70 overflow-hidden shadow-[0_18px_50px_rgba(15,23,42,0.18)]">
-                    <div className="bg-gradient-to-r from-theme-accent-indigo via-theme-accent-navy to-theme-orange/80 p-5 md:p-6">
+                <div className="bg-theme-slate w-full h-full mx-auto rounded-[20px] border border-theme-muted overflow-hidden">
+                    <div className="border-b border-theme-muted bg-theme-surface p-5 md:p-6">
                         <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                             <div>
-                                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/70">Konto</p>
-                                <h2 className="text-2xl font-bold text-white">Twoje ustawienia</h2>
+                                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-theme-muted">Konto</p>
+                                <h2 className="text-2xl font-bold text-theme-text">Twoje ustawienia</h2>
                             </div>
-                            <div className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-sm text-white/90 backdrop-blur-sm">
+                            <div className="rounded-full border border-theme-muted bg-theme-page px-3 py-1 text-sm text-theme-text">
                                 {themeData.theme === 'light' ? 'Jasny motyw' : 'Ciemny motyw'}
                             </div>
                         </div>
