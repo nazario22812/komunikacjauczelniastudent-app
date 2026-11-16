@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Ocena;
 use App\Models\Przedmiot;
 use App\Models\Sylabus;
+use Illuminate\Validation\Rule;
 
 
 class DziekanatController extends Controller
@@ -27,7 +28,19 @@ class DziekanatController extends Controller
     //
 
     public function szczegolypodaniapost(Request $request, $podanie){
+        $validated = $request->validate([
+            'selected_status' => ['required', Rule::in(['Przyjęto', 'Odrzucono'])],
+            'odpowiedz' => ['required', 'string', 'max:2000'],
+        ]);
 
+        $podanieModel = Podanie::findOrFail($podanie);
+
+        $podanieModel->update([
+            'status' => $validated['selected_status'],
+            'odpowiedz' => $validated['odpowiedz'],
+        ]);
+
+        return redirect()->back()->with('status', 'Decyzja została zapisana.');
     }
     public function szczegolypodania(Request $request, $podanie){
         
