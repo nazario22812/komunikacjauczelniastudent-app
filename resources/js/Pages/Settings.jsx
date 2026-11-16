@@ -1,9 +1,10 @@
-
-import { useForm, Head } from "@inertiajs/react";
+import React, { useEffect, useState } from "react";
+import { useForm, Head, usePage } from "@inertiajs/react";
 import BackButton from "../Components/BackButton";
 import MenuStudenta from "../Components/MenuStudenta";
 import MenuProwadzacy from "../Components/MenuProwadzacy";
 import MenuDziekanat from "../Components/MenuDziekanat";
+import { ToastContainer, toast } from "react-toastify";
 
 function Content({ theme = "dark" }) {
     const currentTheme =
@@ -55,7 +56,9 @@ function Content({ theme = "dark" }) {
 
     const submitPassword = (e) => {
         e.preventDefault();
-        postPassword("/ustawienia/haslo");
+        postPassword("/ustawienia/haslo", {
+            onSuccess: () => reset(),
+        });
     };
 
     return (
@@ -279,6 +282,20 @@ function Content({ theme = "dark" }) {
 }
 
 export default function Settings({ auth, theme = "dark", rol }) {
+
+    const props = usePage().props;
+        const message = props.flash?.status || props.status;
+    
+        useEffect(() => {
+            if (message) {
+                toast.info(message, {
+                    position: "bottom-right",
+                    autoClose: 5000,
+                    theme: "dark",
+                });
+            }
+        }, [message]);
+
     let menu;
 
     if (rol === "Student") {
@@ -295,6 +312,18 @@ export default function Settings({ auth, theme = "dark", rol }) {
 
     return (
         <div className="flex min-h-dvh min-w-0 w-full">
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick={false}
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+            />
             <Head title="Ustawienia" />
             {menu}
             <Content theme={theme} />
