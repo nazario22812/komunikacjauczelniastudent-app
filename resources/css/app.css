@@ -136,6 +136,19 @@ body {
 img {
   display: block;
   max-width: 100%;
+  height: auto;
+}
+
+img[src],
+svg {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+}
+
+img[alt],
+img:not([src]) {
+  max-width: 100%;
 }
 
 button, input, select, textarea {
@@ -156,14 +169,26 @@ button, input, select, textarea {
 }
 
 @media (max-width: 768px) {
-  .flex {
-    flex-direction: column;
+  div.flex {
+    display: block !important;
   }
 
-  .flex > * {
+  div.flex > nav,
+  div.flex > aside,
+  div.flex > *:not(nav):not(aside) {
     width: 100% !important;
     max-width: 100% !important;
     min-width: 0;
+  }
+
+  div.flex > nav,
+  div.flex > aside {
+    height: auto !important;
+    min-height: auto !important;
+  }
+
+  body {
+    padding-left: 0 !important;
   }
 }
 
