@@ -10,139 +10,107 @@ function Content({ rol, name, surname, email, numerTelefonu, kontoBankowe, DataU
     semester, stopien, trybStudiow, rok, Specjalnosc, kierunek, wydzial, 
     TytulNaukowy, katedra, Odpowiedzialnosc,
     grupaLaboratoryjna, grupaCwiczeniowa, grupaWykladowa }){
-    return(
+    const extraFields = [];
+
+    if (rol === 'Student') {
+        extraFields.push(
+            { label: 'Wydział', value: wydzial },
+            { label: 'Kierunek', value: kierunek },
+            { label: 'Rok studiów', value: rok },
+            { label: 'Semestr', value: semester },
+            { label: 'Stopień', value: stopien },
+            { label: 'Tryb studiów', value: trybStudiow },
+            { label: 'Numer indeksu', value: index },
+            { label: 'Specjalność', value: Specjalnosc },
+            { label: 'Grupa laboratoryjna', value: grupaLaboratoryjna },
+            { label: 'Grupa ćwiczeniowa', value: grupaCwiczeniowa },
+            { label: 'Grupa wykładowa', value: grupaWykladowa },
+        );
+    }
+
+    if (rol === 'Prowadzący') {
+        extraFields.push(
+            { label: 'Tytuł naukowy', value: TytulNaukowy },
+            { label: 'Katedra', value: katedra },
+        );
+    }
+
+    if (rol === 'Pracownik Dziekanatu' && Odpowiedzialnosc != null) {
+        extraFields.push({ label: 'Odpowiedzialność', value: Odpowiedzialnosc });
+    }
+
+    return (
         <div className="bg-theme-page w-full p-[10px] h-screen flex flex-col box-border">
-            {/* <p className="text-white">{rol}</p> */}
-            
-            <div className="bg-theme-panel w-full flex shrink-0 h-[40px] mx-auto text-center border-[0.3px] border-theme-muted p-[10px] rounded-t-[10px]">
+            <div className="bg-theme-page w-full flex shrink-0 h-[40px] mx-auto items-center text-center border-b-[0.3px] border-theme-muted p-[10px] rounded-t-[10px]">
                 <BackButton back={ () => window.history.back()} />
                 <span className="font-bold text-[16px] text-theme-text w-full">Moje dane</span>
             </div>
 
-            <div className="bg-theme-panel w-full h-full flex-1 border-[0.3px] border-theme-muted py-10 rounded-b-[10px]">
-                <div className="mx-auto h-full w-full rounded-[15px] bg-theme-slate p-4 md:w-3/4 md:p-0">
-                     
-
-                    <div className="w-full p-4 text-left md:m-10 md:p-0">
-                        <div className="border-b border-theme-muted mb-3">
-                            <p className="font-bold text-theme-text text-[26px] w-1/2">{rol}</p>
+            <div className="bg-theme-panel w-full h-full flex-1 border-[0.3px] border-theme-muted py-6 rounded-b-[10px] md:py-10">
+                <div className="mx-auto w-full rounded-[18px] bg-[#0f1d3d] p-4 md:w-[90%] md:p-6 xl:w-[80%]">
+                    <div className="mb-6 flex items-center justify-between border-b border-[#304266] pb-4">
+                        <p className="text-2xl font-bold text-white md:text-3xl">{rol}</p>
+                        <div className="hidden rounded-full border border-[#3b4d7b] bg-[#101d43] px-3 py-1 text-xs uppercase tracking-[0.2em] text-[#dfe8ff] md:block">
+                            Konto
                         </div>
-                        <div className="mb-3 flex flex-col gap-2 md:flex-row md:gap-5">
-                            <p className="w-full font-bold text-theme-text text-[20px] md:w-1/2">Imie: </p>
-                            <p className="w-full text-theme-text text-[16px] md:w-1/2">{name}</p>
-                        </div>
-                        <div className="mb-3 flex flex-col gap-2 md:flex-row md:gap-5">
-                            <p className="w-full font-bold text-theme-text text-[20px] md:w-1/2">Nazwisko: </p>                    
-                            <p className="w-full text-theme-text text-[16px] md:w-1/2">{surname}</p>
-                        </div>
-                        <div className="mb-3 flex flex-col gap-2 md:flex-row md:gap-5">
-                            <p className="w-full font-bold text-theme-text text-[20px] md:w-1/2">Data urodzenia: </p>
-                            <p className="w-full text-theme-text text-[16px] md:w-1/2">{DataUrodzenia}</p>
-
-                        </div>
-                        <div className="mb-3 flex flex-col gap-2 md:flex-row md:gap-5">
-                            <p className="w-full font-bold text-theme-text text-[20px] md:w-1/2">Email: </p>
-                            <p className="w-full text-theme-text text-[16px] md:w-1/2">{email}</p>
-                        </div>
-                        <div className="mb-3 flex flex-col gap-2 md:flex-row md:gap-5">
-                            <p className="w-full font-bold text-theme-text text-[20px] md:w-1/2">Numer telefonu: </p>
-                            <p className="w-full text-theme-text text-[16px] md:w-1/2">{numerTelefonu}</p>
-
-                        </div>
-                        <div className="mb-3 flex flex-col gap-2 border-b border-theme-muted pb-2 md:flex-row md:gap-5">
-                            <p className="w-full font-bold text-theme-text text-[20px] md:w-1/2">Konto bankowe: </p>
-                            <p className="w-full text-theme-text text-[16px] md:w-1/2">{kontoBankowe}</p>
-
-                        </div>
-                        
-                        {rol === 'Student' &&(
-                            <div>
-                                <div className="flex gap-5 mb-3 ">
-                                    <p className="font-bold text-theme-text text-[14px] w-1/2">Wydział: </p>
-                                    <p className="w-1/2 text-theme-text text-[12px]">{wydzial}</p>
-                                </div>
-                                <div className="flex gap-5 mb-3 ">
-                                    <p className="font-bold text-theme-text text-[14px] w-1/2">Kierunek: </p>
-                                    <p className="w-1/2 text-theme-text text-[12px]">{kierunek}</p>
-                                </div>
-                                <div className="flex gap-5 mb-3 ">
-                                    <p className="font-bold text-theme-text text-[14px] w-1/2">Rok stydiów: </p>
-                                    <p className="w-1/2 text-theme-text text-[12px]">{rok}</p>
-                                </div>
-                                <div className="flex gap-5 mb-3 ">
-                                    <p className="font-bold text-theme-text text-[14px] w-1/2">Semestr: </p>
-                                    <p className="w-1/2 text-theme-text text-[12px]">{semester}</p>
-                                </div>
-                                <div className="flex gap-5 mb-3 ">
-                                    <p className="font-bold text-theme-text text-[14px] w-1/2">Stopień: </p>
-                                    <p className="w-1/2 text-theme-text text-[12px]">{stopien}</p>
-                                </div>
-                                <div className="flex gap-5 mb-3 ">
-                                    <p className="font-bold text-theme-text text-[14px] w-1/2">Tryb studiów: </p>
-                                    <p className="w-1/2 text-theme-text text-[12px]">{trybStudiow}</p>
-                                </div>
-                                
-                                <div className="flex gap-5 mb-3 ">
-                                    <p className="font-bold text-theme-text text-[14px] w-1/2">Numer indeksu: </p>
-                                    <p className="w-1/2 text-theme-text text-[12px]">{index}</p>
-                                </div>
-                                {Specjalnosc != null &&(
-                                    <div className="flex gap-5 mb-3 ">
-                                        <p className="font-bold text-theme-text text-[14px] w-1/2">Specjalność: </p>
-                                        <p className="w-1/2 text-theme-text text-[12px]">{Specjalnosc}</p>
-                                    </div>
-                                )}
-
-                                {grupaLaboratoryjna != null &&(
-                                    <div className="flex gap-5 mb-3 ">
-                                        <p className="font-bold text-theme-text text-[14px] w-1/2">Grupa laboratoryjna: </p>
-                                        <p className="w-1/2 text-theme-text text-[12px]">{grupaLaboratoryjna}</p>
-                                    </div>
-                                )}
-
-                                {grupaCwiczeniowa != null &&(
-                                   <div className="flex gap-5 mb-3 ">
-                                        <p className="font-bold text-theme-text text-[14px] w-1/2">Grupa ćwiczeniowa: </p>
-                                        <p className="w-1/2 text-theme-text text-[12px]">{grupaCwiczeniowa}</p>
-                                    </div> 
-                                )}
-
-                                {grupaWykladowa != null &&(
-                                    <div className="flex gap-5 mb-3 ">
-                                        <p className="font-bold text-theme-text text-[14px] w-1/2">Grupa wykładowa: </p>
-                                        <p className="w-1/2 text-theme-text text-[12px]">{grupaWykladowa}</p>
-                                    </div>
-                                )}
-                            </div>
-                        )}
-
-                        {rol === 'Prowadzący' &&(
-                            <div>
-                                <div className="flex gap-5 mb-3 ">
-                                    <p className="font-bold text-theme-text text-[14px] w-1/2">Tytuł naukowy: </p>
-                                    <p className="w-1/2 text-theme-text text-[12px]">{TytulNaukowy}</p>
-                                </div>
-                                <div className="flex gap-5 mb-3 ">
-                                    <p className="font-bold text-theme-text text-[14px] w-1/2">Katedra: </p>
-                                    <p className="w-1/2 text-theme-text text-[12px]">{katedra}</p>
-                                </div>
-                            </div>
-                        )}
-
-                        {rol === 'Pracownik Dziekanatu' && Odpowiedzialnosc != null &&(
-                            <div>
-                                <div className="flex gap-5 mb-3 ">
-                                    <p className="font-bold text-theme-text text-[14px] w-1/2">Odpowiedzialność: </p>
-                                    <p className="w-1/2 text-theme-text text-[12px]">{Odpowiedzialnosc}</p>
-                                </div>
-                            </div>
-                        )}
                     </div>
 
-                    <div className="w-full mx-auto mt-5">
-                        <img src={photo} alt="zdjecie" className="w-90 h-100 mx-auto border-[0.3px] border-theme-muted"/>
-                        <div className="w-full mx-auto text-center text-theme-text">Zdjęcie użytkownika</div>
+                    <div className="grid gap-4 md:grid-cols-[1.1fr_1.5fr] md:gap-6">
+                        <div className="flex items-center justify-center rounded-[14px] border border-[#304266] bg-[#101d43] p-5">
+                            <div className="flex h-28 w-28 items-center justify-center rounded-full border border-[#7da5ff] bg-[#1a2d56] text-3xl font-bold text-white">
+                                {String(name || '?').charAt(0).toUpperCase()}{String(surname || '?').charAt(0).toUpperCase()}
+                            </div>
+                        </div>
+
+                        <div className="space-y-3 rounded-[14px] border border-[#304266] bg-[#101d43] p-4">
+                            <div className="grid gap-2 md:grid-cols-[180px_1fr] md:items-center">
+                                <p className="font-bold text-[#dfe8ff]">Imie:</p>
+                                <p className="text-white">{name}</p>
+                            </div>
+                            <div className="grid gap-2 md:grid-cols-[180px_1fr] md:items-center">
+                                <p className="font-bold text-[#dfe8ff]">Nazwisko:</p>
+                                <p className="text-white">{surname}</p>
+                            </div>
+                            <div className="grid gap-2 md:grid-cols-[180px_1fr] md:items-center">
+                                <p className="font-bold text-[#dfe8ff]">Data urodzenia:</p>
+                                <p className="text-white">{DataUrodzenia}</p>
+                            </div>
+                            <div className="grid gap-2 md:grid-cols-[180px_1fr] md:items-center">
+                                <p className="font-bold text-[#dfe8ff]">Email:</p>
+                                <p className="break-all text-white">{email}</p>
+                            </div>
+                            <div className="grid gap-2 md:grid-cols-[180px_1fr] md:items-center">
+                                <p className="font-bold text-[#dfe8ff]">Numer telefonu:</p>
+                                <p className="text-white">{numerTelefonu}</p>
+                            </div>
+                            <div className="grid gap-2 md:grid-cols-[180px_1fr] md:items-center">
+                                <p className="font-bold text-[#dfe8ff]">Konto bankowe:</p>
+                                <p className="break-all text-white">{kontoBankowe}</p>
+                            </div>
+                        </div>
                     </div>
+
+                    {extraFields.length > 0 && (
+                        <div className="mt-6 rounded-[14px] border border-[#304266] bg-[#101d43] p-4">
+                            {extraFields
+                                .filter((field) => field.value != null && field.value !== '')
+                                .map((field) => (
+                                    <div key={field.label} className="grid gap-2 py-2 md:grid-cols-[220px_1fr] md:items-center">
+                                        <p className="font-bold text-[#dfe8ff]">{field.label}:</p>
+                                        <p className="text-white">{field.value}</p>
+                                    </div>
+                                ))}
+                        </div>
+                    )}
+
+                    {photo && (
+                        <div className="mt-6 flex justify-center">
+                            <div className="w-full max-w-[360px] rounded-[14px] border border-[#304266] bg-[#101d43] p-4 text-center">
+                                <img src={photo} alt="zdjecie" className="mx-auto h-[220px] w-full max-w-[220px] rounded-[10px] border border-[#304266] object-cover" />
+                                <div className="mt-3 text-sm text-[#dfe8ff]">Zdjęcie użytkownika</div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
