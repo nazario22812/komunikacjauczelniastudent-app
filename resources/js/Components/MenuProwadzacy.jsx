@@ -35,12 +35,12 @@ export default function MenuProwadzacy(){
 
             <aside className={`fixed left-0 top-0 z-40 h-screen w-[78vw] max-w-[240px] border-r border-[#2a3c6a] bg-[#0b1238] text-white transition-transform duration-300 md:static md:w-[250px] md:translate-x-0 ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
                 <div className="flex items-center justify-between gap-2 border-b border-[#2a3c6a] bg-[#0b1238] px-3 py-4">
-                    <div className="flex items-center gap-3 min-w-0">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-md bg-[#f3f6ff]/5 ring-1 ring-[#dfe8ff]/15">
+                    <div className="flex min-w-0 items-center gap-3">
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-[#f3f6ff]/5 ring-1 ring-[#dfe8ff]/15">
                             <img src={Logo} alt="logo" className="h-6 w-6 shrink-0" />
                         </div>
-                        <Link href='/stronaglowna/student' method="get" as='button' className="hover:cursor-pointer min-w-0">
-                            <p className="truncate text-sm font-semibold tracking-wide text-white">MojaUczelnia</p>
+                        <Link href='/stronaglowna/student' method="get" as='button' className="hover:cursor-pointer min-w-0 max-w-[calc(100%-48px)]">
+                            <p className="truncate text-[11px] font-semibold tracking-wide text-white sm:text-sm">MojaUczelnia</p>
                         </Link>
                     </div>
 
