@@ -27,13 +27,17 @@ export default function MenuStudenta(){
             <button
                 type="button"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="fixed left-3 top-3 z-50 inline-flex h-10 w-10 items-center justify-center rounded-lg border border-theme-muted bg-theme-surface text-xl text-theme-text md:hidden"
+                className="fixed left-3 top-3 z-50 inline-flex h-9 w-9 items-center justify-center rounded-md border border-theme-muted bg-theme-surface text-theme-text md:hidden"
                 aria-label="Otwórz menu"
             >
-                ☰
+                <span className="flex w-4 flex-col gap-1">
+                    <span className="block h-0.5 w-full rounded-full bg-current" />
+                    <span className="block h-0.5 w-full rounded-full bg-current" />
+                    <span className="block h-0.5 w-full rounded-full bg-current" />
+                </span>
             </button>
 
-            <aside className={`fixed left-0 top-0 z-40 h-screen w-[240px] border-r border-theme-muted bg-theme-page transition-transform duration-300 md:static md:w-[260px] md:translate-x-0 ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
+            <aside className={`fixed left-0 top-0 z-40 h-screen w-[78vw] max-w-[240px] border-r border-theme-muted bg-theme-page transition-transform duration-300 md:static md:w-[260px] md:translate-x-0 ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
                 <div className="flex items-center justify-between gap-2 border-b border-theme-muted bg-theme-surface px-3 py-3">
                     <div className="flex items-center gap-2 min-w-0">
                         <img src={Logo} alt="logo" className="h-6 w-6 shrink-0" />
@@ -52,26 +56,26 @@ export default function MenuStudenta(){
                 <div className="px-3 py-3 text-theme-muted">
                     <Link href='/mojedane' method="get" as="button" className="hover:cursor-pointer w-full block">
                         <div className="flex h-[38px] items-center gap-x-[10px] border-b border-theme-muted px-2">
-                            <img src={Account} alt="mojedane" className="h-4 w-4" />
-                            <span className="text-[12px]">Moje dane</span>
+                            <img src={Account} alt="mojedane" className="h-4 w-4 shrink-0 object-contain" />
+                            <span className="text-[12px] sm:text-[13px]">Moje dane</span>
                         </div>
                     </Link>
                     <Link href='/planzajec' method="get" as="button" className="hover:cursor-pointer w-full block">
                         <div className="flex h-[38px] items-center gap-x-[10px] border-b border-theme-muted px-2">
-                            <img src={Calendar} alt="planzajec" className="h-4 w-4" />
-                            <span className="text-[12px]">Plan Zajęć</span>
+                            <img src={Calendar} alt="planzajec" className="h-4 w-4 shrink-0 object-contain" />
+                            <span className="text-[12px] sm:text-[13px]">Plan Zajęć</span>
                         </div>
                     </Link>
                     <Link href='/student/edziekanat' method="get" as="button" className="hover:cursor-pointer w-full block">
                         <div className="flex h-[38px] items-center gap-x-[10px] border-b border-theme-muted px-2">
-                            <img src={Inbox} alt="edziekanat" className="h-4 w-4" />
-                            <span className="text-[12px]">E-Dziekanat</span>
+                            <img src={Inbox} alt="edziekanat" className="h-4 w-4 shrink-0 object-contain" />
+                            <span className="text-[12px] sm:text-[13px]">E-Dziekanat</span>
                         </div>
                     </Link>
                     <Link href='/student/mojefinanse' method="get" as="button" className="hover:cursor-pointer w-full block">
                         <div className="flex h-[38px] items-center gap-x-[10px] border-b border-theme-muted px-2">
-                            <img src={Wallet} alt="finanse" className="h-4 w-4" />
-                            <span className="text-[12px]">Moje Finanse</span>
+                            <img src={Wallet} alt="finanse" className="h-4 w-4 shrink-0 object-contain" />
+                            <span className="text-[12px] sm:text-[13px]">Moje Finanse</span>
                         </div>
                     </Link>
 
@@ -85,20 +89,20 @@ export default function MenuStudenta(){
                         <div className={`overflow-hidden pl-3 transition-all duration-300 ease-in-out ${isOpen ? 'max-h-[200px] opacity-100' : 'max-h-0 opacity-0'}`}>
                             <Link href='/student/konsultacje' method="get" as="button" className="hover:cursor-pointer w-full block">
                                 <div className="flex gap-x-[10px] px-2 py-2">
-                                    <img src={Chat} className="h-4 w-4" alt="konsultacje" />
-                                    <span> Konsultacje</span>
+                                    <img src={Chat} className="h-4 w-4 shrink-0 object-contain" alt="konsultacje" />
+                                    <span className="text-[12px] sm:text-[13px]">Konsultacje</span>
                                 </div>
                             </Link>
                             <Link href='/mapa' method="get" as="button" className="hover:cursor-pointer w-full block">
                                 <div className="flex gap-x-[10px] px-2 py-2">
-                                    <img src={Map} className="h-4 w-4" alt="mapakampusu" />
-                                    <span>Mapa kampusu</span>
+                                    <img src={Map} className="h-4 w-4 shrink-0 object-contain" alt="mapakampusu" />
+                                    <span className="text-[12px] sm:text-[13px]">Mapa kampusu</span>
                                 </div>
                             </Link>
                             <Link href='/ogloszeniaiankiety' method="get" as="button" className="hover:cursor-pointer w-full block">
                                 <div className="flex gap-x-[10px] px-2 py-2">
-                                    <img src={Bell} className="h-4 w-4" alt="ogloszeniaiankiety" />
-                                    <span>Ogłoszenia i ankiety</span>
+                                    <img src={Bell} className="h-4 w-4 shrink-0 object-contain" alt="ogloszeniaiankiety" />
+                                    <span className="text-[12px] sm:text-[13px]">Ogłoszenia i ankiety</span>
                                 </div>
                             </Link>
                         </div>
@@ -114,20 +118,20 @@ export default function MenuStudenta(){
                         <div className={`overflow-hidden pl-3 transition-all duration-300 ease-in-out ${isOpen2 ? 'max-h-[200px] opacity-100' : 'max-h-0 opacity-0'}`}>
                             <Link href='/student/ocenykoncowe' method="get" as="button" className="hover:cursor-pointer w-full block">
                                 <div className="flex gap-x-[10px] px-2 py-2">
-                                    <img src={Reward} className="h-4 w-4" alt="oceny" />
-                                    <span>Oceny</span>
+                                    <img src={Reward} className="h-4 w-4 shrink-0 object-contain" alt="oceny" />
+                                    <span className="text-[12px] sm:text-[13px]">Oceny</span>
                                 </div>
                             </Link>
                             <Link href='/student/mojekursy' method="get" as="button" className="hover:cursor-pointer w-full block">
                                 <div className="flex gap-x-[10px] px-2 py-2">
-                                    <img src={List} className="h-4 w-4" alt="mojekursy" />
-                                    <span>Moje kursy</span>
+                                    <img src={List} className="h-4 w-4 shrink-0 object-contain" alt="mojekursy" />
+                                    <span className="text-[12px] sm:text-[13px]">Moje kursy</span>
                                 </div>
                             </Link>
                             <Link href='/student/mojezadania' method="get" as="button" className="hover:cursor-pointer w-full block">
                                 <div className="flex gap-x-[10px] px-2 py-2">
-                                    <img src={Task} className="h-4 w-4" alt="mojezadania" />
-                                    <span>Moje zadania</span>
+                                    <img src={Task} className="h-4 w-4 shrink-0 object-contain" alt="mojezadania" />
+                                    <span className="text-[12px] sm:text-[13px]">Moje zadania</span>
                                 </div>
                             </Link>
                         </div>
