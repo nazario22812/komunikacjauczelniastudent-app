@@ -37,15 +37,14 @@ function Content({ plan = null, listagrup, listakierunkow}){
     
 
     return(
-        <div className="bg-theme-page w-full p-[10px] h-screen flex flex-col box-border">
+        <div className="bg-theme-page w-full min-h-screen p-[10px] flex flex-col box-border">
             <div className="bg-theme-panel w-full flex shrink-0 h-[40px] mx-auto text-center border-[0.3px] border-theme-muted p-[10px] rounded-t-[10px]">
                 <BackButton back={ () => window.history.back()} />
                 <span className="font-bold text-[16px] text-theme-text w-full">Plan zajęć</span>
             </div>
 
             <div className="bg-theme-panel w-full h-full flex flex-col gap-3 border-[0.3px] border-theme-muted pt-3 pb-5 px-1 rounded-b-[10px] md:flex-row">
-                <div className="w-full h-full border border-theme-muted rounded-xl flex flex-col md:w-[80%] md:rounded-l-xl md:rounded-r-xl">
-                    
+                <div className="w-full min-h-[440px] flex-1 overflow-hidden rounded-xl border border-theme-muted bg-theme-page md:rounded-l-xl md:rounded-r-xl">
                     <FullCalendar
                         theme="monarch"
                         colorScheme="dark"
@@ -71,9 +70,6 @@ function Content({ plan = null, listagrup, listakierunkow}){
                         weekNumberFormat={{
                             week: 'narrow'
                         }}
-                        // eventClick={function(info) {
-                        //     info.event.size
-                        // }}
                         eventContent={(arg) => {
                            const props = arg.event.extendedProps;
                            const eventClass = {
@@ -95,38 +91,34 @@ function Content({ plan = null, listagrup, listakierunkow}){
                            };
                         }}
                     />
+                </div>
 
-                    
-                </div> 
-
-                <div className="w-full rounded-[10px] bg-theme-surface px-[20px] py-[33px] md:w-[20%] md:rounded-r-[10px] md:rounded-l-none">
+                <div className="w-full rounded-[10px] bg-theme-surface px-4 py-5 sm:px-[20px] sm:py-[33px] md:w-[280px] md:min-w-[280px] md:rounded-r-[10px] md:rounded-l-none">
                     <form onSubmit={wyszukajGrupe}>
                         <div className="px-[10px] py-[10px]">
-                            <div className="mx-auto w-full text-center text-[16px] text-theme-text">
+                            <div className="mx-auto w-full text-center text-[clamp(0.9rem,1vw+0.6rem,1.1rem)] text-theme-text">
                                 Wybierz grupę
                             </div>
-                            <div className="w-full px-[29px] pt-[40px]">
+                            <div className="w-full pt-6">
                                 <span className="text-[13px] text-theme-text">Kierunek</span>
-                                <Form.Select value={wybranyKierunek} onChange={(e) =>{ setwybranyKierunek(e.target.value); setwybranaGrupa(''); setData('kierunk', e.target.value)}} className="w-full border border-theme-muted rounded-[15px] bg-theme-slate text-theme-text h-[28px]">
+                                <Form.Select value={wybranyKierunek} onChange={(e) =>{ setwybranyKierunek(e.target.value); setwybranaGrupa(''); setData('kierunk', e.target.value)}} className="w-full border border-theme-muted rounded-[15px] bg-theme-slate text-theme-text h-[32px]">
                                     <option>Wybierz kierunek</option>
                                     {listakierunkow && listakierunkow.map((kierunek) => (
                                         <option key={kierunek.idKierunek} value={kierunek.idKierunek}>{kierunek.nazwa}</option>
-                                        
                                     )) }
                                 </Form.Select>
                             </div>
-                            <div className="w-full px-[29px] pt-[40px]">
+                            <div className="w-full pt-6">
                                 <span className="text-[13px] text-theme-text">Grupa</span>
-                                <Form.Select value={wybranaGrupa} onChange={(e) => {setwybranaGrupa(e.target.value); setData('grpa', e.target.value)}} disabled={!wybranyKierunek}  className="w-full border border-theme-muted rounded-[15px] bg-theme-slate text-theme-text h-[28px]">
+                                <Form.Select value={wybranaGrupa} onChange={(e) => {setwybranaGrupa(e.target.value); setData('grpa', e.target.value)}} disabled={!wybranyKierunek} className="w-full border border-theme-muted rounded-[15px] bg-theme-slate text-theme-text h-[32px]">
                                     <option>Wybierz grupę</option>
                                     {filtergrup.map((grupa) => (
                                         <option key={grupa.idGrupaStudenta} value={grupa.idGrupaStudenta}>{grupa.nazwaGrupy}</option>
-
                                     ))}
                                 </Form.Select>
                             </div>
-                            <div className="w-full mx-auto h-[28px] px-[18px] my-3 flex items-center mt-10">
-                                <button disabled={processing} type="submit" className="text-[13px] mx-auto w-3/4 h-full text-theme-text bg-theme-orange rounded-[15px] hover:cursor-pointer active:bg-theme-orange">
+                            <div className="mx-auto mt-10 flex h-[36px] w-full items-center justify-center">
+                                <button disabled={processing} type="submit" className="h-full w-3/4 rounded-[15px] bg-theme-orange text-[13px] text-theme-text hover:cursor-pointer active:bg-theme-orange">
                                     Wyszukaj
                                 </button>
                             </div>

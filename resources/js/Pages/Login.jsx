@@ -28,29 +28,29 @@ export default function Login({ status }){
     }
 
     return (
-        <div className="min-h-screen bg-[#040d2a] px-4 py-8 text-white">
+        <div className="min-h-screen bg-[#040d2a] px-4 py-6 text-white sm:px-5 sm:py-8">
             <Head title="Logowanie" />
 
-            <div className="mx-auto mt-10 w-full max-w-[520px] overflow-hidden rounded-[18px] border border-[#2e3d67] bg-[#0d173a] shadow-[0_0_0_1px_rgba(147,167,255,0.08)]">
-                <div className="border-b border-[#2e3d67] bg-[#0d173a] px-6 py-5">
-                    <div className="mx-auto flex h-[140px] w-[140px] items-center justify-center rounded-[20px] bg-[#0b112d] ring-1 ring-[#f2f7ff]/10">
-                        <img src={image} alt="mojauczelnia" className="h-[100px] w-[100px] object-contain" />
+            <div className="mx-auto mt-6 w-full max-w-[520px] overflow-hidden rounded-[18px] border border-[#2e3d67] bg-[#0d173a] shadow-[0_0_0_1px_rgba(147,167,255,0.08)] sm:mt-10">
+                <div className="border-b border-[#2e3d67] bg-[#0d173a] px-5 py-5 sm:px-6">
+                    <div className="mx-auto flex h-[110px] w-[110px] items-center justify-center rounded-[20px] bg-[#0b112d] ring-1 ring-[#f2f7ff]/10 sm:h-[140px] sm:w-[140px]">
+                        <img src={image} alt="mojauczelnia" className="h-[76px] w-[76px] object-contain sm:h-[100px] sm:w-[100px]" />
                     </div>
                 </div>
 
-                <form onSubmit={submit} className="space-y-4 px-6 py-6 sm:px-8">
+                <form onSubmit={submit} className="space-y-4 px-4 py-5 sm:px-8 sm:py-6">
                     <div className="space-y-2">
                         <label htmlFor="email" className="block text-sm font-medium text-[#dfe8ff]">Email</label>
                         <div className="flex items-center overflow-hidden rounded-xl border border-[#2e3d67] bg-[#0c1535] focus-within:border-[#6ab2ff]">
-                            <span className="flex h-12 w-12 items-center justify-center border-r border-[#2e3d67] bg-[#0d173a]">
-                                <img src={login} alt="login" className="h-5 w-5" />
+                            <span className="flex h-11 w-11 shrink-0 items-center justify-center border-r border-[#2e3d67] bg-[#0d173a] sm:h-12 sm:w-12">
+                                <img src={login} alt="login" className="h-4 w-4 object-contain sm:h-5 sm:w-5" />
                             </span>
                             <input
                                 id="email"
                                 type="email"
                                 name="email"
                                 value={data.email}
-                                className="h-12 w-full bg-transparent px-3 text-white placeholder:text-[#8aa0cf] outline-none"
+                                className="h-11 w-full bg-transparent px-3 text-sm text-white placeholder:text-[#8aa0cf] outline-none sm:h-12 sm:text-base"
                                 autoComplete="username"
                                 placeholder="adam.zielinski@example.pl"
                                 ref={emailInput}
@@ -63,15 +63,15 @@ export default function Login({ status }){
                     <div className="space-y-2">
                         <label htmlFor="password" className="block text-sm font-medium text-[#dfe8ff]">Hasło</label>
                         <div className="flex items-center overflow-hidden rounded-xl border border-[#2e3d67] bg-[#0c1535] focus-within:border-[#6ab2ff]">
-                            <span className="flex h-12 w-12 items-center justify-center border-r border-[#2e3d67] bg-[#0d173a]">
-                                <img src={haslo} alt="haslo" className="h-5 w-5" />
+                            <span className="flex h-11 w-11 shrink-0 items-center justify-center border-r border-[#2e3d67] bg-[#0d173a] sm:h-12 sm:w-12">
+                                <img src={haslo} alt="haslo" className="h-4 w-4 object-contain sm:h-5 sm:w-5" />
                             </span>
                             <input
                                 id="password"
                                 type="password"
                                 name="password"
                                 value={data.password}
-                                className="h-12 w-full bg-transparent px-3 text-white placeholder:text-[#8aa0cf] outline-none"
+                                className="h-11 w-full bg-transparent px-3 text-sm text-white placeholder:text-[#8aa0cf] outline-none sm:h-12 sm:text-base"
                                 autoComplete="current-password"
                                 placeholder="**************"
                                 onChange={(e) => setData('password', e.target.value)}

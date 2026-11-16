@@ -24,8 +24,8 @@ function Content({sale}){
         })
         if(!coords){
             return (
-                <div className="w-full h-screen bg-theme-page text-center p-50 ">
-                    <span className="text-theme-text font-bold text-[48px]">ładowanie mapy</span>
+                <div className="flex min-h-screen w-full items-center justify-center bg-theme-page p-6 text-center">
+                    <span className="text-theme-text text-[clamp(1.5rem,2vw+1rem,3rem)] font-bold">ładowanie mapy</span>
                 </div>
             )
         }
@@ -48,7 +48,7 @@ function Content({sale}){
         // <div className="w-full">
         // </div>
         
-        <div className="bg-theme-page w-full p-[10px] h-screen flex flex-col box-border">
+        <div className="bg-theme-page w-full min-h-screen p-[10px] flex flex-col box-border">
             <ToastContainer
                 position="bottom-right"
                 autoClose={5000}
