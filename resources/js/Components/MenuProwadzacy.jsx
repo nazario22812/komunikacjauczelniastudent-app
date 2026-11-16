@@ -18,36 +18,31 @@ import Chat from '@/../images/chat-bubble-outline.png';
 export default function MenuProwadzacy(){
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    return(
-        <aside className="w-full border-b border-theme-muted bg-theme-page md:w-[260px] md:border-b-0 md:border-r md:border-theme-muted md:h-screen">
-            <div className="flex items-center justify-between gap-2 border-b border-theme-muted bg-theme-surface px-3 py-3">
-                <div className="flex items-center gap-2 min-w-0">
-                    <button
-                        type="button"
-                        onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-theme-muted bg-theme-page text-lg text-theme-text md:hidden"
-                        aria-label="Otwórz menu"
-                    >
-                        ☰
-                    </button>
-                    <img src={Logo} alt="logo" className="h-6 w-6 shrink-0" />
-                    <Link href='/stronaglowna/student' method="get" as='button' className="hover:cursor-pointer min-w-0">
-                        <p className="truncate text-sm font-bold text-theme-text">MojaUczelnia</p>
-                    </Link>
-                </div>
+    return (
+        <>
+            <button
+                type="button"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="fixed left-3 top-3 z-50 inline-flex h-10 w-10 items-center justify-center rounded-lg border border-theme-muted bg-theme-surface text-xl text-theme-text md:hidden"
+                aria-label="Otwórz menu"
+            >
+                ☰
+            </button>
 
-                <div className="hidden items-center gap-2 md:flex">
-                    <Link href='/powiadomienia' method="get" as="button" className="hover:cursor-pointer rounded-lg border border-theme-muted bg-theme-page p-2"><img src={Notification} alt="powiadomienia" className="h-4 w-4" /></Link>
-                    <Link href='/ustawienia' method="get" as="button" className="hover:cursor-pointer rounded-lg border border-theme-muted bg-theme-page p-2"><img src={Settings} alt="ustawienia" className="h-4 w-4" /></Link>
-                    <Link href='/logout' method="post" as="button" className="hover:cursor-pointer rounded-lg border border-theme-muted bg-theme-page p-2"><img src={Exit} alt="logout" className="h-4 w-4" /></Link>
-                </div>
-            </div>
+            <aside className={`fixed left-0 top-0 z-40 h-screen w-[240px] border-r border-theme-muted bg-theme-page transition-transform duration-300 md:static md:w-[260px] md:translate-x-0 ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
+                <div className="flex items-center justify-between gap-2 border-b border-theme-muted bg-theme-surface px-3 py-3">
+                    <div className="flex items-center gap-2 min-w-0">
+                        <img src={Logo} alt="logo" className="h-6 w-6 shrink-0" />
+                        <Link href='/stronaglowna/student' method="get" as='button' className="hover:cursor-pointer min-w-0">
+                            <p className="truncate text-sm font-bold text-theme-text">MojaUczelnia</p>
+                        </Link>
+                    </div>
 
-            <div className={`${isMenuOpen ? 'block' : 'hidden'} md:block`}>
-                <div className="flex items-center justify-end gap-2 border-b border-theme-muted px-3 py-2 md:hidden">
-                    <Link href='/powiadomienia' method="get" as="button" className="hover:cursor-pointer rounded-lg border border-theme-muted bg-theme-page p-2"><img src={Notification} alt="powiadomienia" className="h-4 w-4" /></Link>
-                    <Link href='/ustawienia' method="get" as="button" className="hover:cursor-pointer rounded-lg border border-theme-muted bg-theme-page p-2"><img src={Settings} alt="ustawienia" className="h-4 w-4" /></Link>
-                    <Link href='/logout' method="post" as="button" className="hover:cursor-pointer rounded-lg border border-theme-muted bg-theme-page p-2"><img src={Exit} alt="logout" className="h-4 w-4" /></Link>
+                    <div className="hidden items-center gap-2 md:flex">
+                        <Link href='/powiadomienia' method="get" as="button" className="hover:cursor-pointer rounded-lg border border-theme-muted bg-theme-page p-2"><img src={Notification} alt="powiadomienia" className="h-4 w-4" /></Link>
+                        <Link href='/ustawienia' method="get" as="button" className="hover:cursor-pointer rounded-lg border border-theme-muted bg-theme-page p-2"><img src={Settings} alt="ustawienia" className="h-4 w-4" /></Link>
+                        <Link href='/logout' method="post" as="button" className="hover:cursor-pointer rounded-lg border border-theme-muted bg-theme-page p-2"><img src={Exit} alt="logout" className="h-4 w-4" /></Link>
+                    </div>
                 </div>
 
                 <div className="px-3 py-3 text-theme-muted">
@@ -106,7 +101,7 @@ export default function MenuProwadzacy(){
                         </div>
                     </Link>
                 </div>
-            </div>
-        </aside>
+            </aside>
+        </>
     );
 }
