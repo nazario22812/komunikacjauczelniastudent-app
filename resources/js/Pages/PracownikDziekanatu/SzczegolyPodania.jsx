@@ -47,7 +47,7 @@ function Content({ szczegoly, listaplikow, podanie }){
                                 <button 
                                     onClick={() => handleDecision('Przyjęto')} 
                                     type="button" 
-                                    className={`p-2 rounded-[10px] font-medium text-base hover:cursor-pointer border transition ${
+                                    className={`p-2 rounded-[10px] font-medium text-theme-text hover:cursor-pointer border transition ${
                                         data.selected_status === 'Przyjęto' ? 'bg-green-700 border-white ring-2 ring-white' : 'bg-green-600 border-transparent'
                                     }`}
                                 >
@@ -57,7 +57,7 @@ function Content({ szczegoly, listaplikow, podanie }){
                                 <button 
                                     onClick={() => handleDecision('Odrzucono')} 
                                     type="button" 
-                                    className={`p-2 rounded-[10px] font-medium text-base hover:cursor-pointer border transition ${
+                                    className={`p-2 rounded-[10px] font-medium text-theme-text hover:cursor-pointer border transition ${
                                         data.selected_status === 'Odrzucono' ? 'bg-red-700 border-white ring-2 ring-white' : 'bg-red-600 border-transparent'
                                     }`}
                                 >
