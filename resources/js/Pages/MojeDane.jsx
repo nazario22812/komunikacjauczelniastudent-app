@@ -20,7 +20,7 @@ function Content({ rol, name, surname, email, numerTelefonu, kontoBankowe, DataU
             </div>
 
             <div className="bg-theme-panel w-full h-full flex-1 border-[0.3px] border-theme-muted py-10 rounded-b-[10px]">
-                <div className="mx-auto h-full w-full rounded-[15px] bg-theme-slate p-4 md:w-3/4 md:p-0 md:pl-0">
+                <div className="mx-auto h-full w-full rounded-[15px] bg-theme-slate p-4 md:w-3/4 md:p-0">
                      
 
                     <div className="w-full p-4 text-left md:m-10 md:p-0">
