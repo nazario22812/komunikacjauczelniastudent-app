@@ -1,6 +1,7 @@
 
 import { Link } from "@inertiajs/react";
 import { useState } from "react";
+import { Clock3 } from "lucide-react";
 
 import Logo from "@/../images/logo.png";
 import Notification from "@/../images/notifications-sharp.png";
@@ -29,6 +30,12 @@ export default function MenuDziekanat() {
         },
         {
             href: "",
+            label: "Godziny dziekańskie i rektorskie",
+            icon: Clock3,
+            isLucide: true,
+        },
+        {
+            href: "",
             label: "Ogłoszenia i ankiety",
             icon: Bell,
         },
@@ -48,6 +55,29 @@ export default function MenuDziekanat() {
             icon: Wallet,
         },
     ];
+
+    const renderIcon = (item) => {
+        if (item.isLucide) {
+            const IconComponent = item.icon;
+
+            return (
+                <IconComponent
+                    size={16}
+                    strokeWidth={2}
+                    color="#FFFFFF"
+                    className="!h-[16px] !w-[16px] !max-w-[16px] shrink-0"
+                />
+            );
+        }
+
+        return (
+            <img
+                src={item.icon}
+                alt=""
+                className="!h-[16px] !w-[16px] !max-w-[16px] shrink-0 object-contain brightness-0 invert"
+            />
+        );
+    };
 
     return (
         <>
@@ -96,7 +126,7 @@ export default function MenuDziekanat() {
                         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-[#f3f6ff]/5">
                             <img
                                 src={Logo}
-                                alt="logo"
+                                alt="Logo"
                                 className="!h-[30px] !w-[30px] !max-w-[30px] shrink-0 object-contain"
                             />
                         </div>
@@ -112,11 +142,12 @@ export default function MenuDziekanat() {
                             className="flex h-[38px] min-w-0 items-center justify-center rounded-[8px] transition-all duration-200 hover:bg-[#24345e]"
                             aria-label="Powiadomienia"
                             title="Powiadomienia"
+                            onClick={() => setIsMenuOpen(false)}
                         >
                             <img
                                 src={Notification}
                                 alt=""
-                                className="!h-[19px] !w-[19px] !max-w-[19px] shrink-0 object-contain"
+                                className="!h-[19px] !w-[19px] !max-w-[19px] shrink-0 object-contain brightness-0 invert"
                             />
                         </Link>
 
@@ -125,11 +156,12 @@ export default function MenuDziekanat() {
                             className="flex h-[38px] min-w-0 items-center justify-center rounded-[8px] transition-all duration-200 hover:bg-[#24345e]"
                             aria-label="Ustawienia"
                             title="Ustawienia"
+                            onClick={() => setIsMenuOpen(false)}
                         >
                             <img
                                 src={Settings}
                                 alt=""
-                                className="!h-[19px] !w-[19px] !max-w-[19px] shrink-0 object-contain"
+                                className="!h-[19px] !w-[19px] !max-w-[19px] shrink-0 object-contain brightness-0 invert"
                             />
                         </Link>
 
@@ -144,7 +176,7 @@ export default function MenuDziekanat() {
                             <img
                                 src={Exit}
                                 alt=""
-                                className="!h-[19px] !w-[19px] !max-w-[19px] shrink-0 object-contain"
+                                className="!h-[19px] !w-[19px] !max-w-[19px] shrink-0 object-contain brightness-0 invert"
                             />
                         </Link>
                     </div>
@@ -160,11 +192,7 @@ export default function MenuDziekanat() {
                                 className="block w-full no-underline"
                             >
                                 <div className="flex min-h-[42px] items-center gap-[10px] border-b border-[#2a3c6a] px-2 py-2 text-[13px] text-white transition-colors hover:bg-[#121d4a]">
-                                    <img
-                                        src={item.icon}
-                                        alt=""
-                                        className="!h-[16px] !w-[16px] !max-w-[16px] shrink-0 object-contain opacity-90"
-                                    />
+                                    {renderIcon(item)}
 
                                     <span className="min-w-0 break-words">
                                         {item.label}
@@ -174,14 +202,10 @@ export default function MenuDziekanat() {
                         ) : (
                             <div
                                 key={item.label}
-                                className="flex min-h-[42px] w-full items-center gap-[10px] border-b border-[#2a3c6a] px-2 py-2 text-[13px] text-white opacity-60"
+                                className="flex min-h-[42px] w-full items-center gap-[10px] border-b border-[#2a3c6a] px-2 py-2 text-[13px] text-white"
                                 aria-disabled="true"
                             >
-                                <img
-                                    src={item.icon}
-                                    alt=""
-                                    className="!h-[16px] !w-[16px] !max-w-[16px] shrink-0 object-contain opacity-90"
-                                />
+                                {renderIcon(item)}
 
                                 <span className="min-w-0 break-words">
                                     {item.label}
