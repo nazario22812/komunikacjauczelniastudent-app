@@ -65,6 +65,12 @@ export default function MenuProwadzacy() {
         },
     ];
 
+    const iconClass =
+        "!h-[16px] !w-[16px] !max-w-[16px] shrink-0 object-contain brightness-0 invert";
+
+    const headerIconClass =
+        "!h-[19px] !w-[19px] !max-w-[19px] shrink-0 object-contain brightness-0 invert";
+
     return (
         <>
             <button
@@ -112,7 +118,7 @@ export default function MenuProwadzacy() {
                         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-[#f3f6ff]/5">
                             <img
                                 src={Logo}
-                                alt="logo"
+                                alt="Logo"
                                 className="!h-[30px] !w-[30px] !max-w-[30px] shrink-0 object-contain"
                             />
                         </div>
@@ -128,11 +134,12 @@ export default function MenuProwadzacy() {
                             className="flex h-[38px] min-w-0 items-center justify-center rounded-[8px] transition-all duration-200 hover:bg-[#24345e]"
                             aria-label="Powiadomienia"
                             title="Powiadomienia"
+                            onClick={() => setIsMenuOpen(false)}
                         >
                             <img
                                 src={Notification}
                                 alt=""
-                                className="!h-[19px] !w-[19px] !max-w-[19px] shrink-0 object-contain"
+                                className={headerIconClass}
                             />
                         </Link>
 
@@ -141,11 +148,12 @@ export default function MenuProwadzacy() {
                             className="flex h-[38px] min-w-0 items-center justify-center rounded-[8px] transition-all duration-200 hover:bg-[#24345e]"
                             aria-label="Ustawienia"
                             title="Ustawienia"
+                            onClick={() => setIsMenuOpen(false)}
                         >
                             <img
                                 src={Settings}
                                 alt=""
-                                className="!h-[19px] !w-[19px] !max-w-[19px] shrink-0 object-contain"
+                                className={headerIconClass}
                             />
                         </Link>
 
@@ -160,7 +168,7 @@ export default function MenuProwadzacy() {
                             <img
                                 src={Exit}
                                 alt=""
-                                className="!h-[19px] !w-[19px] !max-w-[19px] shrink-0 object-contain"
+                                className={headerIconClass}
                             />
                         </Link>
                     </div>
@@ -178,7 +186,7 @@ export default function MenuProwadzacy() {
                                 <img
                                     src={item.icon}
                                     alt=""
-                                    className="!h-[16px] !w-[16px] !max-w-[16px] shrink-0 object-contain opacity-90"
+                                    className={iconClass}
                                 />
 
                                 <span className="min-w-0 break-words">

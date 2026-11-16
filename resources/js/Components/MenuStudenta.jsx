@@ -81,6 +81,39 @@ export default function MenuStudenta() {
         },
     ];
 
+    const iconClass =
+        "!h-[16px] !w-[16px] !max-w-[16px] shrink-0 object-contain brightness-0 invert";
+
+    const headerIconClass =
+        "!h-[19px] !w-[19px] !max-w-[19px] shrink-0 object-contain brightness-0 invert";
+
+    const renderMenuItem = (item, small = false) => (
+        <Link
+            key={item.href}
+            href={item.href}
+            onClick={() => setIsMenuOpen(false)}
+            className="block w-full no-underline"
+        >
+            <div
+                className={`flex min-h-[42px] items-center gap-[10px] px-2 py-2 text-white transition-colors hover:bg-[#121d4a] ${
+                    small
+                        ? "text-[12px]"
+                        : "border-b border-[#2a3c6a] text-[13px]"
+                }`}
+            >
+                <img
+                    src={item.icon}
+                    alt=""
+                    className={iconClass}
+                />
+
+                <span className="min-w-0 break-words">
+                    {item.label}
+                </span>
+            </div>
+        </Link>
+    );
+
     return (
         <>
             <button
@@ -128,7 +161,7 @@ export default function MenuStudenta() {
                         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-[#f3f6ff]/5">
                             <img
                                 src={Logo}
-                                alt="logo"
+                                alt="Logo"
                                 className="!h-[30px] !w-[30px] !max-w-[30px] shrink-0 object-contain"
                             />
                         </div>
@@ -144,11 +177,12 @@ export default function MenuStudenta() {
                             className="flex h-[38px] min-w-0 items-center justify-center rounded-[8px] transition-all duration-200 hover:bg-[#24345e]"
                             aria-label="Powiadomienia"
                             title="Powiadomienia"
+                            onClick={() => setIsMenuOpen(false)}
                         >
                             <img
                                 src={Notification}
                                 alt=""
-                                className="!h-[19px] !w-[19px] !max-w-[19px] shrink-0 object-contain"
+                                className={headerIconClass}
                             />
                         </Link>
 
@@ -157,11 +191,12 @@ export default function MenuStudenta() {
                             className="flex h-[38px] min-w-0 items-center justify-center rounded-[8px] transition-all duration-200 hover:bg-[#24345e]"
                             aria-label="Ustawienia"
                             title="Ustawienia"
+                            onClick={() => setIsMenuOpen(false)}
                         >
                             <img
                                 src={Settings}
                                 alt=""
-                                className="!h-[19px] !w-[19px] !max-w-[19px] shrink-0 object-contain"
+                                className={headerIconClass}
                             />
                         </Link>
 
@@ -176,35 +211,16 @@ export default function MenuStudenta() {
                             <img
                                 src={Exit}
                                 alt=""
-                                className="!h-[19px] !w-[19px] !max-w-[19px] shrink-0 object-contain"
+                                className={headerIconClass}
                             />
                         </Link>
                     </div>
                 </div>
 
                 <nav className="hide-scrollbar min-h-0 flex-1 overflow-x-hidden overflow-y-auto px-3 py-3 text-[#eaf0ff]">
-                    {menuItems.map((item) => (
-                        <Link
-                            key={item.href}
-                            href={item.href}
-                            onClick={() => setIsMenuOpen(false)}
-                            className="block w-full no-underline"
-                        >
-                            <div className="flex min-h-[42px] items-center gap-[10px] border-b border-[#2a3c6a] px-2 py-2 text-[13px] text-white hover:bg-[#121d4a]">
-                                <img
-                                    src={item.icon}
-                                    alt=""
-                                    className="!h-[16px] !w-[16px] !max-w-[16px] shrink-0 object-contain opacity-90"
-                                />
+                    {menuItems.map((item) => renderMenuItem(item))}
 
-                                <span className="min-w-0 break-words">
-                                    {item.label}
-                                </span>
-                            </div>
-                        </Link>
-                    ))}
-
-                    <div className="pt-3 pr-2">
+                    <div className="pr-2 pt-3">
                         <button
                             type="button"
                             onClick={() => setIsOpen(!isOpen)}
@@ -231,30 +247,13 @@ export default function MenuStudenta() {
                                     : "max-h-0 opacity-0"
                             }`}
                         >
-                            {komunikacjaItems.map((item) => (
-                                <Link
-                                    key={item.href}
-                                    href={item.href}
-                                    onClick={() => setIsMenuOpen(false)}
-                                    className="block w-full no-underline"
-                                >
-                                    <div className="flex items-center gap-[10px] px-2 py-2 text-[12px] text-white hover:bg-[#121d4a]">
-                                        <img
-                                            src={item.icon}
-                                            alt=""
-                                            className="!h-[16px] !w-[16px] !max-w-[16px] shrink-0 object-contain opacity-90"
-                                        />
-
-                                        <span className="min-w-0 break-words">
-                                            {item.label}
-                                        </span>
-                                    </div>
-                                </Link>
-                            ))}
+                            {komunikacjaItems.map((item) =>
+                                renderMenuItem(item, true)
+                            )}
                         </div>
                     </div>
 
-                    <div className="pt-3 pr-2">
+                    <div className="pr-2 pt-3">
                         <button
                             type="button"
                             onClick={() => setIsOpen2(!isOpen2)}
@@ -281,26 +280,9 @@ export default function MenuStudenta() {
                                     : "max-h-0 opacity-0"
                             }`}
                         >
-                            {naukaItems.map((item) => (
-                                <Link
-                                    key={item.href}
-                                    href={item.href}
-                                    onClick={() => setIsMenuOpen(false)}
-                                    className="block w-full no-underline"
-                                >
-                                    <div className="flex items-center gap-[10px] px-2 py-2 text-[12px] text-white hover:bg-[#121d4a]">
-                                        <img
-                                            src={item.icon}
-                                            alt=""
-                                            className="!h-[16px] !w-[16px] !max-w-[16px] shrink-0 object-contain opacity-90"
-                                        />
-
-                                        <span className="min-w-0 break-words">
-                                            {item.label}
-                                        </span>
-                                    </div>
-                                </Link>
-                            ))}
+                            {naukaItems.map((item) =>
+                                renderMenuItem(item, true)
+                            )}
                         </div>
                     </div>
                 </nav>
