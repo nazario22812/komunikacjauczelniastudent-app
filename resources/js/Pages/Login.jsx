@@ -28,73 +28,71 @@ export default function Login({ status }){
     }
 
     return (
-        <div className="bg-theme-panel min-h-screen p-4">
-            
+        <div className="min-h-screen bg-[#040d2a] px-4 py-8 text-white">
             <Head title="Logowanie" />
-            
-            <div className="bg-theme-login w-md h-1/2 mx-auto mt-60 overflow-hidden px-6 py-4 shadow-md rounded-lg border-[0.1px] border-theme-muted">
-                <img src={image} alt="mojauczelnia" className="w-[240px] h-[240px] mx-auto mb-5" />
-                <form onSubmit={submit} className="">
-                    
-                    {/* email input and label  */}
-                    <div className="w-3/4 mx-auto h-[35] flex border-[0.1px] border-theme-muted m-1 rounded-lg mb-2">   
-                        <label htmlFor="email" className="w-1/4"><img src={login} alt="login" className="w-[24px] h-[24px] mx-auto m-1 fill-white"/></label>
 
-                        <input 
-                            id="email"
-                            type="email"
-                            name="email"
-                            value={data.email}
-                            className="w-3/4 bg-white px-2 rounded-r-lg"
-                            autoComplete="username"
-                            placeholder="adam.zielinski@example.pl"
-
-                            ref={emailInput}
-                            onChange={(e) => setData('email', e.target.value)}
-
-                        />
-
+            <div className="mx-auto mt-10 w-full max-w-[520px] overflow-hidden rounded-[18px] border border-[#2e3d67] bg-[#0d173a] shadow-[0_0_0_1px_rgba(147,167,255,0.08)]">
+                <div className="border-b border-[#2e3d67] bg-[#0d173a] px-6 py-5">
+                    <div className="mx-auto flex h-[140px] w-[140px] items-center justify-center rounded-[20px] bg-[#0b112d] ring-1 ring-[#f2f7ff]/10">
+                        <img src={image} alt="mojauczelnia" className="h-[100px] w-[100px] object-contain" />
                     </div>
-                    <p className="text-white text-[12px] mx-auto text-center ">{errors.email}</p>
+                </div>
 
-
-                    {/* password input and label  */}
-                    <div className="w-3/4 mx-auto h-[35] flex border-[0.1px] border-theme-muted m-1 rounded-lg">
-                        <label htmlFor="password" className="w-1/4 h-full "><img src={haslo} alt="haslo" className="w-[24px] h-[24px] mx-auto m-1 fill-white"/></label>
-                        
-                        <input
-                            id="password"
-                            type="password"
-                            name="password"
-                            value={data.password}
-                            className="w-3/4 bg-white px-2 rounded-r-lg"
-                            autoComplete="current-password"
-                            placeholder="**************"
-                            onChange={(e) => setData('password', e.target.value)}
-                        />
-
+                <form onSubmit={submit} className="space-y-4 px-6 py-6 sm:px-8">
+                    <div className="space-y-2">
+                        <label htmlFor="email" className="block text-sm font-medium text-[#dfe8ff]">Email</label>
+                        <div className="flex items-center overflow-hidden rounded-xl border border-[#2e3d67] bg-[#0c1535] focus-within:border-[#6ab2ff]">
+                            <span className="flex h-12 w-12 items-center justify-center border-r border-[#2e3d67] bg-[#0d173a]">
+                                <img src={login} alt="login" className="h-5 w-5" />
+                            </span>
+                            <input
+                                id="email"
+                                type="email"
+                                name="email"
+                                value={data.email}
+                                className="h-12 w-full bg-transparent px-3 text-white placeholder:text-[#8aa0cf] outline-none"
+                                autoComplete="username"
+                                placeholder="adam.zielinski@example.pl"
+                                ref={emailInput}
+                                onChange={(e) => setData('email', e.target.value)}
+                            />
+                        </div>
+                        <p className="min-h-[18px] text-xs text-red-300">{errors.email}</p>
                     </div>
-                    <p className="text-theme-text text-[12px] mx-auto text-center ">{errors.password}</p>
 
+                    <div className="space-y-2">
+                        <label htmlFor="password" className="block text-sm font-medium text-[#dfe8ff]">Hasło</label>
+                        <div className="flex items-center overflow-hidden rounded-xl border border-[#2e3d67] bg-[#0c1535] focus-within:border-[#6ab2ff]">
+                            <span className="flex h-12 w-12 items-center justify-center border-r border-[#2e3d67] bg-[#0d173a]">
+                                <img src={haslo} alt="haslo" className="h-5 w-5" />
+                            </span>
+                            <input
+                                id="password"
+                                type="password"
+                                name="password"
+                                value={data.password}
+                                className="h-12 w-full bg-transparent px-3 text-white placeholder:text-[#8aa0cf] outline-none"
+                                autoComplete="current-password"
+                                placeholder="**************"
+                                onChange={(e) => setData('password', e.target.value)}
+                            />
+                        </div>
+                        <p className="min-h-[18px] text-xs text-red-300">{errors.password}</p>
+                    </div>
 
                     {status && (
-                        <p className="text-theme-text text-[12px] text-center mt-3">{status}</p>
+                        <p className="text-center text-sm text-[#dfe8ff]">{status}</p>
                     )}
 
-                    <div  className=" w-3/4 mx-auto pt-5">
-                        <button className="w-full h-[35] mt-5 bg-white rounded-lg text-theme-dark-panel font-bold hover:bg-gray-300 hover:cursor-pointer active:bg-gray-500" disabled={processing}>
-                            Zaloguj
-                        </button>
-                    </div>
+                    <button
+                        type="submit"
+                        disabled={processing}
+                        className="mt-2 h-12 w-full rounded-xl bg-[#3b60d4] text-base font-semibold text-white transition hover:bg-[#2d4eb3] disabled:cursor-not-allowed disabled:opacity-70"
+                    >
+                        {processing ? 'Logowanie...' : 'Zaloguj'}
+                    </button>
                 </form>
             </div>
-            
-        
         </div>
-        
-        
-
-        
-
     );
 }
