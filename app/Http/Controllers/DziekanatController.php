@@ -33,12 +33,24 @@ class DziekanatController extends Controller
             'odpowiedz' => ['required', 'string', 'max:2000'],
         ]);
 
-        $podanieModel = Podanie::findOrFail($podanie);
+        $podanieModel = Podanie::with('user')->findOrFail($podanie);
 
         $podanieModel->update([
             'status' => $validated['selected_status'],
             'odpowiedz' => $validated['odpowiedz'],
         ]);
+
+        $autor = $podanieModel->user;
+
+        if ($autor) {
+            $komunikat = Komunikat::create([
+                'temat' => 'Decyzja w sprawie podania: ' . $podanieModel->temat,
+                'tresc' => 'Twoje podanie zostało ' . strtolower($validated['selected_status']) . '.\n\nUzasadnienie: ' . $validated['odpowiedz'],
+                'czyOgloszenie' => 0,
+            ]);
+
+            $komunikat->user()->attach($autor->idUser);
+        }
 
         return redirect()->back()->with('status', 'Decyzja została zapisana.');
     }
