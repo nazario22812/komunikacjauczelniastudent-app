@@ -45,7 +45,7 @@ class DziekanatController extends Controller
         if ($autor) {
             $komunikat = Komunikat::create([
                 'temat' => 'Decyzja w sprawie podania',
-                'tresc' => 'Twoje podanie zostało ' . strtolower($validated['selected_status']) . '.\n\nUzasadnienie: ' . $validated['odpowiedz'],
+                'tresc' => 'Twoje podanie zostało ' . strtolower($validated['selected_status']),
                 'czyOgloszenie' => 0,
             ]);
 
