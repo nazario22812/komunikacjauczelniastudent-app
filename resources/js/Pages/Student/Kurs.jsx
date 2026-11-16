@@ -1,42 +1,45 @@
-import React, { useEffect } from "react";
+
+import React from "react";
 import MenuStudenta from "../../Components/MenuStudenta";
-import { Head, Link, router, usePage } from "@inertiajs/react";
+import { Head, router } from "@inertiajs/react";
 import BackButton from "../../Components/BackButton";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import "react-tabs/style/react-tabs.css";
 
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import 'react-tabs/style/react-tabs.css';
-
-
-
-function Materialy({ materialy }) {
+function Materialy({ materialy = [] }) {
     return (
-        <div className="w-full h-full p-4  flex flex-col gap-3">
+        <div className="flex w-full min-w-0 flex-col gap-3 p-2 sm:p-4">
             {materialy && materialy.length > 0 ? (
-                materialy.map((material) => {
-                    const fileName = material.nazwa.split('/').pop();
+                materialy.map((material, index) => {
+                    const fileName =
+                        material.nazwa?.split("/").pop() || "Plik";
 
                     return (
                         <a
-                            key={material.id}
+                            key={material.id ?? index}
                             href={`/storage/${material.nazwa}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center justify-between p-3 bg-theme-surface border border-theme-muted/30 rounded-[12px] hover:border-theme-orange transition-all duration-200 group"
+                            className="group flex min-w-0 w-full items-center justify-between gap-3 rounded-[12px] border border-theme-muted/30 bg-theme-surface p-3 transition-all duration-200 hover:border-theme-orange"
                         >
-                            <div className="flex items-center gap-3">
-                                <span className="text-[24px]">📄</span>
-                                <span className="text-[16px] text-theme-text font-medium group-hover:text-theme-orange transition-colors">
+                            <div className="flex min-w-0 flex-1 items-center gap-3">
+                                <span className="shrink-0 text-[24px]">
+                                    📄
+                                </span>
+
+                                <span className="min-w-0 break-words [overflow-wrap:anywhere] text-sm font-medium text-theme-text transition-colors group-hover:text-theme-orange sm:text-[16px]">
                                     {fileName}
                                 </span>
                             </div>
-                            <span className="text-theme-muted text-[14px] group-hover:translate-x-1 transition-transform">
-                                Otwórz 
+
+                            <span className="shrink-0 text-xs text-theme-muted transition-transform group-hover:translate-x-1 sm:text-[14px]">
+                                Otwórz
                             </span>
                         </a>
                     );
                 })
             ) : (
-                <div className="w-full mx-auto text-center mt-10 text-[20px] text-theme-muted">
+                <div className="mx-auto mt-10 w-full text-center text-[20px] text-theme-muted">
                     <span>Brak materiałów</span>
                 </div>
             )}
@@ -44,71 +47,138 @@ function Materialy({ materialy }) {
     );
 }
 
-function Sylabusplusliteratura({sylabus, literatura, przedmiot, kurs}){
+function Sylabusplusliteratura({
+    sylabus,
+    literatura = [],
+    przedmiot,
+    kurs,
+}) {
     return (
-        <div className="w-full text-theme-text">
-            <div className="mb-2 ">
-                <span className="font-bold text-[22px]">Informacje o przedmiocie</span>
-                <div className="bg-theme-slate p-5 rounded-[10px] w-full">
-                    <p>Przedmiot: {przedmiot.nazwa}</p>
-                    <p>Semester: {kurs.Semester}</p>
-                    <p>ECTS: {przedmiot.punktyECTS}</p>
-                    <p>Liczba godzin: {sylabus.iloscGodzin}</p>
-                    {sylabus.czyEgzamin === 1 ? (
-                        <p>Egzamin: Tak</p>
-                    ):(
-                        <p>Egzamin: Nie</p>
+        <div className="w-full min-w-0 text-theme-text">
+            <div className="mb-4 min-w-0">
+                <h2 className="mb-2 break-words text-lg font-bold sm:text-[22px]">
+                    Informacje o przedmiocie
+                </h2>
+
+                <div className="bg-theme-slate w-full min-w-0 rounded-[10px] p-3 sm:p-5">
+                    <p className="break-words">
+                        Przedmiot: {przedmiot?.nazwa}
+                    </p>
+
+                    <p>Semestr: {kurs?.Semester}</p>
+
+                    <p>ECTS: {przedmiot?.punktyECTS}</p>
+
+                    <p>Liczba godzin: {sylabus?.iloscGodzin}</p>
+
+                    <p>
+                        Egzamin:{" "}
+                        {Number(sylabus?.czyEgzamin) === 1
+                            ? "Tak"
+                            : "Nie"}
+                    </p>
+                </div>
+            </div>
+
+            <div className="mb-4 min-w-0">
+                <h2 className="mb-2 break-words text-lg font-bold sm:text-[22px]">
+                    Opis przedmiotu
+                </h2>
+
+                <div className="bg-theme-slate w-full min-w-0 rounded-[10px] p-3 sm:p-5">
+                    <p className="break-words whitespace-pre-wrap [overflow-wrap:anywhere]">
+                        {sylabus?.opisPrzedmiotu}
+                    </p>
+                </div>
+            </div>
+
+            <div className="mb-4 min-w-0">
+                <h2 className="mb-2 break-words text-lg font-bold sm:text-[22px]">
+                    Warunki zaliczenia
+                </h2>
+
+                <div className="bg-theme-slate w-full min-w-0 rounded-[10px] p-3 sm:p-5">
+                    <p className="break-words whitespace-pre-wrap [overflow-wrap:anywhere]">
+                        {sylabus?.warunkiZaliczenia}
+                    </p>
+                </div>
+            </div>
+
+            <div className="min-w-0">
+                <h2 className="mb-2 break-words text-lg font-bold sm:text-[22px]">
+                    Literatura
+                </h2>
+
+                <div className="bg-theme-slate w-full min-w-0 rounded-[10px] p-3 sm:p-5">
+                    {literatura && literatura.length > 0 ? (
+                        literatura.map((ksiazka, index) => (
+                            <div
+                                key={ksiazka.id ?? index}
+                                className="min-w-0 border-b border-theme-page py-2 last:border-b-0"
+                            >
+                                <p className="break-words [overflow-wrap:anywhere] text-base sm:text-[18px]">
+                                    {ksiazka.nazwa}
+                                </p>
+
+                                <p className="mt-1 break-words whitespace-pre-wrap text-sm font-thin">
+                                    {ksiazka.opis}
+                                </p>
+                            </div>
+                        ))
+                    ) : (
+                        <p className="text-theme-muted">
+                            Brak literatury
+                        </p>
                     )}
-                </div>
-            </div>
-            <div className="mb-2 ">
-                <span className="font-bold text-[22px]">Opis przedmiotu</span>
-                <div className="bg-theme-slate p-5 rounded-[10px] w-full">
-                    <p>{sylabus.opisPrzedmiotu}</p>
-                </div>
-            </div>
-            <div className="mb-2 ">
-                <span className="font-bold text-[22px]">Warunki zaliczenia</span>
-                <div className="bg-theme-slate p-5 rounded-[10px] w-full">
-                    <p>{sylabus.warunkiZaliczenia}</p>
-                </div>        
-            </div>
-            <div>
-                <span className="font-bold text-[22px]">Literatura</span>
-                <div className="bg-theme-slate p-5 rounded-[10px] w-full">
-                    {literatura.map((ksiazka) => (
-                        <div key={ksiazka.id} className="border-b border-theme-page pb-1">
-                            <p className="text-[18px]">{ksiazka.nazwa}</p>
-                            <p className="text-[14px] font-thin">{ksiazka.opis}</p>
-                        </div>
-                    ))}
                 </div>
             </div>
         </div>
     );
 }
 
-function Oceny({oceny}){
-    return(
-        <div className="overflow-x-auto rounded-[10px] border border-gray-700/60">
-            <table className="w-full text-left border-collapse">
+function Oceny({ oceny = [] }) {
+    return (
+        <div className="min-w-0 w-full overflow-hidden rounded-[10px] border border-gray-700/60">
+            <table className="w-full table-fixed border-collapse text-left">
+                <colgroup>
+                    <col style={{ width: "75%" }} />
+                    <col style={{ width: "25%" }} />
+                </colgroup>
+
                 <thead>
-                    <tr className="border-b border-gray-700 text-theme-muted text-[14px]">
-                        <th className="p-3 font-medium">Nazwa Zadania</th>
-                        <th className="p-3 font-medium">Ocena</th>
+                    <tr className="border-b border-gray-700 text-[14px] text-theme-muted">
+                        <th className="p-2 font-medium sm:p-3">
+                            Nazwa Zadania
+                        </th>
+
+                        <th className="p-2 font-medium sm:p-3">
+                            Ocena
+                        </th>
                     </tr>
                 </thead>
+
                 <tbody className="divide-y divide-gray-800 text-[14px]">
                     {oceny && oceny.length > 0 ? (
-                        oceny.map((ocena) => (
-                            <tr key={ocena.id} className="hover:bg-theme-slate/50 transition-colors">
-                                <td className="p-3 font-medium text-theme-text">{ocena.nazwaZadania || '—'}</td>
-                                <td className="p-3 font-bold text-theme-text">{ocena.skalaOceny}</td>
+                        oceny.map((ocena, index) => (
+                            <tr
+                                key={ocena.id ?? index}
+                                className="transition-colors hover:bg-theme-slate/50"
+                            >
+                                <td className="break-words whitespace-normal [overflow-wrap:anywhere] p-2 font-medium text-theme-text sm:p-3">
+                                    {ocena.nazwaZadania || "—"}
+                                </td>
+
+                                <td className="break-words whitespace-normal p-2 font-bold text-theme-text sm:p-3">
+                                    {ocena.skalaOceny}
+                                </td>
                             </tr>
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="5" className="p-4 text-center text-theme-muted">
+                            <td
+                                colSpan={2}
+                                className="p-4 text-center text-theme-muted"
+                            >
                                 Brak ocen
                             </td>
                         </tr>
@@ -119,33 +189,38 @@ function Oceny({oceny}){
     );
 }
 
-
-function Zadania({ zadania }){
-    return(
-        // <lu>
-        //     {zadania.map((zadanie) => (
-        //         <li key={zadanie.id}>
-        //             {zadanie.nazwaZadania}
-        //         </li>
-        //     ))}
-        // </lu>
-        <div className="overflow-x-auto rounded-[10px] border border-gray-700/60">
-            <table className="w-full text-left border-collapse">
+function Zadania({ zadania = [] }) {
+    return (
+        <div className="min-w-0 w-full overflow-hidden rounded-[10px] border border-gray-700/60">
+            <table className="w-full table-fixed border-collapse text-left">
                 <thead>
-                    <tr className="border-b border-gray-700 text-theme-muted text-[14px]">
-                        <th className="p-3 font-medium">Nazwa Zadania</th>
+                    <tr className="border-b border-gray-700 text-[14px] text-theme-muted">
+                        <th className="p-2 font-medium sm:p-3">
+                            Nazwa Zadania
+                        </th>
                     </tr>
                 </thead>
+
                 <tbody className="divide-y divide-gray-800 text-[14px]">
                     {zadania && zadania.length > 0 ? (
-                        zadania.map((zadanie) => (
-                            <tr key={zadanie.id} onClick={() => router.get(`/student/kurs/${zadanie.idZadanie}`)} className="hover:bg-theme-dark-slate/50 transition-colors cursor-pointer">
-                                <td  className="p-3 font-medium text-theme-text">{zadanie.nazwaZadania || '—'}</td>
+                        zadania.map((zadanie, index) => (
+                            <tr
+                                key={zadanie.idZadanie ?? index}
+                                onClick={() =>
+                                    router.get(
+                                        `/student/kurs/${zadanie.idZadanie}`
+                                    )
+                                }
+                                className="cursor-pointer transition-colors hover:bg-theme-slate/50"
+                            >
+                                <td className="break-words whitespace-normal [overflow-wrap:anywhere] p-2 font-medium text-theme-text sm:p-3">
+                                    {zadanie.nazwaZadania || "—"}
+                                </td>
                             </tr>
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="5" className="p-4 text-theme-text text-theme-muted">
+                            <td className="p-4 text-center text-theme-muted">
                                 Brak zadań
                             </td>
                         </tr>
@@ -156,74 +231,127 @@ function Zadania({ zadania }){
     );
 }
 
-function Content({ kurs, materialy, sylabus, literatura, przedmiot, oceny, zadania }){
-   
-
-    
+function Content({
+    kurs,
+    materialy,
+    sylabus,
+    literatura,
+    przedmiot,
+    oceny,
+    zadania,
+}) {
     return (
-        
-       <div className="bg-theme-page w-full p-[10px] h-screen flex flex-col box-border">
-            <div className="bg-theme-page w-full flex shrink-0 h-[40px] mx-auto text-center border-b-[0.3px] border-theme-muted p-[10px] rounded-t-[10px]">
-                <BackButton back={ () => window.history.back()} />
-                <span className="font-bold text-[16px] text-theme-text w-full">Kurs</span>
-            </div>
-            <div className="w-full flex-1 min-h-0 pt-3 pb-2 px-4 rounded-b-[10px] flex flex-col relative ">
-                <div className="bg-theme-surface w-full h-[15%] mx-auto rounded-t-[15px] px-[12px] flex text-left items-center" > 
-                    <div>
-                        <span className="text-theme-text font-bold text-[36px] ">{kurs.nazwa}</span><br />
-                        <span className="text-theme-text font-thin text-[20px] ">{kurs.prowadzacy.TytulNaukowy} {kurs.prowadzacy.user.name} {kurs.prowadzacy.user.surname}</span>   
-                    </div>
-                    
-                </div>   
-                    <div className="bg-theme-slate w-full flex-1 min-h-0 flex flex-col p-5 rounded-b-[15px]">                    
-                    
-                        <div className="w-full flex-1 min-h-0 flex flex-col">
-                        <Tabs
-                            className="w-full flex flex-col flex-1 min-h-0"
-                            selectedTabPanelClassName="!block"
-                        >
-                            <TabList className="flex border-b border-theme-muted space-x-8 text-theme-text  cursor-pointer list-none text-center">
-                                <Tab className="w-full" selectedClassName="!border-0 !bg-theme-surface !rounded-t-[10px]">Materiały</Tab>
-                                <Tab className="w-full" selectedClassName="!border-0 !bg-theme-surface !rounded-t-[10px]">Zadania</Tab>
-                                <Tab className="w-full" selectedClassName="!border-0 !bg-theme-surface !rounded-t-[10px]">Oceny</Tab>
-                                <Tab className="w-full" selectedClassName="!border-0 !bg-theme-surface !rounded-t-[10px]">Dodatkowa informacja</Tab>
-                            </TabList>
+        <div className="bg-theme-page flex h-dvh min-h-0 min-w-0 w-full flex-1 flex-col overflow-hidden box-border p-2 sm:p-[10px]">
+            <div className="bg-theme-page mx-auto flex h-[40px] w-full shrink-0 items-center rounded-t-[10px] border-b-[0.3px] border-theme-muted px-2 sm:px-[10px]">
+                <div className="flex w-[42px] shrink-0 items-center justify-start">
+                    <BackButton back={() => window.history.back()} />
+                </div>
 
-                            <TabPanel className="hidden w-full flex-1 min-h-0 bg-theme-surface rounded-b-[10px] theme-text p-5 overflow-y-auto custom-scrollbar">
-                                <Materialy materialy={materialy}/>
-                            </TabPanel>
-                            <TabPanel className="hidden w-full flex-1 min-h-0 bg-theme-surface rounded-b-[10px] theme-text p-5 overflow-y-auto custom-scrollbar">
-                                <Zadania zadania={zadania}/>
-                            </TabPanel>
-                             <TabPanel className="hidden w-full flex-1 min-h-0 bg-theme-surface rounded-b-[10px] theme-text p-5 overflow-y-auto custom-scrollbar">
-                                <Oceny oceny={oceny}/>
-                            </TabPanel>
-                             <TabPanel className="hidden w-full flex-1 min-h-0 bg-theme-surface rounded-b-[10px] theme-text p-5 overflow-y-auto custom-scrollbar">
-                                <Sylabusplusliteratura sylabus={sylabus} literatura={literatura} przedmiot={przedmiot} kurs={kurs}/>
-                            </TabPanel>
-                        </Tabs>
+                <span className="min-w-0 flex-1 text-center text-[16px] font-bold text-theme-text">
+                    Kurs
+                </span>
+
+                <div className="w-[42px] shrink-0" />
+            </div>
+
+            <div className="relative flex min-h-0 min-w-0 w-full flex-1 flex-col rounded-b-[10px] px-0 pb-2 pt-3 sm:px-2 md:px-4">
+                <div className="bg-theme-surface flex min-w-0 w-full shrink-0 items-center rounded-t-[15px] px-3 py-4 sm:min-h-[100px] sm:px-4 md:px-[12px]">
+                    <div className="min-w-0 w-full">
+                        <h1 className="break-words [overflow-wrap:anywhere] text-xl font-bold text-theme-text sm:text-2xl lg:text-[36px]">
+                            {kurs?.nazwa}
+                        </h1>
+
+                        <p className="mt-2 break-words text-sm font-thin text-theme-text sm:text-base lg:text-[20px]">
+                            {kurs?.prowadzacy?.TytulNaukowy}{" "}
+                            {kurs?.prowadzacy?.user?.name}{" "}
+                            {kurs?.prowadzacy?.user?.surname}
+                        </p>
                     </div>
-                    
-                </div> 
-            </div>        
+                </div>
+
+                <div className="bg-theme-slate flex min-h-0 min-w-0 w-full flex-1 flex-col rounded-b-[15px] p-2 sm:p-3 md:p-5">
+                    <Tabs className="flex min-h-0 min-w-0 w-full flex-1 flex-col">
+                        <TabList className="hide-scrollbar flex w-full min-w-0 shrink-0 gap-1 overflow-x-auto overscroll-x-contain border-b border-theme-muted text-center text-theme-text sm:gap-3 lg:gap-8">
+                            {[
+                                "Materiały",
+                                "Zadania",
+                                "Oceny",
+                                "Dodatkowa informacja",
+                            ].map((label) => (
+                                <Tab
+                                    key={label}
+                                    className="flex min-h-[44px] shrink-0 cursor-pointer items-center justify-center whitespace-nowrap rounded-t-[10px] px-3 py-2 text-sm outline-none sm:flex-1 sm:px-4 sm:text-base"
+                                    selectedClassName="!border-0 !bg-theme-surface !rounded-t-[10px]"
+                                >
+                                    {label}
+                                </Tab>
+                            ))}
+                        </TabList>
+
+                        <TabPanel
+                            className="hidden min-h-0 min-w-0 w-full flex-1 overflow-x-hidden overflow-y-auto rounded-b-[10px] bg-theme-surface p-2 text-theme-text custom-scrollbar sm:p-4 md:p-5"
+                            selectedClassName="!block"
+                        >
+                            <Materialy materialy={materialy} />
+                        </TabPanel>
+
+                        <TabPanel
+                            className="hidden min-h-0 min-w-0 w-full flex-1 overflow-x-hidden overflow-y-auto rounded-b-[10px] bg-theme-surface p-2 text-theme-text custom-scrollbar sm:p-4 md:p-5"
+                            selectedClassName="!block"
+                        >
+                            <Zadania zadania={zadania} />
+                        </TabPanel>
+
+                        <TabPanel
+                            className="hidden min-h-0 min-w-0 w-full flex-1 overflow-x-hidden overflow-y-auto rounded-b-[10px] bg-theme-surface p-2 text-theme-text custom-scrollbar sm:p-4 md:p-5"
+                            selectedClassName="!block"
+                        >
+                            <Oceny oceny={oceny} />
+                        </TabPanel>
+
+                        <TabPanel
+                            className="hidden min-h-0 min-w-0 w-full flex-1 overflow-x-hidden overflow-y-auto rounded-b-[10px] bg-theme-surface p-2 text-theme-text custom-scrollbar sm:p-4 md:p-5"
+                            selectedClassName="!block"
+                        >
+                            <Sylabusplusliteratura
+                                sylabus={sylabus}
+                                literatura={literatura}
+                                przedmiot={przedmiot}
+                                kurs={kurs}
+                            />
+                        </TabPanel>
+                    </Tabs>
+                </div>
+            </div>
         </div>
-        
     );
 }
 
-export default function MojeKursy({ auth, kurs, materialy, sylabus, literatura, przedmiot, oceny, zadania }) {
-    
+export default function MojeKursy({
+    auth,
+    kurs,
+    materialy,
+    sylabus,
+    literatura,
+    przedmiot,
+    oceny,
+    zadania,
+}) {
     return (
-        // <div>
-        //     <p>ja student</p>
-        // </div>
+        <div className="flex h-dvh min-h-0 min-w-0 w-full overflow-hidden">
+            <Head title="Moje kursy" />
 
-        // 
-        <div className="flex">
-           
-            <Head title="Moje kursy"/>
-            <MenuStudenta/>
-            <Content kurs={kurs} materialy={materialy} sylabus={sylabus} literatura={literatura} przedmiot={przedmiot} oceny={oceny} zadania={zadania}/>
+            <MenuStudenta />
+
+            <Content
+                kurs={kurs}
+                materialy={materialy}
+                sylabus={sylabus}
+                literatura={literatura}
+                przedmiot={przedmiot}
+                oceny={oceny}
+                zadania={zadania}
+            />
         </div>
     );
 }

@@ -183,6 +183,7 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: none !important;
 }
 
+
 @media (max-width: 768px) {
   html {
     font-size: 14px;
@@ -198,18 +199,13 @@ h1, h2, h3, h4, h5, h6 {
     flex-shrink: 0;
   }
 
+  /* Responsywne tabele */
   table {
     display: block;
     width: 100%;
+    max-width: 100%;
     overflow-x: auto;
     white-space: nowrap;
-  }
-
-  thead,
-  tbody,
-  tr {
-    display: table;
-    width: 100%;
   }
 
   th,
@@ -217,11 +213,13 @@ h1, h2, h3, h4, h5, h6 {
     min-width: 120px;
   }
 
+  /* Responsywna mapa */
   .leaflet-container {
-    min-height: 360px !important;
-    height: 52vh !important;
+    min-height: 0 !important;
+    height: 100% !important;
   }
 }
+
 
 @layer utilities {
   .bg-theme-dark-page { background-color: var(--theme-dark-page); }
@@ -339,11 +337,79 @@ h1, h2, h3, h4, h5, h6 {
   .divide-theme-muted { border-color: var(--theme-muted); }
 }
 
-/* .carousel-control-prev-icon,
-.carousel-control-next-icon {
-    filter: invert(1) grayscale(100);
-    width: 2rem;
-    height: 2rem;
-} */
+.settings-page {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.settings-page input,
+.settings-page select,
+.settings-page button {
+  max-width: 100%;
+}
+
+/* Telefony */
+@media (max-width: 639px) {
+  .settings-page {
+    overflow-x: hidden;
+  }
+}
+
+@media (max-width: 767px) {
+    .fc {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .fc .fc-toolbar {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .fc .fc-toolbar-title {
+        font-size: 15px;
+    }
+
+    .fc .fc-button {
+        font-size: 12px;
+        padding: 5px 8px;
+    }
+
+    .fc .fc-timegrid-slot-label {
+        font-size: 11px;
+    }
+
+    .fc .fc-col-header-cell-cushion {
+        font-size: 12px;
+    }
+
+    .fc .fc-timegrid-event {
+        overflow: hidden;
+    }
+
+    .fc .fc-timegrid-event-harness {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 479px) {
+    .fc .fc-toolbar {
+        justify-content: center;
+    }
+
+    .fc .fc-toolbar-chunk {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
 
 
+.hide-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
