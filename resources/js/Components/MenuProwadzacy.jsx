@@ -33,75 +33,77 @@ export default function MenuProwadzacy(){
                 </span>
             </button>
 
-            <aside className={`fixed left-0 top-0 z-40 h-screen w-[78vw] max-w-[240px] border-r border-theme-muted bg-theme-page transition-transform duration-300 md:static md:w-[260px] md:translate-x-0 ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
-                <div className="flex items-center justify-between gap-2 border-b border-theme-muted bg-theme-surface px-3 py-3">
-                    <div className="flex items-center gap-2 min-w-0">
-                        <img src={Logo} alt="logo" className="h-6 w-6 shrink-0" />
+            <aside className={`fixed left-0 top-0 z-40 h-screen w-[78vw] max-w-[240px] border-r border-[#2a3c6a] bg-[#0b1238] text-white transition-transform duration-300 md:static md:w-[250px] md:translate-x-0 ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
+                <div className="flex items-center justify-between gap-2 border-b border-[#2a3c6a] bg-[#0b1238] px-3 py-4">
+                    <div className="flex items-center gap-3 min-w-0">
+                        <div className="flex h-9 w-9 items-center justify-center rounded-md bg-[#f3f6ff]/5 ring-1 ring-[#dfe8ff]/15">
+                            <img src={Logo} alt="logo" className="h-6 w-6 shrink-0" />
+                        </div>
                         <Link href='/stronaglowna/student' method="get" as='button' className="hover:cursor-pointer min-w-0">
-                            <p className="truncate text-sm font-bold text-theme-text">MojaUczelnia</p>
+                            <p className="truncate text-sm font-semibold tracking-wide text-white">MojaUczelnia</p>
                         </Link>
                     </div>
 
                     <div className="hidden items-center gap-2 md:flex">
-                        <Link href='/powiadomienia' method="get" as="button" className="hover:cursor-pointer rounded-lg border border-theme-muted bg-theme-page p-2"><img src={Notification} alt="powiadomienia" className="h-4 w-4" /></Link>
-                        <Link href='/ustawienia' method="get" as="button" className="hover:cursor-pointer rounded-lg border border-theme-muted bg-theme-page p-2"><img src={Settings} alt="ustawienia" className="h-4 w-4" /></Link>
-                        <Link href='/logout' method="post" as="button" className="hover:cursor-pointer rounded-lg border border-theme-muted bg-theme-page p-2"><img src={Exit} alt="logout" className="h-4 w-4" /></Link>
+                        <Link href='/powiadomienia' method="get" as="button" className="hover:cursor-pointer rounded-lg border border-[#2a3c6a] bg-[#121d4a] p-2"><img src={Notification} alt="powiadomienia" className="h-4 w-4" /></Link>
+                        <Link href='/ustawienia' method="get" as="button" className="hover:cursor-pointer rounded-lg border border-[#2a3c6a] bg-[#121d4a] p-2"><img src={Settings} alt="ustawienia" className="h-4 w-4" /></Link>
+                        <Link href='/logout' method="post" as="button" className="hover:cursor-pointer rounded-lg border border-[#2a3c6a] bg-[#121d4a] p-2"><img src={Exit} alt="logout" className="h-4 w-4" /></Link>
                     </div>
                 </div>
 
-                <div className="px-3 py-3 text-theme-muted">
+                <div className="px-3 py-3 text-[#eaf0ff]">
                     <Link href='/mojedane' method="get" as="button" className="hover:cursor-pointer w-full block">
-                        <div className="flex h-[38px] items-center gap-x-[10px] border-b border-theme-muted px-2">
-                            <img src={Account} alt="mojedane" className="h-4 w-4 shrink-0 object-contain" />
-                            <span className="text-[12px] sm:text-[13px]">Moje dane</span>
+                        <div className="flex h-[42px] items-center gap-x-[10px] border-b border-[#2a3c6a] px-2 text-[13px] text-white">
+                            <img src={Account} alt="mojedane" className="h-4 w-4 shrink-0 object-contain opacity-90" />
+                            <span>Moje dane</span>
                         </div>
                     </Link>
                     <Link href='/planzajec' method="get" as="button" className="hover:cursor-pointer w-full block">
-                        <div className="flex h-[38px] items-center gap-x-[10px] border-b border-theme-muted px-2">
-                            <img src={Calendar} alt="planzajec" className="h-4 w-4 shrink-0 object-contain" />
-                            <span className="text-[12px] sm:text-[13px]">Plan Zajęć</span>
+                        <div className="flex h-[42px] items-center gap-x-[10px] border-b border-[#2a3c6a] px-2 text-[13px] text-white">
+                            <img src={Calendar} alt="planzajec" className="h-4 w-4 shrink-0 object-contain opacity-90" />
+                            <span>Plan Zajęć</span>
                         </div>
                     </Link>
                     <Link href='/mapa' method="get" as="button" className="hover:cursor-pointer w-full block">
-                        <div className="flex h-[38px] items-center gap-x-[10px] border-b border-theme-muted px-2">
-                            <img src={Map} alt="mapakampusu" className="h-4 w-4 shrink-0 object-contain" />
-                            <span className="text-[12px] sm:text-[13px]">Mapa kampusu</span>
+                        <div className="flex h-[42px] items-center gap-x-[10px] border-b border-[#2a3c6a] px-2 text-[13px] text-white">
+                            <img src={Map} alt="mapakampusu" className="h-4 w-4 shrink-0 object-contain opacity-90" />
+                            <span>Mapa kampusu</span>
                         </div>
                     </Link>
                     <Link href='/ogloszeniaiankiety' method="get" as="button" className="hover:cursor-pointer w-full block">
-                        <div className="flex h-[38px] items-center gap-x-[10px] border-b border-theme-muted px-2">
-                            <img src={Bell} alt="ogloszeniaiankiety" className="h-4 w-4 shrink-0 object-contain" />
-                            <span className="text-[12px] sm:text-[13px]">Ogłoszenia i ankiety</span>
+                        <div className="flex h-[42px] items-center gap-x-[10px] border-b border-[#2a3c6a] px-2 text-[13px] text-white">
+                            <img src={Bell} alt="ogloszeniaiankiety" className="h-4 w-4 shrink-0 object-contain opacity-90" />
+                            <span>Ogłoszenia i ankiety</span>
                         </div>
                     </Link>
                     <Link href='/prowadzacy/konsultacje' method="get" as="button" className="hover:cursor-pointer w-full block">
-                        <div className="flex h-[38px] items-center gap-x-[10px] border-b border-theme-muted px-2">
-                            <img src={Chat} alt="konsultacje" className="h-4 w-4 shrink-0 object-contain" />
-                            <span className="text-[12px] sm:text-[13px]">Konsultacje</span>
+                        <div className="flex h-[42px] items-center gap-x-[10px] border-b border-[#2a3c6a] px-2 text-[13px] text-white">
+                            <img src={Chat} alt="konsultacje" className="h-4 w-4 shrink-0 object-contain opacity-90" />
+                            <span>Konsultacje</span>
                         </div>
                     </Link>
                     <Link href='/prowadzacy/rezerwacje' method="get" as="button" className="hover:cursor-pointer w-full block">
-                        <div className="flex h-[38px] items-center gap-x-[10px] border-b border-theme-muted px-2">
-                            <img src={Chat} alt="rezerwacje" className="h-4 w-4 shrink-0 object-contain" />
-                            <span className="text-[12px] sm:text-[13px]">Rezerwacje sal</span>
+                        <div className="flex h-[42px] items-center gap-x-[10px] border-b border-[#2a3c6a] px-2 text-[13px] text-white">
+                            <img src={Chat} alt="rezerwacje" className="h-4 w-4 shrink-0 object-contain opacity-90" />
+                            <span>Rezerwacje sal</span>
                         </div>
                     </Link>
                     <Link href='/prowadzacy/wystawienieocen' method="get" as="button" className="hover:cursor-pointer w-full block">
-                        <div className="flex h-[38px] items-center gap-x-[10px] border-b border-theme-muted px-2">
-                            <img src={Reward} alt="wystawienieocen" className="h-4 w-4 shrink-0 object-contain" />
-                            <span className="text-[12px] sm:text-[13px]">Wystawienie ocen</span>
+                        <div className="flex h-[42px] items-center gap-x-[10px] border-b border-[#2a3c6a] px-2 text-[13px] text-white">
+                            <img src={Reward} alt="wystawienieocen" className="h-4 w-4 shrink-0 object-contain opacity-90" />
+                            <span>Wystawienie ocen</span>
                         </div>
                     </Link>
                     <Link href='/prowadzacy/mojekursy' method="get" as="button" className="hover:cursor-pointer w-full block">
-                        <div className="flex h-[38px] items-center gap-x-[10px] border-b border-theme-muted px-2">
-                            <img src={List} alt="mojekursy" className="h-4 w-4 shrink-0 object-contain" />
-                            <span className="text-[12px] sm:text-[13px]">Moje kursy</span>
+                        <div className="flex h-[42px] items-center gap-x-[10px] border-b border-[#2a3c6a] px-2 text-[13px] text-white">
+                            <img src={List} alt="mojekursy" className="h-4 w-4 shrink-0 object-contain opacity-90" />
+                            <span>Moje kursy</span>
                         </div>
                     </Link>
                     <Link href='/prowadzacy/komunikaty' method="get" as="button" className="hover:cursor-pointer w-full block">
-                        <div className="flex h-[38px] items-center gap-x-[10px] border-b border-theme-muted px-2">
-                            <img src={Bell} alt="komunikaty" className="h-4 w-4 shrink-0 object-contain" />
-                            <span className="text-[12px] sm:text-[13px]">Komunikaty</span>
+                        <div className="flex h-[42px] items-center gap-x-[10px] border-b border-[#2a3c6a] px-2 text-[13px] text-white">
+                            <img src={Bell} alt="komunikaty" className="h-4 w-4 shrink-0 object-contain opacity-90" />
+                            <span>Komunikaty</span>
                         </div>
                     </Link>
                 </div>

@@ -43,8 +43,8 @@ function Content({ plan = null, listagrup, listakierunkow}){
                 <span className="font-bold text-[16px] text-theme-text w-full">Plan zajęć</span>
             </div>
 
-            <div className="bg-theme-panel w-full h-full flex flex-col gap-3 border-[0.3px] border-theme-muted pt-3 pb-5 px-1 rounded-b-[10px] xl:flex-row">
-                <div className="w-full h-full border border-theme-muted rounded-xl flex flex-col xl:w-[80%] xl:rounded-l-xl xl:rounded-r-xl">
+            <div className="bg-theme-panel w-full h-full flex flex-col gap-3 border-[0.3px] border-theme-muted pt-3 pb-5 px-1 rounded-b-[10px] md:flex-row">
+                <div className="w-full h-full border border-theme-muted rounded-xl flex flex-col md:w-[80%] md:rounded-l-xl md:rounded-r-xl">
                     
                     <FullCalendar
                         theme="monarch"
@@ -99,7 +99,7 @@ function Content({ plan = null, listagrup, listakierunkow}){
                     
                 </div> 
 
-                <div className="w-full rounded-[10px] bg-theme-surface px-[20px] py-[33px] xl:w-[20%] xl:rounded-r-[10px] xl:rounded-l-none">
+                <div className="w-full rounded-[10px] bg-theme-surface px-[20px] py-[33px] md:w-[20%] md:rounded-r-[10px] md:rounded-l-none">
                     <form onSubmit={wyszukajGrupe}>
                         <div className="px-[10px] py-[10px]">
                             <div className="mx-auto w-full text-center text-[16px] text-theme-text">
