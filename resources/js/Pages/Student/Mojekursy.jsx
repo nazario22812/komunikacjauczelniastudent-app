@@ -1,296 +1,402 @@
-import React, { useEffect } from "react";
+
+import React, { useEffect, useState } from "react";
 import MenuStudenta from "../../Components/MenuStudenta";
-import { Head, Link, router, usePage } from "@inertiajs/react";
+import { Head, router, usePage } from "@inertiajs/react";
 import BackButton from "../../Components/BackButton";
-import Lupa from '@/../images/search-rounded.png';
-import { useState } from 'react';
+import Lupa from "@/../images/search-rounded.png";
 import { ToastContainer, toast } from "react-toastify";
 
-function Content({ mojekursy, wszystkiekursy, listasemestrow, kierunekstudenta }){
+function Content({
+    mojekursy = [],
+    wszystkiekursy = [],
+    listasemestrow = [],
+    kierunekstudenta,
+}) {
     const [pokaz, setpokaz] = useState(false);
+    const [znalezionyKurs, setznalezionyKurs] = useState("");
+
     const handleClose = () => setpokaz(false);
     const handleOpen = () => setpokaz(true);
-    
 
-    const [znalezionyKurs,setznalezionyKurs] = useState('');
-    const [idZnalezionegoKursu, setidZnalezionegoKursu] = useState(null);
     const znajdzKurs = () => {
-        const kurs = wszystkiekursy.find((k) => k.kod === znalezionyKurs);
-        if(kurs){
-            // setidZnalezionegoKursu(kurs.idkurs);
-            // console.log(idZnalezionegoKursu);
+        const kurs = (wszystkiekursy ?? []).find(
+            (k) => k.kod === znalezionyKurs.trim()
+        );
+
+        if (kurs) {
             router.post(`/student/mojekursy/${kurs.idkurs}`);
-        }
-        else{
-            setidZnalezionegoKursu(null);
-            // alert("nie znaleziono kursu");
-            toast.error('Nie znaleziono kursu', {
+        } else {
+            toast.error("Nie znaleziono kursu", {
                 position: "bottom-right",
                 autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: false,
                 pauseOnHover: true,
                 draggable: true,
-                progress: undefined,
                 theme: "dark",
             });
         }
-    }
+    };
+
+    const handleSearchSubmit = (e) => {
+        e.preventDefault();
+        znajdzKurs();
+    };
 
     return (
-        
-        <div className="bg-theme-page w-full p-[10px] h-screen flex flex-col box-border">
-            <ToastContainer
-                position="bottom-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick={false}
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="dark"
-            />
-
-            <div className="bg-theme-page w-full flex shrink-0 h-[40px] mx-auto text-center border-b-[0.3px] border-theme-muted p-[10px] rounded-t-[10px]">
-                <BackButton back={ () => window.history.back()} />
-                <span className="font-bold text-[16px] text-theme-text w-full">Moje kursy</span>
-            </div>
-            <div className="w-full flex-1 min-h-0 pt-3 pb-2  px-4 rounded-b-[10px] flex flex-col relative ">
-                <div className="w-full h-[8%] flex  text-theme-text">
-                    <div className="bg-theme-slate w-[30%] max-h-[60%] flex items-center text-theme-text rounded-[10px] overflow-hidden border border-theme-muted">
-
-                        <input 
-                            type="text" 
-                            placeholder="szukaj kurs za kodem" 
-                            className="w-full bg-transparent px-4 py-1 text-theme-text placeholder-gray-400 focus:outline-none"
-                            value={znalezionyKurs}
-                            maxLength={6}
-                            minLength={5}
-                            onChange={(e) => setznalezionyKurs(e.target.value)}
-                        />
-
-                        <div className=" px-3 py-1 flex items-center justify-center cursor-pointer  transition-colors">
-                            <img onClick={znajdzKurs} src={Lupa} className="w-[28px] h-[28px] object-contain" alt="wyszukaj" />
-                        </div>
-
-                    </div>
-                    <div className="w-full text-right"><button variant="primary" onClick={handleOpen} className="hover:cursor-pointer">Lista wszystkich kursów</button></div>    
+        <div className="bg-theme-page flex h-dvh min-h-0 min-w-0 w-full flex-1 flex-col overflow-hidden box-border p-2 sm:p-[10px]">
+            <div className="bg-theme-page mx-auto flex h-[40px] w-full shrink-0 items-center rounded-t-[10px] border-b-[0.3px] border-theme-muted px-2 sm:px-[10px]">
+                <div className="flex w-[42px] shrink-0 items-center justify-start">
+                    <BackButton back={() => window.history.back()} />
                 </div>
 
-                
+                <span className="min-w-0 flex-1 text-center text-[16px] font-bold text-theme-text">
+                    Moje kursy
+                </span>
 
-                <div className="w-full h-[90%]">   
+                <div className="w-[42px] shrink-0" />
+            </div>
+
+            <div className="relative flex min-h-0 min-w-0 w-full flex-1 flex-col rounded-b-[10px] px-0 pb-2 pt-3 sm:px-2 md:px-4">
+                <div className="flex min-w-0 w-full shrink-0 flex-col gap-3 pb-4 text-theme-text sm:flex-row sm:items-center sm:justify-between">
+                    <form
+                        onSubmit={handleSearchSubmit}
+                        className="bg-theme-slate flex h-[42px] min-w-0 w-full items-center overflow-hidden rounded-[10px] border border-theme-muted sm:w-[280px] md:w-[30%] md:min-w-[220px] md:max-w-[360px]"
+                    >
+                        <input
+                            type="text"
+                            placeholder="szukaj kurs za kodem"
+                            className="h-full min-w-0 flex-1 bg-transparent px-3 py-1 text-sm text-theme-text placeholder-gray-400 focus:outline-none sm:px-4"
+                            value={znalezionyKurs}
+                            maxLength={6}
+                            onChange={(e) =>
+                                setznalezionyKurs(e.target.value)
+                            }
+                        />
+
+                        <button
+                            type="submit"
+                            className="flex h-full w-[44px] shrink-0 items-center justify-center px-2 transition-colors hover:bg-theme-panel"
+                        >
+                            <img
+                                src={Lupa}
+                                className="!h-[24px] !w-[24px] !max-w-[24px] object-contain"
+                                alt="wyszukaj"
+                            />
+                        </button>
+                    </form>
+
+                    <div className="w-full text-left sm:w-auto sm:shrink-0 sm:text-right">
+                        <button
+                            type="button"
+                            onClick={handleOpen}
+                            className="cursor-pointer break-words text-sm text-theme-text hover:underline sm:text-base"
+                        >
+                            Lista wszystkich kursów
+                        </button>
+                    </div>
+                </div>
+
+                <div className="min-h-0 min-w-0 w-full flex-1">
                     {mojekursy && mojekursy.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 overflow-y-auto custom-scrollbar pr-2 h-[30%]">
+                        <div className="custom-scrollbar grid h-full min-h-0 min-w-0 w-full auto-rows-max grid-cols-1 content-start gap-3 overflow-x-hidden overflow-y-auto pr-1 sm:grid-cols-2 sm:gap-4 sm:pr-2 xl:grid-cols-3 xl:gap-6">
                             {mojekursy.map((kurs) => (
-                                <div key={kurs.id} className="bg-theme-slate p-5 rounded-[15px] flex flex-col justify-between gap-5 border border-gray-700/50 hover:border-gray-500">
-                                    <div>
-                                        <h3 className="text-theme-text font-bold text-[20px] leading-light">{kurs.nazwa}</h3>
-                                        
-                                        <p className="text-gray-400 text-[14px] ">Prowadzący: {kurs.prowadzacy.TytulNaukowy} {kurs.prowadzacy.user.name} {kurs.prowadzacy.user.surname}</p>
+                                <div
+                                    key={kurs.idkurs ?? kurs.id}
+                                    className="bg-theme-slate flex min-h-[160px] min-w-0 flex-col justify-between gap-5 rounded-[15px] border border-gray-700/50 p-4 hover:border-gray-500 sm:min-h-[180px] sm:p-5"
+                                >
+                                    <div className="min-w-0">
+                                        <h3 className="break-words [overflow-wrap:anywhere] text-lg font-bold leading-tight text-theme-text sm:text-[20px]">
+                                            {kurs.nazwa}
+                                        </h3>
+
+                                        <p className="mt-3 break-words [overflow-wrap:anywhere] text-sm text-gray-400">
+                                            Prowadzący:{" "}
+                                            {kurs.prowadzacy?.TytulNaukowy}{" "}
+                                            {kurs.prowadzacy?.user?.name}{" "}
+                                            {kurs.prowadzacy?.user?.surname}
+                                        </p>
                                     </div>
 
-                                    <button onClick={() => router.get(`/student/mojekursy/${kurs.nazwa}/${kurs.idkurs}`)} className="w-full bg-theme-surface hover:bg-theme-accent-navy text-theme-text py-2 rounded-[10px] text-center font-medium hover:cursor-pointer">
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            router.get(
+                                                `/student/mojekursy/${kurs.nazwa}/${kurs.idkurs}`
+                                            )
+                                        }
+                                        className="bg-theme-surface w-full shrink-0 cursor-pointer rounded-[10px] py-2 text-center font-medium text-theme-text hover:bg-theme-accent-navy"
+                                    >
                                         Otwórz kurs
                                     </button>
                                 </div>
                             ))}
                         </div>
-                    ):(
-                        <div className="w-full flex-1 flex items-center justify-center text-[24px] text-theme-muted">
+                    ) : (
+                        <div className="flex h-full min-h-[160px] w-full items-center justify-center text-center text-xl text-theme-muted sm:text-[24px]">
                             <span>Nie masz jeszcze kursów</span>
                         </div>
                     )}
                 </div>
-            </div>  
-            
+            </div>
 
-
-            {/* panel ktora wyjezdza od prawej strony */}
             {pokaz && (
-                <div className="fixed inset-0 bg-black/60 z-40 transition-opacity" onClick={handleClose}>
+                <div
+                    className="fixed inset-0 z-40 bg-black/60 transition-opacity"
+                    onClick={handleClose}
+                />
+            )}
 
-                </div>
-            )}     
-            <div className={`fixed top-0 right-0 h-full w-[500px] bg-theme-page border-l border-white/20 shadow-2xl z-50 p-6 flex flex-col text-theme-text transition-transform duration-300 ease-in-out ${pokaz ? 'translate-x-0' : 'translate-x-full'}`}>
-                
-                <div className="flex justify-between items-center pb-4 border-b border-white/20">
-                    <h2 className="font-bold text-[20px]">Wszystkie kursy</h2>
-                    <button 
+            <div
+                className={`fixed right-0 top-0 z-50 flex h-dvh w-full max-w-[500px] min-w-0 flex-col border-l border-white/20 bg-theme-page p-4 text-theme-text transition-transform duration-300 ease-in-out sm:p-6 ${
+                    pokaz ? "translate-x-0" : "translate-x-full"
+                }`}
+                aria-hidden={!pokaz}
+                inert={!pokaz}
+            >
+                <div className="flex min-w-0 shrink-0 items-center justify-between gap-3 border-b border-white/20 pb-4">
+                    <h2 className="min-w-0 break-words text-lg font-bold sm:text-[20px]">
+                        Wszystkie kursy
+                    </h2>
+
+                    <button
+                        type="button"
                         onClick={handleClose}
-                        className="text-gray-400 hover:text-theme-text text-[28px] font-bold px-2 leading-none cursor-pointer"
+                        className="shrink-0 cursor-pointer px-2 text-[28px] font-bold leading-none text-gray-400 hover:text-theme-text"
                     >
                         &times;
                     </button>
                 </div>
 
-                <div className="flex-1 overflow-y-auto custom-scrollbar py-4">
-                    <h1 className="text-[22px] font-semibold">{kierunekstudenta.nazwa}</h1>
+                <div className="custom-scrollbar min-h-0 min-w-0 flex-1 overflow-x-hidden overflow-y-auto py-4">
+                    <h1 className="mb-4 break-words text-lg font-semibold sm:text-[22px]">
+                        {kierunekstudenta?.nazwa}
+                    </h1>
 
                     {wszystkiekursy && wszystkiekursy.length > 0 ? (
-                        <div>
-                            
-                            {listasemestrow.map((semestr) => {
-                                
-                                const kursySemestru = wszystkiekursy.filter((kurs) => kurs.Semester === semestr.Semester);
-                                const uniqPrqdmioty = Array.from(
-                                    new Map(kursySemestru.map(kurs => [kurs.Przedmiot_idPrzedmiot, kurs.przedmiot])).values() 
-                                );
+                        <div className="min-w-0">
+                            {(listasemestrow ?? []).map((semestr, index) => {
+                                const kursySemestru =
+                                    wszystkiekursy.filter(
+                                        (kurs) =>
+                                            kurs.Semester === semestr.Semester
+                                    );
+
+                                const uniqPrzedmioty = Array.from(
+                                    new Map(
+                                        kursySemestru.map((kurs) => [
+                                            kurs.Przedmiot_idPrzedmiot,
+                                            kurs.przedmiot,
+                                        ])
+                                    ).values()
+                                ).filter(Boolean);
+
                                 return (
-                                    <div key={semestr.id} className="pb-2">
-                                        <h1 className="text-[18px] font-bold">{semestr.Semester} semester</h1>
-                                
-                                        {uniqPrqdmioty.map((przedmiot) => (
-                                            <div key={przedmiot.id} className="mb-3">
-                                                <h2 className="text-[15px] text-theme-text">{przedmiot.nazwa}</h2>
-                                            
-                                            
-                                                <div className="flex flex-col gap-1 pl-4 mt-1">
-                                                    {kursySemestru.filter((kurs) => kurs.Przedmiot_idPrzedmiot === przedmiot.idPrzedmiot)
-                                                    .map((kurs) => (
-                                                        <div key={kurs.idKurs}>
-                                                            <p onClick={() => router.post(`/student/checkkurs/${kurs.idkurs}`)} className="text-[14px] pl-5 text-theme-muted shrink cursor-pointer">
-                                                                {kurs.nazwa}, {kurs.prowadzacy.TytulNaukowy} {kurs.prowadzacy.user.name} {kurs.prowadzacy.user.surname}
-                                                            </p>
-                                                        </div>
-                                                    ))}
-                            
-                                                </div>    
+                                    <div
+                                        key={semestr.id ?? index}
+                                        className="min-w-0 pb-4"
+                                    >
+                                        <h2 className="mb-3 break-words text-[18px] font-bold">
+                                            {semestr.Semester} semester
+                                        </h2>
+
+                                        {uniqPrzedmioty.map((przedmiot) => (
+                                            <div
+                                                key={przedmiot.idPrzedmiot}
+                                                className="mb-4 min-w-0"
+                                            >
+                                                <h3 className="break-words text-[15px] text-theme-text">
+                                                    {przedmiot.nazwa}
+                                                </h3>
+
+                                                <div className="mt-2 flex min-w-0 flex-col gap-2 pl-2 sm:pl-4">
+                                                    {kursySemestru
+                                                        .filter(
+                                                            (kurs) =>
+                                                                kurs.Przedmiot_idPrzedmiot ===
+                                                                przedmiot.idPrzedmiot
+                                                        )
+                                                        .map((kurs) => (
+                                                            <button
+                                                                key={kurs.idkurs}
+                                                                type="button"
+                                                                onClick={() =>
+                                                                    router.post(
+                                                                        `/student/checkkurs/${kurs.idkurs}`
+                                                                    )
+                                                                }
+                                                                className="min-w-0 cursor-pointer break-words [overflow-wrap:anywhere] pl-2 text-left text-[14px] text-theme-muted hover:text-theme-text sm:pl-5"
+                                                            >
+                                                                {kurs.nazwa},{" "}
+                                                                {
+                                                                    kurs.prowadzacy
+                                                                        ?.TytulNaukowy
+                                                                }{" "}
+                                                                {
+                                                                    kurs.prowadzacy
+                                                                        ?.user
+                                                                        ?.name
+                                                                }{" "}
+                                                                {
+                                                                    kurs.prowadzacy
+                                                                        ?.user
+                                                                        ?.surname
+                                                                }
+                                                            </button>
+                                                        ))}
+                                                </div>
                                             </div>
                                         ))}
-
-                                        
                                     </div>
                                 );
-                                
-
-
                             })}
                         </div>
-                    ):(
-                        <div className="w-full flex-1 flex items-center justify-center text-[24px] text-theme-muted">
+                    ) : (
+                        <div className="flex min-h-[150px] w-full items-center justify-center text-center text-xl text-theme-muted sm:text-[24px]">
                             <span>Brak kursów</span>
                         </div>
                     )}
                 </div>
-
             </div>
         </div>
-        
     );
 }
 
-function Koddokursu({ isOpen, onClose, zwroconyKurs, wszystkiekursy }){
-    if (!isOpen) return null;
-    
-    const [znalezionyKurs,setznalezionyKurs] = useState('');
-    const [idZnalezionegoKursu, setidZnalezionegoKursu] = useState(null);
+function Koddokursu({
+    isOpen,
+    onClose,
+    zwroconyKurs,
+    wszystkiekursy = [],
+}) {
+    const [znalezionyKurs, setznalezionyKurs] = useState("");
+
     const znajdzKurs = () => {
-        const kurs = wszystkiekursy.find((k) => k.kod === znalezionyKurs);
-        if(kurs){
-            // setidZnalezionegoKursu(kurs.idkurs);
-            // console.log(idZnalezionegoKursu);
+        const kurs = (wszystkiekursy ?? []).find(
+            (k) => k.kod === znalezionyKurs.trim()
+        );
+
+        if (kurs) {
             router.post(`/student/mojekursy/${kurs.idkurs}`);
             onClose();
-        }
-        else{
-            setidZnalezionegoKursu(null);
-            // alert("nie znaleziono kursu");
-            toast.error('Nie znaleziono kursu', {
+        } else {
+            toast.error("Nie znaleziono kursu", {
                 position: "bottom-right",
                 autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: false,
                 pauseOnHover: true,
                 draggable: true,
-                progress: undefined,
                 theme: "dark",
             });
         }
-    }
-    
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        znajdzKurs();
+    };
+
+    if (!isOpen) return null;
+
     return (
         <>
-            {isOpen && (
-                <div className="fixed inset-0 bg-black/60 z-40 transition-opacity" onClick={onClose}>
+            <div
+                className="fixed inset-0 z-[60] bg-black/60 transition-opacity"
+                onClick={onClose}
+            />
 
-                </div>
-            )}
-            <div className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[300px] w-[600px] bg-theme-page border border-white/20 rounded-[15px] shadow-2xl z-50 p-6 flex flex-col text-theme-text transition-all duration-300 ease-in-out ${isOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0 pointer-events-none'}`}>                
-                <div className="flex justify-between items-center pb-4 border-b border-white/20">
-                    <h2 className="font-bold text-[20px]">Podaj kod do kursu</h2>
-                    <h4 className="text-[17px] font-thin">{zwroconyKurs?.nazwa}</h4>
-                    <button 
+            <div className="fixed left-1/2 top-1/2 z-[70] flex h-auto max-h-[90dvh] w-[calc(100%-24px)] max-w-[600px] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-[15px] border border-white/20 bg-theme-page p-4 text-theme-text sm:min-h-[300px] sm:p-6">
+                <div className="flex min-w-0 shrink-0 flex-wrap items-center justify-between gap-3 border-b border-white/20 pb-4">
+                    <div className="min-w-0 flex-1">
+                        <h2 className="break-words text-lg font-bold sm:text-[20px]">
+                            Podaj kod do kursu
+                        </h2>
+
+                        {zwroconyKurs?.nazwa && (
+                            <h4 className="mt-1 break-words text-sm font-light sm:text-[17px]">
+                                {zwroconyKurs.nazwa}
+                            </h4>
+                        )}
+                    </div>
+
+                    <button
+                        type="button"
                         onClick={onClose}
-                        className="text-gray-400 hover:text-theme-text text-[28px] font-bold px-2 leading-none cursor-pointer"
+                        className="shrink-0 cursor-pointer px-2 text-[28px] font-bold leading-none text-gray-400 hover:text-theme-text"
                     >
                         &times;
                     </button>
                 </div>
 
-                <div className="flex-1 overflow-y-auto">
-                    <div className="bg-theme-slate w-[80%] mx-auto mt-[20%] max-h-[60%] flex items-center text-theme-text rounded-[10px] overflow-hidden border border-theme-muted">
-
-                        <input 
-                            type="text" 
-                            placeholder="szukaj kurs za kodem" 
-                            className="w-full bg-transparent px-4 py-1 text-theme-text placeholder-gray-400 focus:outline-none"
+                <div className="flex min-h-[130px] min-w-0 flex-1 flex-col justify-center overflow-y-auto py-5">
+                    <form
+                        onSubmit={handleSubmit}
+                        className="bg-theme-slate mx-auto flex h-[44px] w-full min-w-0 items-center overflow-hidden rounded-[10px] border border-theme-muted sm:w-[80%]"
+                    >
+                        <input
+                            type="text"
+                            placeholder="szukaj kurs za kodem"
+                            className="h-full min-w-0 flex-1 bg-transparent px-3 py-1 text-sm text-theme-text placeholder-gray-400 focus:outline-none sm:px-4"
                             value={znalezionyKurs}
                             maxLength={6}
-                            minLength={5}
-                            onChange={(e) => setznalezionyKurs(e.target.value)}
+                            onChange={(e) =>
+                                setznalezionyKurs(e.target.value)
+                            }
                         />
 
-                        <div onClick={znajdzKurs} className=" px-3 py-1 flex items-center justify-center cursor-pointer  transition-colors">
-                            <img  src={Lupa} className="w-[28px] h-[28px] object-contain" alt="wyszukaj" />
-                        </div>
-
-                    </div>
+                        <button
+                            type="submit"
+                            className="flex h-full w-[44px] shrink-0 cursor-pointer items-center justify-center px-2 transition-colors hover:bg-theme-panel"
+                        >
+                            <img
+                                src={Lupa}
+                                className="!h-[24px] !w-[24px] !max-w-[24px] object-contain"
+                                alt="wyszukaj"
+                            />
+                        </button>
+                    </form>
                 </div>
-
             </div>
         </>
     );
 }
 
-export default function MojeKursy({ auth, mojekursy, wszystkiekursy,listasemestrow, kierunekstudenta }) {
+export default function MojeKursy({
+    auth,
+    mojekursy,
+    wszystkiekursy,
+    listasemestrow,
+    kierunekstudenta,
+}) {
     const pageProps = usePage().props;
-    
 
     const message = pageProps.status || pageProps.flash?.status;
     const kurs = pageProps.kurs || pageProps.flash?.kurs;
-    
+
     const [pokazKod, setpokazKod] = useState(false);
     const [zwroconyKurs, setzwroconyKurs] = useState(null);
+
     const handleClose2 = () => {
         setpokazKod(false);
-            // setzwroconyKurs(null);
     };
-    
+
     useEffect(() => {
-        if (message && message !== 'nie jestes zapisany na ten kurs') {
+        if (message && message !== "nie jestes zapisany na ten kurs") {
             toast.info(message, {
                 position: "bottom-right",
                 autoClose: 5000,
                 theme: "dark",
-                
             });
-        }
-        else if (message && message === 'nie jestes zapisany na ten kurs') {
-            console.log('test');
+        } else if (
+            message === "nie jestes zapisany na ten kurs"
+        ) {
             setpokazKod(true);
             setzwroconyKurs(kurs);
         }
     }, [message, kurs]);
-    return (
-        // <div>
-        //     <p>ja student</p>
-        // </div>
 
-        // 
-        <div className="flex">
+    return (
+        <div className="flex h-dvh min-h-0 min-w-0 w-full overflow-hidden">
             <ToastContainer
                 position="bottom-right"
                 autoClose={5000}
@@ -303,10 +409,24 @@ export default function MojeKursy({ auth, mojekursy, wszystkiekursy,listasemestr
                 pauseOnHover
                 theme="dark"
             />
-            <Head title="Moje kursy"/>
-            <MenuStudenta/>
-            <Content mojekursy={mojekursy} wszystkiekursy={wszystkiekursy} listasemestrow={listasemestrow} kierunekstudenta={kierunekstudenta}/>
-            <Koddokursu isOpen={pokazKod} onClose={handleClose2} zwroconyKurs={zwroconyKurs} wszystkiekursy={wszystkiekursy}/>
+
+            <Head title="Moje kursy" />
+
+            <MenuStudenta />
+
+            <Content
+                mojekursy={mojekursy}
+                wszystkiekursy={wszystkiekursy}
+                listasemestrow={listasemestrow}
+                kierunekstudenta={kierunekstudenta}
+            />
+
+            <Koddokursu
+                isOpen={pokazKod}
+                onClose={handleClose2}
+                zwroconyKurs={zwroconyKurs}
+                wszystkiekursy={wszystkiekursy}
+            />
         </div>
     );
 }

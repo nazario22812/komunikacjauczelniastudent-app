@@ -1,93 +1,195 @@
+
 import { Link } from "@inertiajs/react";
 import { useState } from "react";
 
-// import ikonek
-import Logo from '@/../images/logo.png';
-import Notification from '@/../images/notifications-sharp.png';
-import Settings from '@/../images/settings-rounded.png';
-import Exit from '@/../images/logout-sharp.png';
-import Account from '@/../images/account-box-outline.png';
-import Calendar from '@/../images/calendar-month-outline-sharp.png';
-import Map from '@/../images/map-search-outline-rounded.png';
-import Bell from '@/../images/doorbell-outline.png';
-import Inbox from '@/../images/inbox-text-rounded.png';
-import List from '@/../images/list-alt-outline-sharp.png';
-import Wallet from '@/../images/wallet-sharp.png';
+import Logo from "@/../images/logo.png";
+import Notification from "@/../images/notifications-sharp.png";
+import Settings from "@/../images/settings-rounded.png";
+import Exit from "@/../images/logout-sharp.png";
+import Account from "@/../images/account-box-outline.png";
+import Calendar from "@/../images/calendar-month-outline-sharp.png";
+import Bell from "@/../images/doorbell-outline.png";
+import Inbox from "@/../images/inbox-text-rounded.png";
+import List from "@/../images/list-alt-outline-sharp.png";
+import Wallet from "@/../images/wallet-sharp.png";
 
-export default function MenuDziekanat(){
+export default function MenuDziekanat() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    const menuItems = [
+        {
+            href: "/mojedane",
+            label: "Moje dane",
+            icon: Account,
+        },
+        {
+            href: "",
+            label: "Plany Zajęć",
+            icon: Calendar,
+        },
+        {
+            href: "",
+            label: "Ogłoszenia i ankiety",
+            icon: Bell,
+        },
+        {
+            href: "/dziekanat/podania",
+            label: "Podania",
+            icon: Inbox,
+        },
+        {
+            href: "",
+            label: "Sylabusy",
+            icon: List,
+        },
+        {
+            href: "",
+            label: "Finanse studentów",
+            icon: Wallet,
+        },
+    ];
 
     return (
         <>
             <button
                 type="button"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="fixed left-3 top-3 z-50 inline-flex h-9 w-9 items-center justify-center rounded-md border border-theme-muted bg-theme-surface text-theme-text md:hidden"
-                aria-label="Otwórz menu"
+                className="fixed left-3 top-3 z-[60] inline-flex h-9 w-9 items-center justify-center rounded-md border border-theme-muted bg-theme-surface text-theme-text md:hidden"
+                aria-label={
+                    isMenuOpen ? "Zamknij menu" : "Otwórz menu"
+                }
+                aria-expanded={isMenuOpen}
             >
-                <span className="flex w-4 flex-col gap-1">
-                    <span className="block h-0.5 w-full rounded-full bg-current" />
-                    <span className="block h-0.5 w-full rounded-full bg-current" />
-                    <span className="block h-0.5 w-full rounded-full bg-current" />
-                </span>
+                {isMenuOpen ? (
+                    <span className="text-[24px] leading-none">
+                        &times;
+                    </span>
+                ) : (
+                    <span className="flex w-4 flex-col gap-1">
+                        <span className="block h-0.5 w-full rounded-full bg-current" />
+                        <span className="block h-0.5 w-full rounded-full bg-current" />
+                        <span className="block h-0.5 w-full rounded-full bg-current" />
+                    </span>
+                )}
             </button>
 
-            <aside className={`fixed left-0 top-0 z-40 h-screen w-[78vw] max-w-[240px] border-r border-[#2a3c6a] bg-[#0b1238] text-white transition-transform duration-300 md:static md:w-[250px] md:translate-x-0 ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
-                <div className="flex items-center justify-between gap-2 border-b border-[#2a3c6a] bg-[#0b1238] px-3 py-4">
-                    <div className="flex min-w-0 items-center gap-3">
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-[#f3f6ff]/5 ring-1 ring-[#dfe8ff]/15">
-                            <img src={Logo} alt="logo" className="h-6 w-6 shrink-0" />
+            {isMenuOpen && (
+                <div
+                    className="fixed inset-0 z-[40] bg-black/60 md:hidden"
+                    onClick={() => setIsMenuOpen(false)}
+                />
+            )}
+
+            <aside
+                className={`fixed left-0 top-0 z-[50] flex h-dvh w-[85vw] max-w-[280px] shrink-0 flex-col overflow-hidden border-r border-[#2a3c6a] bg-[#0b1238] text-white transition-transform duration-300 md:sticky md:top-0 md:h-dvh md:w-[250px] md:max-w-none md:translate-x-0 ${
+                    isMenuOpen
+                        ? "translate-x-0"
+                        : "-translate-x-full"
+                }`}
+            >
+                <div className="shrink-0 border-b border-[#2a3c6a] bg-[#0b1238] px-3 pb-4 pt-14 md:pt-4">
+                    <Link
+                        href="/stronaglowna/pracownikdziekanatu"
+                        className="flex min-w-0 w-full items-center gap-3 no-underline"
+                        onClick={() => setIsMenuOpen(false)}
+                    >
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-[#f3f6ff]/5">
+                            <img
+                                src={Logo}
+                                alt="logo"
+                                className="!h-[30px] !w-[30px] !max-w-[30px] shrink-0 object-contain"
+                            />
                         </div>
-                        <Link href='/stronaglowna/student' method="get" as='button' className="hover:cursor-pointer min-w-0 max-w-[calc(100%-48px)]">
-                            <p className="truncate text-[11px] font-semibold tracking-wide text-white sm:text-sm">MojaUczelnia</p>
+
+                        <span className="min-w-0 break-words text-[17px] font-semibold tracking-wide text-white">
+                            MojaUczelnia
+                        </span>
+                    </Link>
+
+                    <div className="mt-4 grid w-full grid-cols-3 gap-1 rounded-[12px] border border-[#2a3c6a] bg-[#121d4a] p-1">
+                        <Link
+                            href="/powiadomienia"
+                            className="flex h-[38px] min-w-0 items-center justify-center rounded-[8px] transition-all duration-200 hover:bg-[#24345e]"
+                            aria-label="Powiadomienia"
+                            title="Powiadomienia"
+                        >
+                            <img
+                                src={Notification}
+                                alt=""
+                                className="!h-[19px] !w-[19px] !max-w-[19px] shrink-0 object-contain"
+                            />
+                        </Link>
+
+                        <Link
+                            href="/ustawienia"
+                            className="flex h-[38px] min-w-0 items-center justify-center rounded-[8px] transition-all duration-200 hover:bg-[#24345e]"
+                            aria-label="Ustawienia"
+                            title="Ustawienia"
+                        >
+                            <img
+                                src={Settings}
+                                alt=""
+                                className="!h-[19px] !w-[19px] !max-w-[19px] shrink-0 object-contain"
+                            />
+                        </Link>
+
+                        <Link
+                            href="/logout"
+                            method="post"
+                            as="button"
+                            className="flex h-[38px] min-w-0 cursor-pointer items-center justify-center rounded-[8px] transition-all duration-200 hover:bg-[#8b2635]"
+                            aria-label="Wyloguj"
+                            title="Wyloguj"
+                        >
+                            <img
+                                src={Exit}
+                                alt=""
+                                className="!h-[19px] !w-[19px] !max-w-[19px] shrink-0 object-contain"
+                            />
                         </Link>
                     </div>
-
-                    <div className="hidden items-center gap-2 md:flex">
-                        <Link href='/powiadomienia' method="get" as="button" className="hover:cursor-pointer rounded-lg border border-[#2a3c6a] bg-[#121d4a] p-2"><img src={Notification} alt="powiadomienia" className="h-4 w-4" /></Link>
-                        <Link href='/ustawienia' method="get" as="button" className="hover:cursor-pointer rounded-lg border border-[#2a3c6a] bg-[#121d4a] p-2"><img src={Settings} alt="ustawienia" className="h-4 w-4" /></Link>
-                        <Link href='/logout' method="post" as="button" className="hover:cursor-pointer rounded-lg border border-[#2a3c6a] bg-[#121d4a] p-2"><img src={Exit} alt="logout" className="h-4 w-4" /></Link>
-                    </div>
                 </div>
 
-                <div className="px-3 py-3 text-[#eaf0ff]">
-                    <Link href='/mojedane' method="get" as="button" className="hover:cursor-pointer w-full block">
-                        <div className="flex h-[42px] items-center gap-x-[10px] border-b border-[#2a3c6a] px-2 text-[13px] text-white">
-                            <img src={Account} alt="mojedane" className="h-4 w-4 shrink-0 object-contain opacity-90" />
-                            <span>Moje dane</span>
-                        </div>
-                    </Link>
-                    <Link href='' method="get" as="button" className="hover:cursor-pointer w-full block">
-                        <div className="flex h-[42px] items-center gap-x-[10px] border-b border-[#2a3c6a] px-2 text-[13px] text-white">
-                            <img src={Calendar} alt="planzajec" className="h-4 w-4 shrink-0 object-contain opacity-90" />
-                            <span>Plany Zajęć</span>
-                        </div>
-                    </Link>
-                    <Link href='' method="get" as="button" className="hover:cursor-pointer w-full block">
-                        <div className="flex h-[42px] items-center gap-x-[10px] border-b border-[#2a3c6a] px-2 text-[13px] text-white">
-                            <img src={Bell} alt="ogloszeniaiankiety" className="h-4 w-4 shrink-0 object-contain opacity-90" />
-                            <span>Ogłoszenia i ankiety</span>
-                        </div>
-                    </Link>
-                    <Link href='/dziekanat/podania' method="get" as="button" className="hover:cursor-pointer w-full block">
-                        <div className="flex h-[42px] items-center gap-x-[10px] border-b border-[#2a3c6a] px-2 text-[13px] text-white">
-                            <img src={Inbox} alt="edziekanat" className="h-4 w-4 shrink-0 object-contain opacity-90" />
-                            <span>Podania</span>
-                        </div>
-                    </Link>
-                    <Link href='' method="get" as="button" className="hover:cursor-pointer w-full block">
-                        <div className="flex h-[42px] items-center gap-x-[10px] border-b border-[#2a3c6a] px-2 text-[13px] text-white">
-                            <img src={List} alt="sylabusy" className="h-4 w-4 shrink-0 object-contain opacity-90" />
-                            <span>Sylabusy</span>
-                        </div>
-                    </Link>
-                    <Link href='' method="get" as="button" className="hover:cursor-pointer w-full block">
-                        <div className="flex h-[42px] items-center gap-x-[10px] border-b border-[#2a3c6a] px-2 text-[13px] text-white">
-                            <img src={Wallet} alt="finanse" className="h-4 w-4 shrink-0 object-contain opacity-90" />
-                            <span>Finanse studentów</span>
-                        </div>
-                    </Link>
-                </div>
+                <nav className="hide-scrollbar min-h-0 flex-1 overflow-x-hidden overflow-y-auto px-3 py-3 text-[#eaf0ff]">
+                    {menuItems.map((item) =>
+                        item.href ? (
+                            <Link
+                                key={item.label}
+                                href={item.href}
+                                onClick={() => setIsMenuOpen(false)}
+                                className="block w-full no-underline"
+                            >
+                                <div className="flex min-h-[42px] items-center gap-[10px] border-b border-[#2a3c6a] px-2 py-2 text-[13px] text-white transition-colors hover:bg-[#121d4a]">
+                                    <img
+                                        src={item.icon}
+                                        alt=""
+                                        className="!h-[16px] !w-[16px] !max-w-[16px] shrink-0 object-contain opacity-90"
+                                    />
+
+                                    <span className="min-w-0 break-words">
+                                        {item.label}
+                                    </span>
+                                </div>
+                            </Link>
+                        ) : (
+                            <div
+                                key={item.label}
+                                className="flex min-h-[42px] w-full items-center gap-[10px] border-b border-[#2a3c6a] px-2 py-2 text-[13px] text-white opacity-60"
+                                aria-disabled="true"
+                            >
+                                <img
+                                    src={item.icon}
+                                    alt=""
+                                    className="!h-[16px] !w-[16px] !max-w-[16px] shrink-0 object-contain opacity-90"
+                                />
+
+                                <span className="min-w-0 break-words">
+                                    {item.label}
+                                </span>
+                            </div>
+                        )
+                    )}
+                </nav>
             </aside>
         </>
     );
