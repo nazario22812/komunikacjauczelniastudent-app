@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ankieta;
+use App\Models\Pracownikdziekanatu;
 use App\Models\Kierunek;
 use App\Models\Komunikat;
 use App\Models\Kurs;
@@ -29,6 +30,107 @@ class DziekanatController extends Controller
 {
     //
 
+    public function dodanieplatnosci(Request $request, $student_id)
+    {
+        $validated = $request->validate([
+            'tytul' => 'required|string|max:45',
+            'kwota' => 'required|numeric|gt:0',
+            'termin' => 'required|date',
+        ]);
+
+        $student = Student::findOrFail($student_id);
+        $user = $request->user();
+
+        $pracownik = PracownikDziekanatu::where(
+            'User_idUser',
+            $user->idUser
+        )->first();
+
+        DB::transaction(function () use (
+            $validated,
+            $student,
+            $pracownik
+        ) {
+            $platnosc = Platnosc::create([
+                'tytul' => $validated['tytul'],
+                'kwota' => $validated['kwota'],
+                'termin' => $validated['termin'],
+                'data' => now(),
+                'czyOplacone' => 0,
+                'Student_idStudent' => $student->idStudent,
+                'PracownikDziekanatu_idPracownikDziekanatu' =>
+                $pracownik->idPracownikDziekanatu,
+            ]);
+
+            $komunikat = Komunikat::create([
+                'temat' => 'Nowa płatność',
+                'tresc' =>
+                'Wystawiono nową płatność: ' .
+                    $platnosc->tytul .
+                    '. Kwota: ' .
+                    number_format($platnosc->kwota, 2, ',', ' ') .
+                    ' PLN. Termin: ' .
+                    date(
+                        'd.m.Y H:i',
+                        strtotime($platnosc->termin)
+                    ) .
+                    '.',
+                'czyOgloszenie' => 0,
+            ]);
+
+            $komunikat->user()->attach($student->User_idUser);
+
+        });
+
+        return back()->with('status','Płatność została dodana, a student otrzymał powiadomienie');
+    }
+
+
+    public function zmianastatusuplatnosci(Request $request, $student_id, $platnosc_id) {
+        $validated = $request->validate([
+            'czyOplacone' => 'required|boolean',
+        ]);
+
+        $nowyStatus = $validated['czyOplacone'];    
+    
+        $platnosc = Platnosc::where('idPlatnosc', $platnosc_id)->first();
+        $platnosc->czyOplacone = $nowyStatus;  
+        $platnosc->save();  
+        
+        return back()->with('status','Status płatności został zmieniony');
+
+    }
+
+    public function usuniecieplatnosci(Request $request, $student_id, $platnosc_id) {
+        $znalezionaplatnosc = Platnosc::where('idPlatnosc', $platnosc_id)->first();
+
+        if($znalezionaplatnosc){
+            $znalezionaplatnosc->delete();
+            return back()->with('status', 'Platnosc została usunięta');
+        }
+
+    }
+
+    public function finansestudentow(Request $request)
+    {
+
+        $listastudentow = Student::with('user')->get()->toArray();
+
+        $wybranystudent = $request->input('student_id');
+
+
+        $platnosci = [];
+
+        if ($wybranystudent) {
+            $platnosci = Platnosc::where('Student_idStudent', $wybranystudent)->get()->toArray();
+        }
+        return Inertia::render('PracownikDziekanatu/FinanseStudentow', [
+            'listastudentow' => $listastudentow,
+            'wybranystudent' => $wybranystudent,
+            'platnosci' => $platnosci
+        ]);
+    }
+
     public function storeAnkieta(Request $request)
     {
         $validated = $request->validate([
@@ -54,7 +156,7 @@ class DziekanatController extends Controller
             'czy_godziny' => 'boolean',
             'rodzaj_godzin' => 'required_if:czy_godziny,true|nullable|in:dziekanskie,rektorskie',
             'wydzialy_ids' => 'required_if:czy_godziny,true|array',
-            'wydzialy_ids.*' => 'integer|exists:wydzial,idWydzial', 
+            'wydzialy_ids.*' => 'integer|exists:wydzial,idWydzial',
             'data_godzin' => 'required_if:czy_godziny,true|nullable|date',
             'godzina_od' => 'required_if:czy_godziny,true|nullable|date_format:H:i',
             'godzina_do' => 'required_if:czy_godziny,true|nullable|date_format:H:i|after:godzina_od',
