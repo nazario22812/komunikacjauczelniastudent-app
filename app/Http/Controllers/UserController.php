@@ -15,137 +15,154 @@ use App\Models\Student;
 use App\Models\Zajecie;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use App\Models\User;
 use App\Models\Komunikat;
 use function PHPSTORM_META\map;
 use Carbon\Carbon;
+
 class UserController extends Controller
-{   
+{
 
-    public function ustawienia(Request $request){
+    public function ustawienia(Request $request)
+    {
         $user = $request->user();
-        $settings = json_decode($user?->Ustawienia ?? '{}', true);
+        $theme = session('theme', 'dark');
 
-        $user = $request->user();
+        if (! in_array($theme, ['dark', 'light'], true)) {
+            $theme = 'dark';
+        }
+
         $role = '';
-        if($user->isStudent()){
+        if ($user->isStudent()) {
             $role = 'Student';
         }
-        if($user->isProwadzacy()){
+        if ($user->isProwadzacy()) {
             $role = 'Prowadzący';
         }
-        if($user->isPracownikDziekanatu()){
+        if ($user->isPracownikDziekanatu()) {
             $role = 'Pracownik Dziekanatu';
         }
 
         return Inertia::render('Settings', [
             'rol' => $role,
-            'theme' => $settings['theme'] ?? 'dark',
+            'theme' => $theme,
         ]);
     }
 
-    public function ustawieniaTheme(Request $request){
-        $user = $request->user();
+    public function ustawieniaTheme(Request $request)
+    {
         $theme = $request->input('theme');
 
         if (! in_array($theme, ['dark', 'light'], true)) {
             $theme = 'dark';
         }
 
-        $settings = json_decode($user->Ustawienia ?? '{}', true);
-        $settings['theme'] = $theme;
-
-        $user->update([
-            'Ustawienia' => json_encode($settings),
-        ]);
-
         session()->put('theme', $theme);
-    
+
         return redirect()->back();
     }
 
-    public function ogloszniaiankiety(Request $request){
+    public function ustawieniaHaslo(Request $request)
+    {
+        $request->validate([
+            'current_password' => ['required', 'current_password'],
+            'new_password' => ['required', 'min:8', 'confirmed'],
+        ]);
+
+        $user = $request->user();
+        $user->update([
+            'password' => Hash::make($request->input('new_password')),
+        ]);
+
+        return redirect()->back()->with('status', 'Hasło zostało zmienione.');
+    }
+
+    public function ogloszniaiankiety(Request $request)
+    {
         $user = $request->user();
         $ogloszenia = Komunikat::where('czyOgloszenie', 1)->orderby('idKomunikat', 'desc')->get()->toArray();
         $ankiety = Ankieta::orderby('idAnkieta', 'desc')->get()->toArray();
-        
+
         $role = '';
-        if($user->isStudent()){
+        if ($user->isStudent()) {
             $role = 'Student';
         }
-        if($user->isProwadzacy()){
+        if ($user->isProwadzacy()) {
             $role = 'Prowadzący';
         }
-        if($user->isPracownikDziekanatu()){
+        if ($user->isPracownikDziekanatu()) {
             $role = 'Pracownik Dziekanatu';
         }
-        
-        if($request->expectsJson()){
+
+        if ($request->expectsJson()) {
             return response()->json([
                 'ogloszenia' => array_slice($ogloszenia, 0, 10),
                 'ankiety' => array_slice($ankiety, 0, 10)
             ]);
         }
 
-        return Inertia::render('Ogloszenia',[
+        return Inertia::render('Ogloszenia', [
             'rol' => $role,
             'ogloszenia' => array_slice($ogloszenia, 0, 10),
             'ankiety' => array_slice($ankiety, 0, 10)
         ]);
     }
 
-    public function powiadomienia(Request $request){
+    public function powiadomienia(Request $request)
+    {
         $user = $request->user();
         // $powiadomienia = User::with('komunikat')->where('User_idUser', $user->idUser)->get();
         $powiadomienia = $user->komunikat()->where('czyOgloszenie', 0)->orderBy('idKomunikat', 'desc')->get()->toArray();
 
         $role = '';
-        if($user->isStudent()){
+        if ($user->isStudent()) {
             $role = 'Student';
         }
-        if($user->isProwadzacy()){
+        if ($user->isProwadzacy()) {
             $role = 'Prowadzący';
         }
-        if($user->isPracownikDziekanatu()){
+        if ($user->isPracownikDziekanatu()) {
             $role = 'Pracownik Dziekanatu';
         }
 
-        if($request->expectsJson()){
+        if ($request->expectsJson()) {
             return response()->json([
                 'powiadomienia' => $powiadomienia
             ]);
         }
 
-        return Inertia::render('Powiadomienia',[
+        return Inertia::render('Powiadomienia', [
             'rol' => $role,
             'powiadomienia' => $powiadomienia
         ]);
     }
-    
-    
 
-    public function mapaKampusu(Request $request){
+
+
+    public function mapaKampusu(Request $request)
+    {
 
 
         $sali = Sala::select(
             'budynek.*',
             'sala.numerSali'
         )
-        ->join('budynek', function($join){
-            $join->on('budynek.idBudynek', '=', 'sala.Budynek_idBudynek');
-        })
-        ->get();
+            ->join('budynek', function ($join) {
+                $join->on('budynek.idBudynek', '=', 'sala.Budynek_idBudynek');
+            })
+            ->get();
 
-        $salimapped = $sali->map(function ($item){
-            return[
+        $salimapped = $sali->map(function ($item) {
+            return [
                 'id' => $item->idBudynek,
                 'nazwa' => $item->nazwa,
                 'ulica' => $item->ulica,
                 'nrBudynku' => $item->nrBudynku,
                 'godzinaOtwarcia' => $item->GodzinaOtwarcia,
-                'godzinaZamkniecia' =>$item->GodzinaZamkniecia,
+                'godzinaZamkniecia' => $item->GodzinaZamkniecia,
                 'numerSali' => $item->numerSali,
                 'szerokosc' => $item->szerokosc,
                 'dlugosc' => $item->dlugosc
@@ -157,17 +174,17 @@ class UserController extends Controller
 
         $user = $request->user();
         $role = '';
-        if($user->isStudent()){
+        if ($user->isStudent()) {
             $role = 'Student';
         }
-        if($user->isProwadzacy()){
+        if ($user->isProwadzacy()) {
             $role = 'Prowadzący';
         }
-        if($user->isPracownikDziekanatu()){
+        if ($user->isPracownikDziekanatu()) {
             $role = 'Pracownik Dziekanatu';
         }
 
-        if($request->expectsJson()){
+        if ($request->expectsJson()) {
             return response()->json([
                 'sale' => $salimapped
             ]);
@@ -179,8 +196,9 @@ class UserController extends Controller
         ]);
     }
 
-    public function planzajecpost(Request $request , $grpa){
-        
+    public function planzajecpost(Request $request, $grpa)
+    {
+
         $planzajec = Planzajec::where('GrupaStudenta_idGrupaStudenta', $grpa)->first();
         // $rezerwacje = Rezerwacja::with('zajecie.przedmiot')->where('Zajęcie_PlanZajec_idPlanZajec', $planzajec->idPlanZajec)->get();
         $rezerwacje = Rezerwacja::select(
@@ -194,23 +212,23 @@ class UserController extends Controller
             'user.surname',
             'prowadzacy.TytulNaukowy',
         )
-        ->join('zajęcie', function($join){
-            $join->on('rezerwacja.Zajęcie_idZajęcie', '=', 'zajęcie.idZajęcie')
-                ->on('rezerwacja.Zajęcie_PlanZajec_idPlanZajec', '=', 'zajęcie.PlanZajec_idPlanZajec');
-        })
-        ->join('sala', function($join){
-            $join->on('rezerwacja.Sala_idSala', '=', 'sala.idSala');
-        })
-        
-        ->join('prowadzacy', function($join){
-            $join->on('rezerwacja.Prowadzacy_idProwadzacy', '=', 'prowadzacy.idProwadzacy');    
-        })
-        ->leftJoin('przedmiot', 'zajęcie.Przedmiot_idPrzedmiot', '=', 'przedmiot.idPrzedmiot')
-        ->leftJoin('user', 'prowadzacy.User_idUser' , '=' , 'user.idUser')
+            ->join('zajęcie', function ($join) {
+                $join->on('rezerwacja.Zajęcie_idZajęcie', '=', 'zajęcie.idZajęcie')
+                    ->on('rezerwacja.Zajęcie_PlanZajec_idPlanZajec', '=', 'zajęcie.PlanZajec_idPlanZajec');
+            })
+            ->join('sala', function ($join) {
+                $join->on('rezerwacja.Sala_idSala', '=', 'sala.idSala');
+            })
 
-        ->where([['rezerwacja.Zajęcie_PlanZajec_idPlanZajec', $planzajec->idPlanZajec], ['rezerwacja.typWydarzenia', 'Zajęcia']])
-        ->get();
-        
+            ->join('prowadzacy', function ($join) {
+                $join->on('rezerwacja.Prowadzacy_idProwadzacy', '=', 'prowadzacy.idProwadzacy');
+            })
+            ->leftJoin('przedmiot', 'zajęcie.Przedmiot_idPrzedmiot', '=', 'przedmiot.idPrzedmiot')
+            ->leftJoin('user', 'prowadzacy.User_idUser', '=', 'user.idUser')
+
+            ->where([['rezerwacja.Zajęcie_PlanZajec_idPlanZajec', $planzajec->idPlanZajec], ['rezerwacja.typWydarzenia', 'Zajęcia']])
+            ->get();
+
         $gotowyplan = $rezerwacje->map(function ($item) {
             $dniMapowania = [
                 'Poniedziałek' => 1,
@@ -223,7 +241,7 @@ class UserController extends Controller
             ];
 
             $numerDnia = $dniMapowania[$item->DzienTygodnia] ?? 1;
-            
+
             // $dataZajec = Carbon::now()->startOfWeek()->addDays($numerDnia - 1)->format('Y-m-d');
             // dd($dataZajec); 
             return [
@@ -243,25 +261,25 @@ class UserController extends Controller
                 ]
             ];
         })->values()->toArray();
-        
-        
+
+
         // dd($gotowyplan);
-       
+
         $listaKierunkow = Kierunek::get()->values()->toArray();
-        $listaGrup = Grupastudenta::where('typGrupy', 'Laboratoryjna')->get()->values()->toArray();                       
+        $listaGrup = Grupastudenta::where('typGrupy', 'Laboratoryjna')->get()->values()->toArray();
         $user = $request->user();
         $role = '';
-        if($user->isStudent()){
+        if ($user->isStudent()) {
             $role = 'Student';
         }
-        if($user->isProwadzacy()){
+        if ($user->isProwadzacy()) {
             $role = 'Prowadzący';
         }
-        if($user->isPracownikDziekanatu()){
+        if ($user->isPracownikDziekanatu()) {
             $role = 'Pracownik Dziekanatu';
         }
 
-        if($request->expectsJson()){
+        if ($request->expectsJson()) {
             return response()->json([
                 'plan' => $gotowyplan,
                 'listagrup' => $listaGrup,
@@ -276,22 +294,24 @@ class UserController extends Controller
             'plan' => $gotowyplan,
             'listagrup' => $listaGrup,
             'listakierunkow' => $listaKierunkow
-        ]);}
+        ]);
+    }
 
-    public function planzajec(Request $request){
+    public function planzajec(Request $request)
+    {
 
-    
-    
+
+
 
         $user = $request->user();
         $gotowyplan = null;
         $role = '';
-        if($user->isStudent()){
+        if ($user->isStudent()) {
             $role = 'Student';
             $student = Student::with('grupastudenta')->where('User_idUser', $user->idUser)->first();
             $grupa = $student->grupastudenta()->first();
             $planzajec = Planzajec::where('GrupaStudenta_idGrupaStudenta', $grupa->idGrupaStudenta)->first();
-            // $rezerwacje = Rezerwacja::with('zajecie.przedmiot')->where('Zajęcie_PlanZajec_idPlanZajec', $planzajec->idPlanZajec)->get();
+            
             $rezerwacje = Rezerwacja::select(
                 'rezerwacja.*',
                 'zajęcie.DzienTygodnia',
@@ -308,67 +328,64 @@ class UserController extends Controller
                 'user.surname',
                 'prowadzacy.TytulNaukowy',
             )
-            ->join('zajęcie', function($join){
-                $join->on('rezerwacja.Zajęcie_idZajęcie', '=', 'zajęcie.idZajęcie')
-                    ->on('rezerwacja.Zajęcie_PlanZajec_idPlanZajec', '=', 'zajęcie.PlanZajec_idPlanZajec');
-            })
-            ->join('sala', function($join){
-                $join->on('rezerwacja.Sala_idSala', '=', 'sala.idSala');
-            })
-            ->join('budynek', function($join){
-             $join->on('sala.Budynek_idBudynek', '=', 'budynek.idBudynek');
-            })
-            ->join('prowadzacy', function($join){
-                $join->on('rezerwacja.Prowadzacy_idProwadzacy', '=', 'prowadzacy.idProwadzacy');    
-            })
-            ->leftJoin('przedmiot', 'zajęcie.Przedmiot_idPrzedmiot', '=', 'przedmiot.idPrzedmiot')
-            ->leftJoin('user', 'prowadzacy.User_idUser' , '=' , 'user.idUser')
+                ->leftJoin('zajęcie', function ($join) {
+                    $join->on('rezerwacja.Zajęcie_idZajęcie', '=', 'zajęcie.idZajęcie')
+                        ->on('rezerwacja.Zajęcie_PlanZajec_idPlanZajec', '=', 'zajęcie.PlanZajec_idPlanZajec');
+                })
+                ->leftJoin('sala', 'rezerwacja.Sala_idSala', '=', 'sala.idSala')
+                ->leftJoin('budynek', 'sala.Budynek_idBudynek', '=', 'budynek.idBudynek')
+                ->leftJoin('prowadzacy', 'rezerwacja.Prowadzacy_idProwadzacy', '=', 'prowadzacy.idProwadzacy')
+                ->leftJoin('przedmiot', 'zajęcie.Przedmiot_idPrzedmiot', '=', 'przedmiot.idPrzedmiot')
+                ->leftJoin('user', 'prowadzacy.User_idUser', '=', 'user.idUser')
+                ->where('rezerwacja.Zajęcie_PlanZajec_idPlanZajec', $planzajec->idPlanZajec)
+                ->whereIn('rezerwacja.typWydarzenia', ['Zajęcia', 'Godziny dziekańskie', 'Godziny rektorskie'])
+                ->get();
 
-            ->where([['rezerwacja.Zajęcie_PlanZajec_idPlanZajec', $planzajec->idPlanZajec], ['rezerwacja.typWydarzenia', 'Zajęcia']])
-            ->get();
-            
             $gotowyplan = $rezerwacje->map(function ($item) {
-                
-                // $dataZajec = Carbon::now()->startOfWeek()->addDays($numerDnia - 1)->format('Y-m-d');
-                // dd($dataZajec); 
+                $isDekanskie = in_array($item->typWydarzenia, ['Godziny dziekańskie', 'Godziny rektorskie']);
+
                 return [
                     'id' => $item->idRezerwacja,
                     'start' => $item->data . 'T' . $item->GodzinaRozpoczecia,
                     'end' => $item->data . 'T' . $item->GodzinaZakonczenia,
-                    'title' => $item->nazwa_przedmiotu . ' (' . $item->TypZajec . ')',
+                    'title' => $isDekanskie
+                        ? $item->typWydarzenia
+                        : ($item->nazwa_przedmiotu . ' (' . $item->TypZajec . ')'),
+                    'backgroundColor' => $isDekanskie ? '#d97706' : null,
                     'extendedProps' => [
-                        'typ' => $item->TypZajec,
-                        'parzystosc' => $item->Parzystosc,
+                        'typWydarzenia' => $item->typWydarzenia,
+                        'typ' => $isDekanskie ? $item->typWydarzenia : ($item->TypZajec ?? null),
+                        'parzystosc' => $item->Parzystosc ?? null,
 
-                        'idSala' => $item->idSala,
-                        'numersali' => $item->numerSali,
+                        'idSala' => $item->idSala ?? null,
+                        'numersali' => $item->numerSali ?? 'Brak',
 
-                        'idBudynek' => $item->idBudynek,
-                        'nazwaBudynku' => $item->nazwa_budynku,
-                        'ulica' => $item->ulica,
-                        'nrBudynku' => $item->nrBudynku,
+                        'idBudynek' => $item->idBudynek ?? null,
+                        'nazwaBudynku' => $item->nazwa_budynku ?? '',
+                        'ulica' => $item->ulica ?? '',
+                        'nrBudynku' => $item->nrBudynku ?? '',
 
-                        'imie' => substr($item->name, 0, 1),
-                        'nazwisko' => $item->surname,
-                        'tytulNaukowy' => $item->TytulNaukowy,
-                        'dzientygodnia' => $item->DzienTygodnia
+                        'imie' => $item->name ? substr($item->name, 0, 1) : '',
+                        'nazwisko' => $item->surname ?? '',
+                        'tytulNaukowy' => $item->TytulNaukowy ?? '',
+                        'dzientygodnia' => $item->DzienTygodnia ?? ''
                     ]
                 ];
-            })->values()->toArray();
+            })->values()->toArray();    
         }
-        if($user->isProwadzacy()){
+        if ($user->isProwadzacy()) {
             $role = 'Prowadzący';
         }
-        if($user->isPracownikDziekanatu()){
+        if ($user->isPracownikDziekanatu()) {
             $role = 'Pracownik Dziekanatu';
         }
-        
+
         // dd($gotowyplan);
-       
+
         $listaKierunkow = Kierunek::get()->values()->toArray();
-        $listaGrup = Grupastudenta::where('typGrupy', 'Laboratoryjna')->get()->values()->toArray();                       
- 
-        if($request->expectsJson()){
+        $listaGrup = Grupastudenta::where('typGrupy', 'Laboratoryjna')->get()->values()->toArray();
+
+        if ($request->expectsJson()) {
             return response()->json([
                 'plan' => $gotowyplan ?? null,
                 'listagrup' => $listaGrup,
@@ -386,21 +403,22 @@ class UserController extends Controller
         ]);
     }
 
-    public function mojedane(Request $request){
+    public function mojedane(Request $request)
+    {
         $user = $request->user();
         $role = '';
         $polaroli = [];
         $grupalaboratoryjna = null;
         $grupacwiczeniowa = null;
         $grupawykladowa = null;
-        if($user->isStudent()){
+        if ($user->isStudent()) {
             $role = 'Student';
 
             $student = Student::with('grupastudenta')->where('User_idUser', $user->idUser)->first();
             // dd($student->grupastudenta->toArray());
 
 
-            if($student && $student->grupastudenta){
+            if ($student && $student->grupastudenta) {
 
                 $id_nadgrupy_lab = $student->grupastudenta->where('typGrupy', 'Laboratoryjna')->value('id_nadgrupy');
                 $id_nadgrupy_cw = Grupastudenta::where('typGrupy', 'Cwiczeniowa')->value('id_nadgrupy');
@@ -410,21 +428,17 @@ class UserController extends Controller
                     ->where('typGrupy', 'Laboratoryjna')
                     ->pluck('nazwaGrupy')
                     ->implode(', ');
-                if($id_nadgrupy_lab){
-                    $grupacwiczeniowa = Grupastudenta::
-                        where([['typGrupy', 'Cwiczeniowa'], ['idGrupaStudenta', $id_nadgrupy_lab]])
+                if ($id_nadgrupy_lab) {
+                    $grupacwiczeniowa = Grupastudenta::where([['typGrupy', 'Cwiczeniowa'], ['idGrupaStudenta', $id_nadgrupy_lab]])
                         ->pluck('nazwaGrupy')
                         ->implode(', ');
+                }
 
-                }
-                    
-                if($id_nadgrupy_cw){
-                    $grupawykladowa = Grupastudenta::
-                        where([['typGrupy', 'Wykladowa'], ['idGrupaStudenta', $id_nadgrupy_cw]])
+                if ($id_nadgrupy_cw) {
+                    $grupawykladowa = Grupastudenta::where([['typGrupy', 'Wykladowa'], ['idGrupaStudenta', $id_nadgrupy_cw]])
                         ->pluck('nazwaGrupy')
                         ->implode(', ');
                 }
-                
             }
 
             $polaroli = [
@@ -442,24 +456,24 @@ class UserController extends Controller
 
             ];
         }
-        if($user->isProwadzacy()){
+        if ($user->isProwadzacy()) {
             $role = 'Prowadzący';
             $polaroli = [
                 'TytulNaukowy' => $user->prowadzacy->TytulNaukowy,
                 'katedra' => $user->prowadzacy->katedra,
             ];
         }
-        if($user->isPracownikDziekanatu()){
+        if ($user->isPracownikDziekanatu()) {
             $role = 'Pracownik Dziekanatu';
             $polaroli = [
                 'Odpowiedzialnosc' => $user->pracownikdziekanatu->Odpowiedzialnosc ?? null,
             ];
         }
         //czesc dla wyciagniecia zdjecia z bazy
-        $base64data = $user->photo; 
+        $base64data = $user->photo;
         $photourl = $base64data ? 'data:image/jpeg;base64,' . $base64data : null;
-        
-        if($request->expectsJson()){
+
+        if ($request->expectsJson()) {
             return response()->json(array_merge([
                 'rol' => $role,
                 'name' => $user->name,
@@ -483,5 +497,4 @@ class UserController extends Controller
             'photo' => $photourl
         ], $polaroli));
     }
-
 }
