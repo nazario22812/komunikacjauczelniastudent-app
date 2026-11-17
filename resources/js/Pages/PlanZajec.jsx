@@ -15,7 +15,11 @@ import "@fullcalendar/react/skeleton.css";
 import "@fullcalendar/react/themes/classic/theme.css";
 import "@fullcalendar/react/themes/classic/palette.css";
 
-function Content({ plan = null, listagrup = [], listakierunkow = [] }) {
+function Content({
+    plan = null,
+    listagrup = [],
+    listakierunkow = [],
+}) {
     const [wybranyKierunek, setwybranyKierunek] = useState("");
     const [wybranaGrupa, setwybranaGrupa] = useState("");
 
@@ -32,11 +36,34 @@ function Content({ plan = null, listagrup = [], listakierunkow = [] }) {
 
     const wyszukajGrupe = (e) => {
         e.preventDefault();
+
+        if (!data.grpa) {
+            return;
+        }
+
         get(`/planzajec/${data.grpa}`);
+    };
+
+    const formatTime = (date) => {
+        if (!date) {
+            return "";
+        }
+
+        return new Intl.DateTimeFormat("pl-PL", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hourCycle: "h23",
+        }).format(date);
     };
 
     const renderEventContent = (arg) => {
         const props = arg.event.extendedProps;
+
+        const title = arg.event.title;
+
+        const isGodziny =
+            title === "Godziny dziekańskie" ||
+            title === "Godziny rektorskie";
 
         const eventClass =
             {
@@ -45,28 +72,51 @@ function Content({ plan = null, listagrup = [], listakierunkow = [] }) {
                 Ćwiczenia: "bg-theme-cyan",
             }[props.typ] ?? "bg-theme-blue";
 
+        const startTime = formatTime(arg.event.start);
+        const endTime = formatTime(arg.event.end);
+
+        const timeText =
+            startTime && endTime
+                ? `${startTime} – ${endTime}`
+                : startTime || arg.timeText;
+
         return (
             <div
                 className={`${eventClass} h-full w-full overflow-hidden p-[2px] text-[10px] leading-[1.2] text-white sm:text-[11px]`}
             >
                 <b className="break-words whitespace-normal">
-                    {arg.event.title}
+                    {title}
                 </b>
 
-                <div className="break-words whitespace-normal">
-                    {props.tytulNaukowy || ""} {props.imie}.{" "}
-                    {props.nazwisko}
-                </div>
+                {!isGodziny && (
+                    <>
+                        {props.imie && (
+                            <div className="break-words whitespace-normal">
+                                {props.tytulNaukowy || ""}{" "}
+                                {props.imie}.{" "}
+                                {props.nazwisko}
+                            </div>
+                        )}
 
-                <div className="break-words whitespace-normal">
-                    {props.parzystosc}
-                </div>
+                        {props.parzystosc &&
+                            props.parzystosc !== "Brak" && (
+                                <div className="break-words whitespace-normal">
+                                    {props.parzystosc}
+                                </div>
+                            )}
 
-                <div className="break-words whitespace-normal">
-                    {props.numersali}
-                </div>
+                        {props.numersali &&
+                            props.numersali !== "Brak" && (
+                                <div className="break-words whitespace-normal">
+                                    {props.numersali}
+                                </div>
+                            )}
+                    </>
+                )}
 
-                <div>{arg.timeText}</div>
+                <div className="mt-[2px] whitespace-nowrap">
+                    {timeText}
+                </div>
             </div>
         );
     };
@@ -75,7 +125,9 @@ function Content({ plan = null, listagrup = [], listakierunkow = [] }) {
         <div className="bg-theme-page flex min-h-dvh min-w-0 w-full flex-1 flex-col box-border p-2 sm:p-[10px]">
             <div className="bg-theme-panel mx-auto flex h-[40px] w-full shrink-0 items-center rounded-t-[10px] border-[0.3px] border-theme-muted px-2 sm:px-[10px]">
                 <div className="flex w-[42px] shrink-0 items-center justify-start">
-                    <BackButton back={() => window.history.back()} />
+                    <BackButton
+                        back={() => window.history.back()}
+                    />
                 </div>
 
                 <span className="min-w-0 flex-1 text-center text-[16px] font-bold text-theme-text">
@@ -91,7 +143,10 @@ function Content({ plan = null, listagrup = [], listakierunkow = [] }) {
                         <FullCalendar
                             theme="monarch"
                             colorScheme="dark"
-                            plugins={[timeGridPlugin, themePlugin]}
+                            plugins={[
+                                timeGridPlugin,
+                                themePlugin,
+                            ]}
                             initialView="timeGridFourDay"
                             views={{
                                 timeGridFourDay: {
@@ -112,25 +167,36 @@ function Content({ plan = null, listagrup = [], listakierunkow = [] }) {
                                 },
                             }}
                             windowResizeDelay={150}
-                            viewClassNames={(arg) => {
+                            viewClassNames={() => {
                                 return "responsive-calendar-view";
                             }}
                             datesSet={(arg) => {
-                                const calendar = arg.view.calendar;
+                                const calendar =
+                                    arg.view.calendar;
+
                                 const width = window.innerWidth;
 
-                                let targetView = "timeGridFourDay";
+                                let targetView =
+                                    "timeGridFourDay";
 
                                 if (width < 480) {
-                                    targetView = "timeGridOneDay";
+                                    targetView =
+                                        "timeGridOneDay";
                                 } else if (width < 768) {
-                                    targetView = "timeGridTwoDay";
+                                    targetView =
+                                        "timeGridTwoDay";
                                 } else if (width < 1200) {
-                                    targetView = "timeGridThreeDay";
+                                    targetView =
+                                        "timeGridThreeDay";
                                 }
 
-                                if (arg.view.type !== targetView) {
-                                    calendar.changeView(targetView);
+                                if (
+                                    arg.view.type !==
+                                    targetView
+                                ) {
+                                    calendar.changeView(
+                                        targetView
+                                    );
                                 }
                             }}
                             events={plan ?? []}
@@ -142,6 +208,17 @@ function Content({ plan = null, listagrup = [], listakierunkow = [] }) {
                             slotMinTime="08:00:00"
                             slotMaxTime="22:00:00"
                             slotDuration="01:00:00"
+                            slotLabelFormat={{
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                hour12: false,
+                            }}
+                            eventTimeFormat={{
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                hour12: false,
+                            }}
+                            displayEventEnd={true}
                             height="100%"
                             expandRows={true}
                             weekNumberFormat={{
@@ -167,11 +244,16 @@ function Content({ plan = null, listagrup = [], listakierunkow = [] }) {
                                 <Form.Select
                                     value={wybranyKierunek}
                                     onChange={(e) => {
-                                        setwybranyKierunek(e.target.value);
+                                        setwybranyKierunek(
+                                            e.target.value
+                                        );
+
                                         setwybranaGrupa("");
+
                                         setData({
                                             ...data,
-                                            kierunk: e.target.value,
+                                            kierunk:
+                                                e.target.value,
                                             grpa: "",
                                         });
                                     }}
@@ -184,8 +266,12 @@ function Content({ plan = null, listagrup = [], listakierunkow = [] }) {
                                     {(listakierunkow ?? []).map(
                                         (kierunek) => (
                                             <option
-                                                key={kierunek.idKierunek}
-                                                value={kierunek.idKierunek}
+                                                key={
+                                                    kierunek.idKierunek
+                                                }
+                                                value={
+                                                    kierunek.idKierunek
+                                                }
                                             >
                                                 {kierunek.nazwa}
                                             </option>
@@ -202,8 +288,14 @@ function Content({ plan = null, listagrup = [], listakierunkow = [] }) {
                                 <Form.Select
                                     value={wybranaGrupa}
                                     onChange={(e) => {
-                                        setwybranaGrupa(e.target.value);
-                                        setData("grpa", e.target.value);
+                                        setwybranaGrupa(
+                                            e.target.value
+                                        );
+
+                                        setData(
+                                            "grpa",
+                                            e.target.value
+                                        );
                                     }}
                                     disabled={!wybranyKierunek}
                                     className="h-[32px] w-full min-w-0 max-w-full rounded-[15px] border border-theme-muted bg-theme-slate text-theme-text"
@@ -214,8 +306,12 @@ function Content({ plan = null, listagrup = [], listakierunkow = [] }) {
 
                                     {filtergrup.map((grupa) => (
                                         <option
-                                            key={grupa.idGrupaStudenta}
-                                            value={grupa.idGrupaStudenta}
+                                            key={
+                                                grupa.idGrupaStudenta
+                                            }
+                                            value={
+                                                grupa.idGrupaStudenta
+                                            }
                                         >
                                             {grupa.nazwaGrupy}
                                         </option>
@@ -225,7 +321,10 @@ function Content({ plan = null, listagrup = [], listakierunkow = [] }) {
 
                             <div className="mx-auto mt-10 flex h-[36px] w-full items-center justify-center">
                                 <button
-                                    disabled={processing || !data.grpa}
+                                    disabled={
+                                        processing ||
+                                        !data.grpa
+                                    }
                                     type="submit"
                                     className="h-full w-3/4 rounded-[15px] bg-theme-orange text-[13px] text-theme-text hover:cursor-pointer active:bg-theme-orange disabled:cursor-not-allowed disabled:opacity-60"
                                 >
@@ -245,11 +344,11 @@ function Content({ plan = null, listagrup = [], listakierunkow = [] }) {
 export default function PlanZajec({
     auth,
     plan = null,
-    listagrup,
-    listakierunkow,
+    listagrup = [],
+    listakierunkow = [],
     rol,
 }) {
-    let menu;
+    let menu = null;
 
     if (rol === "Student") {
         menu = <MenuStudenta />;
@@ -266,7 +365,9 @@ export default function PlanZajec({
     return (
         <div className="flex min-h-dvh min-w-0 w-full">
             <Head title="Plan zajęć" />
+
             {menu}
+
             <Content
                 plan={plan}
                 listagrup={listagrup}
