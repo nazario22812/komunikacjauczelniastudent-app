@@ -45,7 +45,7 @@ export default function MenuDziekanat() {
             icon: List,
         },
         {
-            href: "",
+            href: "/dziekanat/finansestudentow",
             label: "Finanse studentów",
             icon: Wallet,
         },

@@ -120,4 +120,10 @@ Route::middleware(['auth', 'role:pracownikdziekanatu'])->group(function (){
     Route::get('/dziekanat/ogloszeniaankiety', [DziekanatController::class, 'ogloszenia']);
     Route::post('/dziekanat/ogloszenia',[DziekanatController::class, 'storeOgloszenie']);
     Route::post('/dziekanat/ankiety',[DziekanatController::class, 'storeAnkieta']);
+    Route::get('/dziekanat/finansestudentow', [DziekanatController::class, 'finansestudentow']);
+    Route::post('/dziekanat/platnosci/{student_id}/dodajPlatnosc', [DziekanatController::class, 'dodanieplatnosci']);
+    Route::post('/dziekanat/platnosci/{student_id}/{platnosc_id}/zmienStatus', [DziekanatController::class, 'zmianastatusuplatnosci']);
+    Route::post('/dziekanat/platnosci/{student_id}/{platnosc_id}/usunPlatnosc', [DziekanatController::class, 'usuniecieplatnosci']);
+
+
 });
