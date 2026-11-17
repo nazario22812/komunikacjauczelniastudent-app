@@ -1,96 +1,129 @@
 import { Head, Link, router, useForm } from "@inertiajs/react";
 import { useEffect, useRef } from "react";
-import image from '@/../images/logo.png';
-import login from '@/../images/at.png'
-import haslo from '@/../images/key.png';
+import image from "@/../images/logo.png";
+import login from "@/../images/at.png";
+import haslo from "@/../images/key.png";
 
-
-export default function Login({ status }){
+export default function Login({ status }) {
     const { data, setData, post, processing, errors, reset } = useForm({
-        email: '',
-        password: '',
-        
+        email: "",
+        password: "",
     });
 
-
-    const emailInput = useRef(null)
+    const emailInput = useRef(null);
     useEffect(() => {
-        emailInput.current?.focus()
-
-    }, [] );
+        emailInput.current?.focus();
+    }, []);
 
     const submit = (e) => {
         e.preventDefault();
 
-        post('/login', {
-            onFinish: () => reset('password') 
+        post("/login", {
+            onFinish: () => reset("password"),
         });
-    }
+    };
 
     return (
-        <div className="bg-theme-panel min-h-screen p-4">
-            
+        <div className="min-h-screen bg-[#040d2a] px-4 py-6 text-white sm:px-5 sm:py-8">
             <Head title="Logowanie" />
-            
-            <div className="bg-theme-login w-md h-1/2 mx-auto mt-60 overflow-hidden px-6 py-4 shadow-md rounded-lg border-[0.1px] border-theme-muted">
-                <img src={image} alt="mojauczelnia" className="w-[240px] h-[240px] mx-auto mb-5" />
-                <form onSubmit={submit} className="">
-                    
-                    {/* email input and label  */}
-                    <div className="w-3/4 mx-auto h-[35] flex border-[0.1px] border-theme-muted m-1 rounded-lg mb-2">   
-                        <label htmlFor="email" className="w-1/4"><img src={login} alt="login" className="w-[24px] h-[24px] mx-auto m-1 fill-white"/></label>
 
-                        <input 
-                            id="email"
-                            type="email"
-                            name="email"
-                            value={data.email}
-                            className="w-3/4 bg-white px-2 rounded-r-lg"
-                            autoComplete="username"
-                            placeholder="adam.zielinski@example.pl"
-
-                            ref={emailInput}
-                            onChange={(e) => setData('email', e.target.value)}
-
+            <div className="mx-auto mt-6 w-full max-w-[520px] overflow-hidden rounded-[18px] border border-[#2e3d67] bg-[#0d173a] shadow-[0_0_0_1px_rgba(147,167,255,0.08)] sm:mt-10">
+                <div className="border-b border-[#2e3d67] bg-[#0d173a] px-5 py-5 sm:px-6">
+                    <div className="mx-auto flex h-[110px] w-[110px] items-center justify-center rounded-[20px] bg-[#0b112d] ring-1 ring-[#f2f7ff]/10 sm:h-[140px] sm:w-[140px]">
+                        <img
+                            src={image}
+                            alt="mojauczelnia"
+                            className="h-[76px] w-[76px] object-contain sm:h-[100px] sm:w-[100px]"
                         />
-
                     </div>
-                    <p className="text-white text-[12px] mx-auto text-center ">{errors.email}</p>
+                </div>
 
-
-                    {/* password input and label  */}
-                    <div className="w-3/4 mx-auto h-[35] flex border-[0.1px] border-theme-muted m-1 rounded-lg">
-                        <label htmlFor="password" className="w-1/4 h-full "><img src={haslo} alt="haslo" className="w-[24px] h-[24px] mx-auto m-1 fill-white"/></label>
-                        
-                        <input
-                            id="password"
-                            type="password"
-                            name="password"
-                            value={data.password}
-                            className="w-3/4 bg-white px-2 rounded-r-lg"
-                            autoComplete="current-password"
-                            placeholder="**************"
-                            onChange={(e) => setData('password', e.target.value)}
-                        />
-
+                <form
+                    onSubmit={submit}
+                    className="space-y-4 px-4 py-5 sm:px-8 sm:py-6"
+                >
+                    <div className="space-y-2">
+                        <label
+                            htmlFor="email"
+                            className="block text-sm font-medium text-[#dfe8ff]"
+                        >
+                            Email
+                        </label>
+                        <div className="flex items-center overflow-hidden rounded-xl border border-[#2e3d67] bg-[#0c1535] focus-within:border-[#6ab2ff]">
+                            <span className="flex h-11 w-11 shrink-0 items-center justify-center border-r border-[#2e3d67] bg-[#0d173a] sm:h-12 sm:w-12">
+                                <img
+                                    src={login}
+                                    alt="login"
+                                    className="!h-[18px] !w-[18px] !max-w-[18px] shrink-0 object-contain sm:!h-[20px] sm:!w-[20px] sm:!max-w-[20px]"
+                                />{" "}
+                            </span>
+                            <input
+                                id="email"
+                                type="email"
+                                name="email"
+                                value={data.email}
+                                className="h-11 w-full bg-transparent px-3 text-sm text-white placeholder:text-[#8aa0cf] outline-none sm:h-12 sm:text-base"
+                                autoComplete="username"
+                                placeholder="adam.zielinski@example.pl"
+                                ref={emailInput}
+                                onChange={(e) =>
+                                    setData("email", e.target.value)
+                                }
+                            />
+                        </div>
+                        <p className="min-h-[18px] text-xs text-red-300">
+                            {errors.email}
+                        </p>
                     </div>
-                    <p className="text-theme-text text-[12px] mx-auto text-center ">{errors.password}</p>
 
-
-                    <div  className=" w-3/4 mx-auto pt-5">
-                        <button className="w-full h-[35] mt-5 bg-white rounded-lg text-theme-dark-panel font-bold hover:bg-gray-300 hover:cursor-pointer active:bg-gray-500" disabled={processing}>
-                            Zaloguj
-                        </button>
+                    <div className="space-y-2">
+                        <label
+                            htmlFor="password"
+                            className="block text-sm font-medium text-[#dfe8ff]"
+                        >
+                            Hasło
+                        </label>
+                        <div className="flex items-center overflow-hidden rounded-xl border border-[#2e3d67] bg-[#0c1535] focus-within:border-[#6ab2ff]">
+                            <span className="flex h-11 w-11 shrink-0 items-center justify-center border-r border-[#2e3d67] bg-[#0d173a] sm:h-12 sm:w-12">
+                                <img
+                                    src={haslo}
+                                    alt="haslo"
+                                    className="!h-[18px] !w-[18px] !max-w-[18px] shrink-0 object-contain sm:!h-[20px] sm:!w-[20px] sm:!max-w-[20px]"
+                                />
+                            </span>
+                            <input
+                                id="password"
+                                type="password"
+                                name="password"
+                                value={data.password}
+                                className="h-11 w-full bg-transparent px-3 text-sm text-white placeholder:text-[#8aa0cf] outline-none sm:h-12 sm:text-base"
+                                autoComplete="current-password"
+                                placeholder="**************"
+                                onChange={(e) =>
+                                    setData("password", e.target.value)
+                                }
+                            />
+                        </div>
+                        <p className="min-h-[18px] text-xs text-red-300">
+                            {errors.password}
+                        </p>
                     </div>
+
+                    {status && (
+                        <p className="text-center text-sm text-[#dfe8ff]">
+                            {status}
+                        </p>
+                    )}
+
+                    <button
+                        type="submit"
+                        disabled={processing}
+                        className="mt-2 h-12 w-full rounded-xl bg-[#3b60d4] text-base font-semibold text-white transition hover:bg-[#2d4eb3] disabled:cursor-not-allowed disabled:opacity-70"
+                    >
+                        {processing ? "Logowanie..." : "Zaloguj"}
+                    </button>
                 </form>
             </div>
-            
-        
         </div>
-        
-        
-
-        
-
     );
 }

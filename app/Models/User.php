@@ -5,12 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Auth\Authenticatable as Autthenticatable;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Model implements \Illuminate\Contracts\Auth\Authenticatable
+class User extends Model implements \Illuminate\Contracts\Auth\Authenticatable, CanResetPasswordContract
 {
     //
-    use Autthenticatable, HasApiTokens, Notifiable;
+    use Autthenticatable, CanResetPassword, HasApiTokens, Notifiable;
 
     protected $table = 'user';
     protected $primaryKey = 'idUser';

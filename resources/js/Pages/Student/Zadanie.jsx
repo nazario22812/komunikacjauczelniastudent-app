@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import MenuStudenta from "../../Components/MenuStudenta";
 import { Head, router, useForm, usePage } from "@inertiajs/react";
@@ -6,8 +7,8 @@ import { useDropzone } from "react-dropzone";
 import { ToastContainer, toast } from "react-toastify";
 
 function Content({ zadanie, pliki = null, ocena = null }) {
-    
     const initialFiles = Array.isArray(pliki) ? pliki : [];
+
     const { data, setData, post, processing, errors } = useForm({
         pliks: initialFiles,
     });
@@ -16,7 +17,9 @@ function Content({ zadanie, pliki = null, ocena = null }) {
 
     const onDrop = (acceptedFiles) => {
         setpliks((previousFiles) => {
-            const safePreviousFiles = Array.isArray(previousFiles) ? previousFiles : [];
+            const safePreviousFiles = Array.isArray(previousFiles)
+                ? previousFiles
+                : [];
 
             const newFiles = acceptedFiles.filter(
                 (newFile) =>
@@ -24,11 +27,14 @@ function Content({ zadanie, pliki = null, ocena = null }) {
                         (file) =>
                             file.name === newFile.name &&
                             file.size === newFile.size &&
-                            file.lastModified === newFile.lastModified,
-                    ),
+                            file.lastModified === newFile.lastModified
+                    )
             );
 
-            const updatedFiles = [...safePreviousFiles, ...newFiles];
+            const updatedFiles = [
+                ...safePreviousFiles,
+                ...newFiles,
+            ];
 
             setData("pliks", updatedFiles);
 
@@ -36,29 +42,32 @@ function Content({ zadanie, pliki = null, ocena = null }) {
         });
     };
 
-    const { getRootProps, getInputProps, isDragActive, fileRejections } =
-        useDropzone({
-            onDrop,
-            multiple: true,
-            accept: {
-                "image/jpeg": [".jpg", ".jpeg"],
-                "image/png": [".png"],
-                "application/pdf": [".pdf"],
-                "application/zip": [".zip"],
-                "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-                    [".docx"],
-                "application/msword": [".doc"],
-                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
-                    [".xlsx"],
-                "application/vnd.ms-excel": [".xls"],
-            },
-            
-            
-        });
+    const {
+        getRootProps,
+        getInputProps,
+        isDragActive,
+    } = useDropzone({
+        onDrop,
+        multiple: true,
+        accept: {
+            "image/jpeg": [".jpg", ".jpeg"],
+            "image/png": [".png"],
+            "application/pdf": [".pdf"],
+            "application/zip": [".zip"],
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [
+                ".docx",
+            ],
+            "application/msword": [".doc"],
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [
+                ".xlsx",
+            ],
+            "application/vnd.ms-excel": [".xls"],
+        },
+    });
 
     const removeFile = (indexToRemove) => {
         const updatedFiles = pliks.filter(
-            (_, index) => index !== indexToRemove,
+            (_, index) => index !== indexToRemove
         );
 
         setpliks(updatedFiles);
@@ -68,156 +77,189 @@ function Content({ zadanie, pliki = null, ocena = null }) {
     const wyslijzadanie = (e) => {
         e.preventDefault();
 
-        
-
         post(`/student/kurs/wyslijzadanie/${zadanie.idZadanie}`, {
             forceFormData: true,
         });
-    }
+    };
 
     return (
-        
-        <div className="bg-theme-page w-full p-[10px] h-screen flex flex-col box-border">
-             
-            <div className="bg-theme-page w-full flex shrink-0 h-[40px] mx-auto text-center border-b-[0.3px] border-theme-muted p-[10px] rounded-t-[10px]">
-                <BackButton back={() => window.history.back()} />
-                <span className="font-bold text-[16px] text-theme-text w-full ">
+        <div className="bg-theme-page flex min-h-dvh min-w-0 w-full flex-1 flex-col box-border p-2 sm:p-[10px]">
+            <div className="bg-theme-page mx-auto flex h-[40px] w-full shrink-0 items-center rounded-t-[10px] border-b-[0.3px] border-theme-muted px-2 sm:px-[10px]">
+                <div className="flex w-[42px] shrink-0 items-center justify-start">
+                    <BackButton back={() => window.history.back()} />
+                </div>
+
+                <span className="min-w-0 flex-1 text-center text-[16px] font-bold text-theme-text">
                     Zadanie
                 </span>
-            </div>
-            <div className="w-full flex-1 min-h-0 pt-3 pb-2 px-1 rounded-b-[10px] flex flex-col relative ">
-                <div className="bg-theme-slate w-full h-full mx-auto pt-[35px] pb-[10px] px-[75px] rounded-[15px] relative overflow-y-auto pr-2 custom-scrollbar">
-                    <div className="w-full text-center text-theme-text font-bold text-[58px]">
-                        <span>{zadanie.nazwaZadania}</span><br />
-                        <span className="text-[20px] font-thin">termin oddania: {zadanie.TerminOddania || 'N/D'}</span><br />
-                        {zadanie.CzyNaOcene == 1 ? (
-                            <div className="w-[60%] mx-auto  flex justify-between items-center">
-                                {ocena != null ? (
-                                    <span className="text-[22px] font-thin">Ocena: {ocena.skalaOceny}</span>
-                                ) : (
-                                    <span className="text-[22px] font-thin">Nie ocenione</span>
-                                )}
-                            </div>   
-                        ): (
-                            <></>
-                        )}
-                        <span className="text-[22px] font-thin">Status: {zadanie.pivot.status}</span>
 
-                         
+                <div className="w-[42px] shrink-0" />
+            </div>
+
+            <div className="relative flex min-h-0 min-w-0 w-full flex-1 flex-col rounded-b-[10px] px-0 pb-2 pt-3 sm:px-1">
+                <div className="bg-[#0f1d3d] mx-auto w-full min-w-0 flex-1 rounded-[18px] border border-[#304266] p-3 sm:p-4 md:p-8">
+                    <div className="mb-6 min-w-0 border-b border-[#304266] pb-4 text-center text-white">
+                        <h1 className="break-words [overflow-wrap:anywhere] text-xl font-bold sm:text-2xl md:text-4xl">
+                            {zadanie.nazwaZadania}
+                        </h1>
+
+                        <p className="mt-2 break-words text-sm text-[#dfe8ff] md:text-base">
+                            Termin oddania:{" "}
+                            {zadanie.TerminOddania || "N/D"}
+                        </p>
+
+                        {zadanie.CzyNaOcene == 1 && (
+                            <p className="mt-2 text-sm text-[#dfe8ff] md:text-base">
+                                {ocena != null
+                                    ? `Ocena: ${ocena.skalaOceny}`
+                                    : "Nie ocenione"}
+                            </p>
+                        )}
+
+                        <p className="mt-2 break-words text-sm text-[#dfe8ff] md:text-base">
+                            Status: {zadanie.pivot?.status}
+                        </p>
                     </div>
-                    <form onSubmit={wyslijzadanie}>
-                        <div className="px-[40px] py-[16px] w-full mt-1">
-                            <div className="w-full flex">
-                                <span className="w-[60%] block mx-auto text-[24px] text-theme-text text-left">
-                                    Treść zadania
-                                </span>
-                            </div>
-                            
+
+                    <form
+                        onSubmit={wyslijzadanie}
+                        className="min-w-0 space-y-6"
+                    >
+                        <div className="min-w-0 rounded-[14px] border border-[#304266] bg-[#101d43] p-3 sm:p-4 md:p-5">
+                            <h2 className="mb-3 text-lg font-semibold text-white sm:text-xl">
+                                Treść zadania
+                            </h2>
+
                             <textarea
                                 readOnly
-                                className="w-[60%] disabled block mx-auto bg-theme-surface rounded-[15px] text-[16px] h-[15%] px-3 py-2 text-theme-muted border border-theme-muted shrink hover:cursor-default"
+                                className="min-h-[140px] w-full min-w-0 max-w-full resize-y rounded-[12px] border border-[#304266] bg-[#0b1735] px-3 py-3 text-sm text-[#dfe8ff] outline-none"
                                 defaultValue={zadanie.tresc}
                             />
                         </div>
-                        <div className="w-full px-[40px] py-[16px] mt-1">
-                            <div className="w-[60%] mx-auto">
-                                <span className="block text-[24px] text-theme-text text-left mb-3">
-                                    Załączniki
-                                </span>
-                                <section className="w-full mx-auto flex flex-col gap-4">
-                                    <div
-                                        {...getRootProps({
-                                            className: `
-                                                dropzone
-                                                w-full min-h-[180px]
-                                                flex flex-col items-center justify-center
-                                                gap-3 p-6
-                                                bg-theme-surface
-                                                border-2 border-dashed border-theme-muted
-                                                rounded-[15px]
-                                                text-theme-text text-center
-                                                cursor-pointer
-                                                transition-all duration-200
-                                                hover:border-orange-500
-                                                hover:bg-theme-accent-ink-2
-                                                focus:outline-none focus:ring-2
-                                                focus:ring-orange-500
-                                                ${isDragActive ? "border-orange-500 bg-theme-accent-ink scale-[1.01]" : ""}
-                                            `,
-                                        })}
-                                    >
-                                        <input {...getInputProps()} />
 
-                                        <div className="text-4xl">📂</div>
+                        <div className="min-w-0 rounded-[14px] border border-[#304266] bg-[#101d43] p-3 sm:p-4 md:p-5">
+                            <h2 className="mb-3 text-lg font-semibold text-white sm:text-xl">
+                                Załączniki
+                            </h2>
 
-                                        {isDragActive ? (
-                                            <p className="text-orange-400 font-semibold text-lg">
-                                                Upuść pliki tutaj...
-                                            </p>
-                                        ) : (
-                                            <>
-                                                <p className="text-lg font-semibold">
-                                                    Przeciągnij i upuść pliki
-                                                </p>
+                            <section className="flex min-w-0 flex-col gap-4">
+                                <div
+                                    {...getRootProps({
+                                        className: `
+                                            dropzone
+                                            flex min-h-[150px] min-w-0 w-full cursor-pointer
+                                            flex-col items-center justify-center gap-3
+                                            rounded-[12px] border-2 border-dashed
+                                            border-[#4d639d] bg-[#0d173a]
+                                            p-3 text-center text-[#dfe8ff]
+                                            transition-all duration-200
+                                            hover:border-[#7da5ff] hover:bg-[#101d43]
+                                            sm:min-h-[170px] sm:p-6
+                                            ${isDragActive
+                                                ? "border-[#7da5ff] bg-[#111f4f]"
+                                                : ""}
+                                        `,
+                                    })}
+                                >
+                                    <input {...getInputProps()} />
 
-                                                <p className="text-sm text-theme-light">
-                                                    lub kliknij, aby wybrać z
-                                                    komputera
-                                                </p>
-                                            </>
-                                        )}
+                                    <div className="text-3xl sm:text-4xl">
+                                        📂
                                     </div>
 
-                                    {pliks && pliks.length > 0 ? (
-                                        <aside className="w-full">
-                                            <h4 className="text-theme-text text-lg font-semibold mb-3">
-                                                Wybrane pliki ({pliks.length})
-                                            </h4>
+                                    {isDragActive ? (
+                                        <p className="break-words text-base font-semibold text-[#9cc3ff] sm:text-lg">
+                                            Upuść pliki tutaj...
+                                        </p>
+                                    ) : (
+                                        <>
+                                            <p className="break-words text-base font-semibold sm:text-lg">
+                                                Przeciągnij i upuść pliki
+                                            </p>
 
-                                            <ul className="flex flex-col gap-2">
-                                                {pliks.map((file, index) => (
-                                                    <li
-                                                        key={`${file.nazwa}-${file.lastModified}-${index}`}
-                                                        className="flex items-center gap-3 p-3 bg-theme-surface border border-white/20 rounded-xl text-theme-light"
-
-                                                    >
-                                                        <span className="text-xl">
-                                                            📎
-                                                        </span>
-
-                                                        <div className="flex-1 min-w-0">
-                                                            <p  className="break-all">
-                                                                {file?.nazwa ? file.nazwa.split('/').pop() : (file?.name || 'Brak nazwy')}                                                            </p>
-
-                                                            <p className="text-xs text-theme-muted">
-                                                                {( file.size / 1024 ).toFixed( 1, )}{" "}KB
-                                                            </p>
-                                                        </div>
-
-                                                        {zadanie.pivot.status != "Wysłane" ? (
-                                                            <button type="button" onClick={() => removeFile(index,)} className="shrink-0 text-red-400 hover:text-red-300">
-                                                                Usuń
-                                                            </button>
-                                                        ) : (
-                                                            <button type="button" onClick={() => router.post(`/student/kurs/redagujzadanie/${zadanie.idZadanie}/${file.idPlik}`)} className="shrink-0 text-red-400 hover:text-red-300">
-                                                                Usuń
-                                                            </button>
-                                                        )}
-
-                                                        
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </aside>
-                                    ):(
-                                        <div></div>
+                                            <p className="break-words text-sm text-[#b9c8ee]">
+                                                lub kliknij, aby wybrać z komputera
+                                            </p>
+                                        </>
                                     )}
-                                </section>
-                            </div>
+                                </div>
+
+                                {pliks && pliks.length > 0 && (
+                                    <aside className="w-full min-w-0">
+                                        <h4 className="mb-3 break-words text-base font-semibold text-white sm:text-lg">
+                                            Wybrane pliki ({pliks.length})
+                                        </h4>
+
+                                        <ul className="flex min-w-0 flex-col gap-2">
+                                            {pliks.map((file, index) => (
+                                                <li
+                                                    key={`${file.nazwa || file.name}-${file.lastModified || index}-${index}`}
+                                                    className="flex min-w-0 flex-wrap items-center gap-2 rounded-xl border border-[#304266] bg-[#0b1735] p-3 text-[#dfe8ff] sm:flex-nowrap sm:gap-3"
+                                                >
+                                                    <span className="shrink-0 text-xl">
+                                                        📎
+                                                    </span>
+
+                                                    <div className="min-w-0 flex-1">
+                                                        <p className="break-words [overflow-wrap:anywhere] text-sm">
+                                                            {file?.nazwa
+                                                                ? file.nazwa
+                                                                      .split("/")
+                                                                      .pop()
+                                                                : file?.name ||
+                                                                  "Brak nazwy"}
+                                                        </p>
+
+                                                        {typeof file.size === "number" && (
+                                                            <p className="text-xs text-[#9aaed8]">
+                                                                {(
+                                                                    file.size /
+                                                                    1024
+                                                                ).toFixed(1)}{" "}
+                                                                KB
+                                                            </p>
+                                                        )}
+                                                    </div>
+
+                                                    {zadanie.pivot?.status !=
+                                                    "Wysłane" ? (
+                                                        <button
+                                                            type="button"
+                                                            onClick={() =>
+                                                                removeFile(index)
+                                                            }
+                                                            className="shrink-0 text-sm text-red-300 hover:text-red-200"
+                                                        >
+                                                            Usuń
+                                                        </button>
+                                                    ) : (
+                                                        <button
+                                                            type="button"
+                                                            onClick={() =>
+                                                                router.post(
+                                                                    `/student/kurs/redagujzadanie/${zadanie.idZadanie}/${file.idPlik}`
+                                                                )
+                                                            }
+                                                            className="shrink-0 text-sm text-red-300 hover:text-red-200"
+                                                        >
+                                                            Usuń
+                                                        </button>
+                                                    )}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </aside>
+                                )}
+                            </section>
                         </div>
-                        <div className="px-[40px] py-[16px] w-full ">
-                            <button disabled={processing} type="submit" className="w-[20%] h-[60px] text-[32px] block mx-auto text-theme-text bg-theme-orange rounded-[15px] hover:cursor-pointer active:bg-theme-orange">
-                                Wyślij
+
+                        <div className="pt-2">
+                            <button
+                                disabled={processing}
+                                type="submit"
+                                className="mx-auto block h-12 w-full rounded-xl bg-[#3b60d4] px-6 text-base font-semibold text-white transition hover:bg-[#2d4eb3] disabled:cursor-not-allowed disabled:opacity-70 md:w-[220px]"
+                            >
+                                {processing ? "Wysyłanie..." : "Wyślij"}
                             </button>
                         </div>
                     </form>
@@ -227,13 +269,19 @@ function Content({ zadanie, pliki = null, ocena = null }) {
     );
 }
 
-export default function Zadanie({ auth, zadanie, pliki = null, ocena = null }) {
+export default function Zadanie({
+    auth,
+    zadanie,
+    pliki = null,
+    ocena = null,
+}) {
     const Pageprops = usePage().props;
+
     const error = Pageprops.error || Pageprops.flash?.error;
     const status = Pageprops.status || Pageprops.flash?.status;
 
     useEffect(() => {
-        if(status){
+        if (status) {
             toast.info(status, {
                 position: "bottom-right",
                 autoClose: 5000,
@@ -241,10 +289,9 @@ export default function Zadanie({ auth, zadanie, pliki = null, ocena = null }) {
                 closeOnClick: false,
                 pauseOnHover: true,
                 draggable: true,
-                progress: undefined,
                 theme: "dark",
             });
-        }else if (error){
+        } else if (error) {
             toast.error(error, {
                 position: "bottom-right",
                 autoClose: 5000,
@@ -252,19 +299,13 @@ export default function Zadanie({ auth, zadanie, pliki = null, ocena = null }) {
                 closeOnClick: false,
                 pauseOnHover: true,
                 draggable: true,
-                progress: undefined,
                 theme: "dark",
             });
         }
-    }, [error], [status]);
+    }, [error, status]);
 
     return (
-        // <div>
-        //     <p>ja student</p>
-        // </div>
-
-        //
-        <div className="flex">
+        <div className="flex min-h-dvh min-w-0 w-full">
             <ToastContainer
                 position="bottom-right"
                 autoClose={5000}
@@ -277,9 +318,16 @@ export default function Zadanie({ auth, zadanie, pliki = null, ocena = null }) {
                 pauseOnHover
                 theme="dark"
             />
+
             <Head title={zadanie.nazwaZadania} />
+
             <MenuStudenta />
-            <Content zadanie={zadanie} pliki={pliki} ocena={ocena} />
+
+            <Content
+                zadanie={zadanie}
+                pliki={pliki}
+                ocena={ocena}
+            />
         </div>
     );
 }

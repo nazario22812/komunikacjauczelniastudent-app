@@ -13,15 +13,8 @@ class ThemeMiddleware
     {
         $theme = session('theme', 'dark');
 
-        if ($request->user()) {
-            $rawSettings = $request->user()->Ustawienia ?? null;
-            $settings = $this->decodeSettings($rawSettings);
-
-            $requestedTheme = $settings['theme'] ?? $theme;
-
-            if (in_array($requestedTheme, ['dark', 'light'], true)) {
-                $theme = $requestedTheme;
-            }
+        if (! in_array($theme, ['dark', 'light'], true)) {
+            $theme = 'dark';
         }
 
         session()->put('theme', $theme);
@@ -30,22 +23,5 @@ class ThemeMiddleware
         $request->attributes->set('theme', $theme);
 
         return $next($request);
-    }
-
-    protected function decodeSettings($rawSettings): array
-    {
-        if (is_array($rawSettings)) {
-            return $rawSettings;
-        }
-
-        if (is_string($rawSettings)) {
-            $decoded = json_decode($rawSettings, true);
-
-            if (is_array($decoded)) {
-                return $decoded;
-            }
-        }
-
-        return [];
     }
 }

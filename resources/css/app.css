@@ -120,6 +120,107 @@
    'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
+* {
+  box-shadow: none !important;
+}
+
+html, body {
+  background-color: var(--theme-page);
+  color: var(--theme-text);
+}
+
+html {
+  font-size: 15px;
+}
+
+body {
+  min-height: 100vh;
+  font-size: clamp(0.82rem, 0.7vw + 0.7rem, 1rem);
+  line-height: 1.5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+img[src],
+svg {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+}
+
+button, input, select, textarea {
+  box-shadow: none !important;
+  font: inherit;
+}
+
+p, span, a, li, button, input, select, textarea {
+  font-size: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.2;
+}
+
+[class*='bg-gradient'],
+[class*='gradient'],
+[class*='shadow-'],
+[class*='drop-shadow'],
+[class*='ring-'],
+[class*='backdrop-blur'],
+[class*='from-'],
+[class*='via-'],
+[class*='to-'] {
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+
+@media (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+
+  body {
+    font-size: clamp(0.8rem, 2.4vw, 1rem);
+    padding-left: 0 !important;
+  }
+
+  img,
+  svg {
+    flex-shrink: 0;
+  }
+
+  /* Responsywne tabele */
+  table {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  th,
+  td {
+    min-width: 120px;
+  }
+
+  /* Responsywna mapa */
+  .leaflet-container {
+    min-height: 0 !important;
+    height: 100% !important;
+  }
+}
+
+
 @layer utilities {
   .bg-theme-dark-page { background-color: var(--theme-dark-page); }
   .bg-theme-dark-surface { background-color: var(--theme-dark-surface); }
@@ -236,11 +337,79 @@
   .divide-theme-muted { border-color: var(--theme-muted); }
 }
 
-/* .carousel-control-prev-icon,
-.carousel-control-next-icon {
-    filter: invert(1) grayscale(100);
-    width: 2rem;
-    height: 2rem;
-} */
+.settings-page {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.settings-page input,
+.settings-page select,
+.settings-page button {
+  max-width: 100%;
+}
+
+/* Telefony */
+@media (max-width: 639px) {
+  .settings-page {
+    overflow-x: hidden;
+  }
+}
+
+@media (max-width: 767px) {
+    .fc {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .fc .fc-toolbar {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .fc .fc-toolbar-title {
+        font-size: 15px;
+    }
+
+    .fc .fc-button {
+        font-size: 12px;
+        padding: 5px 8px;
+    }
+
+    .fc .fc-timegrid-slot-label {
+        font-size: 11px;
+    }
+
+    .fc .fc-col-header-cell-cushion {
+        font-size: 12px;
+    }
+
+    .fc .fc-timegrid-event {
+        overflow: hidden;
+    }
+
+    .fc .fc-timegrid-event-harness {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 479px) {
+    .fc .fc-toolbar {
+        justify-content: center;
+    }
+
+    .fc .fc-toolbar-chunk {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
 
 
+.hide-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
