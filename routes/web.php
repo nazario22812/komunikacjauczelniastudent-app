@@ -117,5 +117,7 @@ Route::middleware(['auth', 'role:pracownikdziekanatu'])->group(function (){
     Route::get('/dziekanat/podania', [DziekanatController::class, 'podania']);
     Route::get('/dziekanat/szczegolypodania/{podanie}', [DziekanatController::class, 'szczegolypodania']);
     Route::post('/dziekanat/szczegolypodania/{podanie}', [DziekanatController::class, 'szczegolypodaniapost']);
-
+    Route::get('/dziekanat/ogloszeniaankiety', [DziekanatController::class, 'ogloszenia']);
+    Route::post('/dziekanat/ogloszenia',[DziekanatController::class, 'storeOgloszenie']);
+    Route::post('/dziekanat/ankiety',[DziekanatController::class, 'storeAnkieta']);
 });
