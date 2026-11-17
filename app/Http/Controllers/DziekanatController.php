@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ankieta;
 use App\Models\Kierunek;
 use App\Models\Komunikat;
 use App\Models\Kurs;
@@ -26,6 +27,42 @@ use Illuminate\Validation\Rule;
 class DziekanatController extends Controller
 {
     //
+
+    public function storeAnkieta(Request $request){
+        $validated = $request->validate([
+            'temat' => 'required|string|max:45',
+            'opis' => 'required|string|max:45',
+            'link' => 'required|url|max:65535',
+        ]);
+
+        Ankieta::create([
+            'temat' => $validated['temat'],
+            'opis' => $validated['opis'],
+            'link' => $validated['link'],
+        ]);
+        return back()->with('status','Ankieta została pomyślnie opublikowana.');
+    }
+
+
+    public function storeOgloszenie(Request $request){
+        $validated = $request->validate([
+            'temat' => 'required|string|max:45',
+            'tresc' => 'required|string|max:200',
+        ]);
+
+        Komunikat::create([
+            'temat' => $validated['temat'],
+            'tresc' => $validated['tresc'],
+            'czyOgloszenie' => 1,
+        ]);
+
+        return back()->with('status','Ogłoszenie zostało pomyślnie opublikowane.');
+    }
+
+
+    public function ogloszenia(){
+        return Inertia::render('PracownikDziekanatu/OgloszeniaAnkiety');
+    }
 
     public function szczegolypodaniapost(Request $request, $podanie){
         $validated = $request->validate([

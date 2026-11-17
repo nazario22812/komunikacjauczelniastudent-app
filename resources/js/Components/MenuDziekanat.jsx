@@ -28,14 +28,9 @@ export default function MenuDziekanat() {
             label: "Plany Zajęć",
             icon: Calendar,
         },
+       
         {
-            href: "",
-            label: "Godziny dziekańskie i rektorskie",
-            icon: Clock3,
-            isLucide: true,
-        },
-        {
-            href: "",
+            href: "/dziekanat/ogloszeniaankiety",
             label: "Ogłoszenia i ankiety",
             icon: Bell,
         },
