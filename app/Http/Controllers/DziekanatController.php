@@ -30,6 +30,170 @@ class DziekanatController extends Controller
 {
     //
 
+
+    public function dodaniesylabusa(Request $request, $przedmiot_id)
+    {
+        $validated = $request->validate([
+            'iloscGodzin' => 'required|integer|min:0',
+            'czyEgzamin' => 'required|boolean',
+            'opisPrzedmiotu' => 'required|string',
+            'warunkiZaliczenia' => 'required|string',
+        ]);
+
+        $przedmiot = Przedmiot::findOrFail($przedmiot_id);
+
+        $istniejacySylabus = Sylabus::where(
+            'Przedmiot_idPrzedmiot',
+            $przedmiot->idPrzedmiot
+        )->first();
+
+        if ($istniejacySylabus) {
+            return back()->withErrors([
+                'sylabus' => 'Ten przedmiot posiada już sylabus.'
+            ]);
+        }
+
+        Sylabus::create([
+            'iloscGodzin' => $validated['iloscGodzin'],
+            'czyEgzamin' => $validated['czyEgzamin'],
+            'opisPrzedmiotu' => $validated['opisPrzedmiotu'],
+            'warunkiZaliczenia' => $validated['warunkiZaliczenia'],
+            'Przedmiot_idPrzedmiot' => $przedmiot->idPrzedmiot,
+        ]);
+
+        return back()->with(
+            'status',
+            'Sylabus został pomyślnie utworzony.'
+        );
+    }
+
+
+    public function aktualizacjasylabusa(
+        Request $request,
+        $przedmiot_id,
+        $sylabus_id
+    ) {
+        $validated = $request->validate([
+            'iloscGodzin' => 'required|integer|min:0',
+            'czyEgzamin' => 'required|boolean',
+            'opisPrzedmiotu' => 'required|string',
+            'warunkiZaliczenia' => 'required|string',
+        ]);
+
+        $sylabus = Sylabus::where(
+            'idSylabus',
+            $sylabus_id
+        )
+            ->where(
+                'Przedmiot_idPrzedmiot',
+                $przedmiot_id
+            )
+            ->firstOrFail();
+
+        $sylabus->update([
+            'iloscGodzin' => $validated['iloscGodzin'],
+            'czyEgzamin' => $validated['czyEgzamin'],
+            'opisPrzedmiotu' => $validated['opisPrzedmiotu'],
+            'warunkiZaliczenia' => $validated['warunkiZaliczenia'],
+        ]);
+
+        return back()->with(
+            'status',
+            'Sylabus został pomyślnie zaktualizowany.'
+        );
+    }
+
+
+    public function dodanieliteratury(
+        Request $request,
+        $przedmiot_id,
+        $sylabus_id
+    ) {
+        $validated = $request->validate([
+            'nazwa' => 'required|string|max:45',
+            'opis' => 'required|string|max:1000',
+        ]);
+
+        $sylabus = Sylabus::where(
+            'idSylabus',
+            $sylabus_id
+        )
+            ->where(
+                'Przedmiot_idPrzedmiot',
+                $przedmiot_id
+            )
+            ->firstOrFail();
+
+        Literatura::create([
+            'nazwa' => $validated['nazwa'],
+            'opis' => $validated['opis'],
+            'Sylabus_idSylabus' => $sylabus->idSylabus,
+        ]);
+
+        return back()->with(
+            'status',
+            'Literatura została pomyślnie dodana.'
+        );
+    }
+
+
+    public function usuniecieliteratury(
+        Request $request,
+        $przedmiot_id,
+        $sylabus_id,
+        $literatura_id
+    ) {
+        $sylabus = Sylabus::where(
+            'idSylabus',
+            $sylabus_id
+        )
+            ->where(
+                'Przedmiot_idPrzedmiot',
+                $przedmiot_id
+            )
+            ->firstOrFail();
+
+        $literatura = Literatura::where(
+            'idLiteratura',
+            $literatura_id
+        )
+            ->where(
+                'Sylabus_idSylabus',
+                $sylabus->idSylabus
+            )
+            ->firstOrFail();
+
+        $literatura->delete();
+
+        return back()->with(
+            'status',
+            'Literatura została pomyślnie usunięta.'
+        );
+    }
+
+    public function sylabusy(Request $request)
+    {
+        $listaprzedmiotow = Przedmiot::get()->toArray();
+
+        $wybranyprzedmiot = $request->input('przedmiot_id');
+
+
+        $sylabusy = [];
+
+        if ($wybranyprzedmiot) {
+            $sylabusy = Przedmiot::with('sylabus.literatura')
+                ->where('idPrzedmiot', $wybranyprzedmiot)
+                ->get()
+                ->toArray();
+        }
+
+        return Inertia::render('PracownikDziekanatu/Sylabusy', [
+            'listaprzedmiotow' => $listaprzedmiotow,
+            'wybranyprzedmiot' => $wybranyprzedmiot,
+            'sylabusy' => $sylabusy
+        ]);
+    }
+
     public function dodanieplatnosci(Request $request, $student_id)
     {
         $validated = $request->validate([
@@ -79,36 +243,35 @@ class DziekanatController extends Controller
             ]);
 
             $komunikat->user()->attach($student->User_idUser);
-
         });
 
-        return back()->with('status','Płatność została dodana, a student otrzymał powiadomienie');
+        return back()->with('status', 'Płatność została dodana, a student otrzymał powiadomienie');
     }
 
 
-    public function zmianastatusuplatnosci(Request $request, $student_id, $platnosc_id) {
+    public function zmianastatusuplatnosci(Request $request, $student_id, $platnosc_id)
+    {
         $validated = $request->validate([
             'czyOplacone' => 'required|boolean',
         ]);
 
-        $nowyStatus = $validated['czyOplacone'];    
-    
-        $platnosc = Platnosc::where('idPlatnosc', $platnosc_id)->first();
-        $platnosc->czyOplacone = $nowyStatus;  
-        $platnosc->save();  
-        
-        return back()->with('status','Status płatności został zmieniony');
+        $nowyStatus = $validated['czyOplacone'];
 
+        $platnosc = Platnosc::where('idPlatnosc', $platnosc_id)->first();
+        $platnosc->czyOplacone = $nowyStatus;
+        $platnosc->save();
+
+        return back()->with('status', 'Status płatności został zmieniony');
     }
 
-    public function usuniecieplatnosci(Request $request, $student_id, $platnosc_id) {
+    public function usuniecieplatnosci(Request $request, $student_id, $platnosc_id)
+    {
         $znalezionaplatnosc = Platnosc::where('idPlatnosc', $platnosc_id)->first();
 
-        if($znalezionaplatnosc){
+        if ($znalezionaplatnosc) {
             $znalezionaplatnosc->delete();
             return back()->with('status', 'Platnosc została usunięta');
         }
-
     }
 
     public function finansestudentow(Request $request)

@@ -124,6 +124,12 @@ Route::middleware(['auth', 'role:pracownikdziekanatu'])->group(function (){
     Route::post('/dziekanat/platnosci/{student_id}/dodajPlatnosc', [DziekanatController::class, 'dodanieplatnosci']);
     Route::post('/dziekanat/platnosci/{student_id}/{platnosc_id}/zmienStatus', [DziekanatController::class, 'zmianastatusuplatnosci']);
     Route::post('/dziekanat/platnosci/{student_id}/{platnosc_id}/usunPlatnosc', [DziekanatController::class, 'usuniecieplatnosci']);
+    Route::get('/dziekanat/sylabusy', [DziekanatController::class, 'sylabusy']);
+    Route::get('/dziekanat/sylabusy',[DziekanatController::class, 'sylabusy']);
+    Route::post('/dziekanat/sylabusy/{przedmiot_id}/dodaniesylabusa',[DziekanatController::class, 'dodaniesylabusa']);
+    Route::post('/dziekanat/sylabusy/{przedmiot_id}/{sylabus_id}/aktualizacjasylabusa',[DziekanatController::class, 'aktualizacjasylabusa']);
+    Route::post('/dziekanat/sylabusy/{przedmiot_id}/{sylabus_id}/dodanieliteratury',[DziekanatController::class, 'dodanieliteratury']);
+    Route::post('/dziekanat/sylabusy/{przedmiot_id}/{sylabus_id}/{literatura_id}/usuniecieliteratury',[DziekanatController::class, 'usuniecieliteratury']);
 
 
 });
