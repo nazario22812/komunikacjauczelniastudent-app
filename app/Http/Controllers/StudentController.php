@@ -309,7 +309,7 @@ class StudentController extends Controller
 
         
         // dd($nowePodanieid->idPodanie);
-        $listaplikow = ($request->file('plik'));
+        $listaplikow = ($request->file('files', []));
         if($listaplikow != null){
 
             $listaplikow = is_array($listaplikow) ? $listaplikow : [$listaplikow];
