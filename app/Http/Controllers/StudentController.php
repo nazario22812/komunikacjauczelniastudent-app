@@ -340,7 +340,7 @@ class StudentController extends Controller
         return Inertia::render('Student/Podanieform');
     }
 
-    public function podanieinfo($podanie){
+    public function podanieinfo(Request $request,$podanie){
         
         $szczegolypodania = Podanie::where('idPodanie', $podanie)->first();
         $pliki = Plik::where('Podanie_idPodanie', $podanie)->get()->toArray();
@@ -354,7 +354,12 @@ class StudentController extends Controller
             }
         }
         // dd($listaplikow);
-
+        if($request->expectsJson()){
+            return response()->json([
+                'szczegoly' => $szczegolypodania,
+                'listaplikow' => $listaplikow
+            ]);
+        }
         return Inertia::render('Student/Podanieinfo',[
             'szczegoly' => $szczegolypodania,
             'listaplikow' => $listaplikow
@@ -378,7 +383,11 @@ class StudentController extends Controller
         // ->toArray();
         $podania = Podanie::where('autor', $user->idUser)->orderBy('data', 'desc')->get();
         // dd($podania);
-
+        if($request->expectsJson()){
+            return response()->json([
+                'podania' => $podania
+            ]);
+        }
         return Inertia::render('Student/EDziekanat', [
             'podania' => $podania,
         ]);
