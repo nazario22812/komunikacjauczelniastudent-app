@@ -40,7 +40,7 @@ export default function MenuDziekanat() {
             icon: Inbox,
         },
         {
-            href: "",
+            href: "/dziekanat/sylabusy",
             label: "Sylabusy",
             icon: List,
         },
@@ -48,6 +48,11 @@ export default function MenuDziekanat() {
             href: "/dziekanat/finansestudentow",
             label: "Finanse studentów",
             icon: Wallet,
+        },
+        {
+            href: "",
+            label: "Rezerwacji",
+            icon: List,
         },
     ];
 
