@@ -88,7 +88,7 @@ function Content({ powiadomienia }) {
                                         <tbody className="divide-y divide-theme-muted">
                                             {powiadomienia.map((powiadomienie) => (
                                                 <Powiadomienierow
-                                                    key={powiadomienie.id}
+                                                    key={powiadomienie.idKomunikat}
                                                     powiadomienie={powiadomienie}
                                                 />
                                             ))}
@@ -99,7 +99,7 @@ function Content({ powiadomienia }) {
                                 <div className="mt-3 block min-w-0 md:hidden">
                                     {powiadomienia.map((powiadomienie) => (
                                         <PowiadomienieMobile
-                                            key={powiadomienie.id}
+                                            key={powiadomienie.idKomunikat}
                                             powiadomienie={powiadomienie}
                                         />
                                     ))}

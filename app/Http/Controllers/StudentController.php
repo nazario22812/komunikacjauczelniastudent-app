@@ -187,7 +187,7 @@ class StudentController extends Controller
         })
         ->where([['ocena.idStudent', $student->idStudent], ['kurs.idkurs', $idkurs], ['ocena.czyKoncowa', 0]])
         ->whereNotNull('ocena.Zadanie_idZadanie')
-        ->orderby('ocena.idOcena', 'desc')
+        ->orderBy('ocena.idOcena', 'desc')
         ->get()->toArray();
 
 
@@ -231,7 +231,7 @@ class StudentController extends Controller
         $student = Student::where('User_idUser', $user->idUser)->first();
         $listakursow = $student->kurs()->with('prowadzacy.user')->get()->toArray();
         $listawszystkichkursow = Kurs::where('Kierunek_idKierunek', $student->Kierunek_idKierunek)->with(['prowadzacy.user', 'przedmiot'])->get()->toArray();
-        $semestrykursow = Kurs::select('Semester')->distinct()->orderby('Semester', 'desc')->where('Kierunek_idKierunek', $student->Kierunek_idKierunek)->get()->toArray();
+        $semestrykursow = Kurs::select('Semester')->distinct()->orderBy('Semester', 'desc')->where('Kierunek_idKierunek', $student->Kierunek_idKierunek)->get()->toArray();
         $kierunek = Kierunek::where('idKierunek', $student->Kierunek_idKierunek)->first();
         // dd($przedmiotykursow);
         if($request->expectsJson()){
@@ -274,7 +274,7 @@ class StudentController extends Controller
         ->where([['ocena.idStudent', $student->idStudent], ['ocena.CzyKoncowa', 1]])
         ->get()
         ->toArray();
-        $semestry = Ocena::select('Semester')->distinct()->orderby('Semester', 'desc')->where([['idStudent', $student->idStudent], ['ocena.CzyKoncowa', 1]])->get()->toArray();
+        $semestry = Ocena::select('Semester')->distinct()->orderBy('Semester', 'desc')->where([['idStudent', $student->idStudent], ['ocena.CzyKoncowa', 1]])->get()->toArray();
         $studentsem = $student->semester;
        
 
@@ -448,6 +448,7 @@ class StudentController extends Controller
             'czyOplacone'
         )
         ->where('Student_idStudent', '=', $student->idStudent)
+        ->orderBy('data', 'desc')
         ->get()
         ->values()
         ->toArray();
