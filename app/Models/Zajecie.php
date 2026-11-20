@@ -16,7 +16,7 @@ class Zajecie extends Model
         'Parzystosc',
         'TypZajec',
         'LiczbaGodzin',
-        'Predmiot_idPrzedmiot',
+        'Przedmiot_idPrzedmiot',
         'PlanZajec_idPlanZajec',
         'Sala_idSala',
         'Sala_Budynek_idBudynek'
@@ -24,22 +24,28 @@ class Zajecie extends Model
 
 
 
-    public function przedmiot(){
-        return $this->belongsTo(Przedmiot::class, 'Predmiot_idPrzedmiot', 'idPrzedmiot');
+    public function przedmiot()
+    {
+        return $this->belongsTo(
+            Przedmiot::class,
+            'Przedmiot_idPrzedmiot',
+            'idPrzedmiot'
+        );
     }
 
-    
 
-    public function planzajec(){
+    public function planzajec()
+    {
         return $this->belongsTo(Planzajec::class, 'PlanZajec_idPlanZajec', 'idPlanZajec');
     }
 
-    public function prowadzacy(){
-        return $this->belongsToMany(Prowadzacy::class, 'prowadzacy_has_zajecie','Zajęcie_idZajęcie', 'Prowadzacy_idProwadzacy');
+    public function prowadzacy()
+    {
+        return $this->belongsToMany(Prowadzacy::class, 'prowadzacy_has_zajecie', 'Zajęcie_idZajęcie', 'Prowadzacy_idProwadzacy');
     }
 
-    public function rezerwacja(){
+    public function rezerwacja()
+    {
         return $this->hasMany(Rezerwacja::class, 'Zajęcie_idZajęcie', 'idZajęcie');
-
     }
 }

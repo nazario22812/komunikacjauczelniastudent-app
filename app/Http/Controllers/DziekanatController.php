@@ -24,11 +24,263 @@ use App\Models\Ocena;
 use App\Models\Przedmiot;
 use App\Models\Sylabus;
 use App\Models\Wydzial;
+use App\Models\Grupastudenta;
+use App\Models\Zajecie;
+use App\Models\Prowadzacy;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class DziekanatController extends Controller
 {
+
+    public function planyZajec(Request $request)
+    {
+        $wybranyPlan = $request->input('plan_id');
+        $plany = Planzajec::orderByDesc('rok')->orderBy('Semester')->get();
+        $grupy = Grupastudenta::orderBy('nazwaGrupy')->get();
+        $sale = Sala::orderBy('numerSali')->get();
+        $prowadzacy = Prowadzacy::with('user')->get();
+        $przedmioty = Przedmiot::orderBy('nazwa')->get();
+
+        $zajecia = collect();
+        if ($wybranyPlan) {
+            $zajecia = Zajecie::with(['przedmiot', 'prowadzacy.user', 'rezerwacja'])
+                ->where('PlanZajec_idPlanZajec', $wybranyPlan)->get();
+            foreach ($zajecia as $zajecie) {
+                $zajecie->rezerwacje = $zajecie->rezerwacja;
+                $zajecie->prowadzacy_ids = $zajecie->prowadzacy->pluck('idProwadzacy');
+                $zajecie->nazwaPrzedmiotu = $zajecie->przedmiot?->nazwa;
+                $zajecie->numerSali = Sala::where('idSala', $zajecie->Sala_idSala)
+                    ->where('Budynek_idBudynek', $zajecie->Sala_Budynek_idBudynek)->value('numerSali');
+            }
+        }
+
+        return Inertia::render('PracownikDziekanatu/Planyzajec', compact(
+            'plany',
+            'grupy',
+            'sale',
+            'prowadzacy',
+            'przedmioty',
+            'wybranyPlan',
+            'zajecia'
+        ));
+    }
+
+    public function dodajPlanZajec(Request $request)
+    {
+        $dane = $this->danePlanu($request);
+        Planzajec::create($dane);
+        return back()->with('status', 'Plan został dodany.');
+    }
+
+    public function aktualizujPlanZajec(Request $request, $id)
+    {
+        $plan = Planzajec::find($id);
+        if (!$plan) return back()->withErrors(['plan' => 'Nie znaleziono planu.']);
+        $dane = $this->danePlanu($request);
+        if (
+            $plan->GrupaStudenta_idGrupaStudenta != $dane['GrupaStudenta_idGrupaStudenta'] &&
+            Zajecie::where('PlanZajec_idPlanZajec', $id)->exists()
+        ) {
+            return back()->withErrors(['plan' => 'Nie można zmienić grupy planu z zajęciami.']);
+        }
+        $plan->update($dane);
+        return back()->with('status', 'Plan został zaktualizowany.');
+    }
+
+    public function usunPlanZajec($id)
+    {
+        $plan = Planzajec::find($id);
+        if (!$plan) return back()->withErrors(['plan' => 'Nie znaleziono planu.']);
+        if (Zajecie::where('PlanZajec_idPlanZajec', $id)->exists()) {
+            return back()->withErrors(['plan' => 'Najpierw usuń zajęcia z planu.']);
+        }
+        $plan->delete();
+        return redirect('/dziekanat/plany-zajec')->with('status', 'Plan został usunięty.');
+    }
+
+    private function danePlanu(Request $request)
+    {
+        return $request->validate([
+            'rok' => 'required|integer|min:2000|max:2100',
+            'Semester' => 'required|integer|min:1|max:12',
+            'trybStudiow' => 'required|string|max:45',
+            'stopien' => 'required|integer|min:1|max:3',
+            'Specjalnosc' => 'nullable|string|max:45',
+            'GrupaStudenta_idGrupaStudenta' => 'required|exists:grupastudenta,idGrupaStudenta',
+        ]);
+    }
+
+    private function daneZajec(Request $request, $nowe = true)
+    {
+        $reguly = [
+            'DzienTygodnia' => 'required|in:Poniedziałek,Wtorek,Środa,Czwartek,Piątek,Sobota,Niedziela',
+            'Parzystosc' => 'required|in:TygodnieAB,TygodnieA,TygodnieB',
+            'TypZajec' => 'required|string|max:45',
+            'LiczbaGodzin' => 'required|integer|min:1|max:24',
+            'Przedmiot_idPrzedmiot' => 'required|exists:przedmiot,idPrzedmiot',
+            'Prowadzacy_idProwadzacy' => 'required|exists:prowadzacy,idProwadzacy',
+            'Sala_idSala' => 'required|integer',
+            'Sala_Budynek_idBudynek' => 'required|integer',
+            'dataOd' => 'required|date_format:Y-m-d',
+            'dataDo' => 'required|date_format:Y-m-d|after_or_equal:dataOd',
+            'GodzinaRozpoczecia' => 'required|date_format:H:i',
+            'GodzinaZakonczenia' => 'required|date_format:H:i|after:GodzinaRozpoczecia',
+        ];
+        if ($nowe) {
+            $reguly['plany'] = 'required|array|size:1';
+            $reguly['plany.*'] = 'required|exists:planzajec,idPlanZajec';
+        } else {
+            $reguly['PlanZajec_idPlanZajec'] = 'required|exists:planzajec,idPlanZajec';
+        }
+        return $request->validate($reguly);
+    }
+
+    private function datyZajec($dane)
+    {
+        $dni = [
+            'Poniedziałek' => 1,
+            'Wtorek' => 2,
+            'Środa' => 3,
+            'Czwartek' => 4,
+            'Piątek' => 5,
+            'Sobota' => 6,
+            'Niedziela' => 7
+        ];
+        $od = Carbon::parse($dane['dataOd'])->startOfDay();
+        $do = Carbon::parse($dane['dataDo'])->startOfDay();
+        if ($od->diffInDays($do) > 366) return [];
+        $daty = [];
+        for ($data = $od->copy(); $data->lte($do); $data->addDay()) {
+            if ($data->dayOfWeekIso !== $dni[$dane['DzienTygodnia']]) continue;
+            if ($dane['Parzystosc'] === 'TygodnieA' && $data->isoWeek() % 2 !== 1) continue;
+            if ($dane['Parzystosc'] === 'TygodnieB' && $data->isoWeek() % 2 !== 0) continue;
+            $daty[] = $data->toDateString();
+        }
+        return $daty;
+    }
+
+    private function kolizjaZajec($dane, $daty, $idPlanu, $pomijaneId = null)
+    {
+        $inne = Rezerwacja::whereIn('data', $daty)
+            ->whereIn('statusRezerwacji', ['Zaakceptowana', 'Zatwierdzona'])
+            ->where('GodzinaRozpoczecia', '<', $dane['GodzinaZakonczenia'])
+            ->where('GodzinaZakonczenia', '>', $dane['GodzinaRozpoczecia'])
+            ->when($pomijaneId, function ($q) use ($pomijaneId) {
+                $q->where(function ($w) use ($pomijaneId) {
+                    $w->whereNull('Zajęcie_idZajęcie')->orWhere('Zajęcie_idZajęcie', '!=', $pomijaneId);
+                });
+            })->get();
+
+        foreach ($inne as $rezerwacja) {
+            if (
+                $rezerwacja->Sala_idSala == $dane['Sala_idSala'] &&
+                $rezerwacja->Sala_Budynek_idBudynek == $dane['Sala_Budynek_idBudynek']
+            ) {
+                return 'Sala jest zajęta: ' . $rezerwacja->data;
+            }
+            if ($rezerwacja->Prowadzacy_idProwadzacy == $dane['Prowadzacy_idProwadzacy']) {
+                return 'Prowadzący jest zajęty: ' . $rezerwacja->data;
+            }
+            if ($rezerwacja->{'Zajęcie_PlanZajec_idPlanZajec'} == $idPlanu) {
+                return 'Grupa ma już zajęcia: ' . $rezerwacja->data;
+            }
+        }
+        return null;
+    }
+
+    private function utworzRezerwacjeZajec($dane, $daty, $idZajecia, $idPlanu)
+    {
+        foreach ($daty as $data) {
+            Rezerwacja::create([
+                'data' => $data,
+                'GodzinaRozpoczecia' => $dane['GodzinaRozpoczecia'],
+                'GodzinaZakonczenia' => $dane['GodzinaZakonczenia'],
+                'typWydarzenia' => 'Zajęcia',
+                'statusRezerwacji' => 'Zaakceptowana',
+                'Zajęcie_idZajęcie' => $idZajecia,
+                'Zajęcie_PlanZajec_idPlanZajec' => $idPlanu,
+                'Prowadzacy_idProwadzacy' => $dane['Prowadzacy_idProwadzacy'],
+                'Sala_idSala' => $dane['Sala_idSala'],
+                'Sala_Budynek_idBudynek' => $dane['Sala_Budynek_idBudynek'],
+            ]);
+        }
+    }
+
+    public function dodajZajecie(Request $request)
+    {
+        $dane = $this->daneZajec($request);
+        $daty = $this->datyZajec($dane);
+        if (!$daty) return back()->withErrors(['dataOd' => 'Brak terminów lub zakres dłuższy niż rok.']);
+        $idPlanu = $dane['plany'][0];
+        return DB::transaction(function () use ($dane, $daty, $idPlanu) {
+            $sala = Sala::where('idSala', $dane['Sala_idSala'])
+                ->where('Budynek_idBudynek', $dane['Sala_Budynek_idBudynek'])->lockForUpdate()->first();
+            if (!$sala) return back()->withErrors(['Sala_idSala' => 'Nie znaleziono sali.']);
+            $blad = $this->kolizjaZajec($dane, $daty, $idPlanu);
+            if ($blad) return back()->withErrors(['termin' => $blad]);
+            $zajecie = Zajecie::create([
+                'DzienTygodnia' => $dane['DzienTygodnia'],
+                'Parzystosc' => $dane['Parzystosc'],
+                'TypZajec' => $dane['TypZajec'],
+                'LiczbaGodzin' => $dane['LiczbaGodzin'],
+                'Przedmiot_idPrzedmiot' => $dane['Przedmiot_idPrzedmiot'],
+                'PlanZajec_idPlanZajec' => $idPlanu,
+                'Sala_idSala' => $dane['Sala_idSala'],
+                'Sala_Budynek_idBudynek' => $dane['Sala_Budynek_idBudynek'],
+            ]);
+            $zajecie->prowadzacy()->sync([$dane['Prowadzacy_idProwadzacy']]);
+            $this->utworzRezerwacjeZajec($dane, $daty, $zajecie->idZajęcie, $idPlanu);
+            return back()->with('status', 'Zajęcie zostało dodane.');
+        });
+    }
+
+    public function aktualizujZajecie(Request $request, $id)
+    {
+        $dane = $this->daneZajec($request, false);
+        $daty = $this->datyZajec($dane);
+        if (!$daty) return back()->withErrors(['dataOd' => 'Brak terminów lub zakres dłuższy niż rok.']);
+        $idPlanu = $dane['PlanZajec_idPlanZajec'];
+        return DB::transaction(function () use ($dane, $daty, $id, $idPlanu) {
+            $zajecie = Zajecie::where('idZajęcie', $id)->where('PlanZajec_idPlanZajec', $idPlanu)->first();
+            if (!$zajecie) return back()->withErrors(['zajecie' => 'Nie znaleziono zajęcia.']);
+            $sala = Sala::where('idSala', $dane['Sala_idSala'])
+                ->where('Budynek_idBudynek', $dane['Sala_Budynek_idBudynek'])->lockForUpdate()->first();
+            if (!$sala) return back()->withErrors(['Sala_idSala' => 'Nie znaleziono sali.']);
+            $blad = $this->kolizjaZajec($dane, $daty, $idPlanu, $id);
+            if ($blad) return back()->withErrors(['termin' => $blad]);
+            $zajecie->update([
+                'DzienTygodnia' => $dane['DzienTygodnia'],
+                'Parzystosc' => $dane['Parzystosc'],
+                'TypZajec' => $dane['TypZajec'],
+                'LiczbaGodzin' => $dane['LiczbaGodzin'],
+                'Przedmiot_idPrzedmiot' => $dane['Przedmiot_idPrzedmiot'],
+                'Sala_idSala' => $dane['Sala_idSala'],
+                'Sala_Budynek_idBudynek' => $dane['Sala_Budynek_idBudynek'],
+            ]);
+            $zajecie->prowadzacy()->sync([$dane['Prowadzacy_idProwadzacy']]);
+            Rezerwacja::where('Zajęcie_idZajęcie', $id)->where('Zajęcie_PlanZajec_idPlanZajec', $idPlanu)->delete();
+            $this->utworzRezerwacjeZajec($dane, $daty, $id, $idPlanu);
+            return back()->with('status', 'Zajęcie zostało zmienione.');
+        });
+    }
+
+    public function usunZajecie(Request $request, $id)
+    {
+        $dane = $request->validate(['PlanZajec_idPlanZajec' => 'required|exists:planzajec,idPlanZajec']);
+        $idPlanu = $dane['PlanZajec_idPlanZajec'];
+        return DB::transaction(function () use ($id, $idPlanu) {
+            $zajecie = Zajecie::where('idZajęcie', $id)->where('PlanZajec_idPlanZajec', $idPlanu)->first();
+            if (!$zajecie) return back()->withErrors(['zajecie' => 'Nie znaleziono zajęcia.']);
+            Rezerwacja::where('Zajęcie_idZajęcie', $id)->where('Zajęcie_PlanZajec_idPlanZajec', $idPlanu)->delete();
+            $zajecie->prowadzacy()->sync([]);
+            $zajecie->delete();
+            return back()->with('status', 'Zajęcie zostało usunięte.');
+        });
+    }
+
+
     //
 
     public function dodanieRezerwacji(Request $request)

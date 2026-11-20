@@ -24,7 +24,7 @@ export default function MenuDziekanat() {
             icon: Account,
         },
         {
-            href: "",
+            href: "/dziekanat/plany-zajec",
             label: "Plany Zajęć",
             icon: Calendar,
         },

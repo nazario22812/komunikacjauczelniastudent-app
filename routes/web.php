@@ -131,7 +131,14 @@ Route::middleware(['auth', 'role:pracownikdziekanatu'])->group(function () {
     Route::post('/dziekanat/sylabusy/{przedmiot_id}/{sylabus_id}/dodanieliteratury', [DziekanatController::class, 'dodanieliteratury']);
     Route::post('/dziekanat/sylabusy/{przedmiot_id}/{sylabus_id}/{literatura_id}/usuniecieliteratury', [DziekanatController::class, 'usuniecieliteratury']);
     Route::get('/dziekanat/rezerwacje', [DziekanatController::class, 'rezerwacje']);
-    Route::post('/dziekanat/rezerwacje/dodanie',[DziekanatController::class, 'dodanieRezerwacji']);
-    Route::post('/dziekanat/rezerwacje/{id}/zatwierdzenie',[DziekanatController::class, 'zatwierdzenierezerwacji']);
-    Route::post('/dziekanat/rezerwacje/{id}/odrzucenie',[DziekanatController::class, 'odrzucenierezerwacji']);
+    Route::post('/dziekanat/rezerwacje/dodanie', [DziekanatController::class, 'dodanieRezerwacji']);
+    Route::post('/dziekanat/rezerwacje/{id}/zatwierdzenie', [DziekanatController::class, 'zatwierdzenierezerwacji']);
+    Route::post('/dziekanat/rezerwacje/{id}/odrzucenie', [DziekanatController::class, 'odrzucenierezerwacji']);
+    Route::get('/dziekanat/plany-zajec', [DziekanatController::class, 'planyZajec']);
+    Route::post('/dziekanat/plany-zajec/plan/dodaj', [DziekanatController::class, 'dodajPlanZajec']);
+    Route::post('/dziekanat/plany-zajec/plan/{id}/aktualizuj', [DziekanatController::class, 'aktualizujPlanZajec']);
+    Route::post('/dziekanat/plany-zajec/plan/{id}/usun', [DziekanatController::class, 'usunPlanZajec']);
+    Route::post('/dziekanat/plany-zajec/dodaj', [DziekanatController::class, 'dodajZajecie']);
+    Route::post('/dziekanat/plany-zajec/{id}/aktualizuj', [DziekanatController::class, 'aktualizujZajecie']);
+    Route::post('/dziekanat/plany-zajec/{id}/usun', [DziekanatController::class, 'usunZajecie']);
 });

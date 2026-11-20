@@ -13,7 +13,7 @@ class Planzajec extends Model
 
     protected $fillable = [
         'rok',
-        'Semestr',
+        'Semester',
         'trybStudiow',
         'stopien',
         'Specjalnosc',
