@@ -3,25 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ankieta;
-use App\Models\Budynek;
 use App\Models\Grupastudenta;
 use App\Models\Kierunek;
 use App\Models\Planzajec;
-use App\Models\Plik;
-use App\Models\Podanie;
 use App\Models\Rezerwacja;
 use App\Models\Sala;
 use App\Models\Student;
-use App\Models\Zajecie;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
-use App\Models\User;
 use App\Models\Komunikat;
-use function PHPSTORM_META\map;
-use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -114,7 +105,6 @@ class UserController extends Controller
     public function powiadomienia(Request $request)
     {
         $user = $request->user();
-        // $powiadomienia = User::with('komunikat')->where('User_idUser', $user->idUser)->get();
         $powiadomienia = $user->komunikat()->where('czyOgloszenie', 0)->orderBy('idKomunikat', 'desc')->get()->toArray();
 
         $role = '';
@@ -169,8 +159,6 @@ class UserController extends Controller
             ];
         })->values()->toArray();
 
-        // $listaBudynkow = Budynek::get()->values()->toArray();
-        // dd($salimapped);
 
         $user = $request->user();
         $role = '';
@@ -200,8 +188,10 @@ class UserController extends Controller
     {
 
         $planzajec = Planzajec::where('GrupaStudenta_idGrupaStudenta', $grpa)->first();
-        // $rezerwacje = Rezerwacja::with('zajecie.przedmiot')->where('Zajęcie_PlanZajec_idPlanZajec', $planzajec->idPlanZajec)->get();
-        $rezerwacje = Rezerwacja::select(
+        $rezerwacje = collect();
+
+        if ($planzajec) {
+            $rezerwacje = Rezerwacja::select(
             'rezerwacja.*',
             'zajęcie.DzienTygodnia',
             'zajęcie.TypZajec',
@@ -217,33 +207,22 @@ class UserController extends Controller
                     ->on('rezerwacja.Zajęcie_PlanZajec_idPlanZajec', '=', 'zajęcie.PlanZajec_idPlanZajec');
             })
             ->join('sala', function ($join) {
-                $join->on('rezerwacja.Sala_idSala', '=', 'sala.idSala');
+                $join->on('rezerwacja.Sala_idSala', '=', 'sala.idSala')
+                    ->on('rezerwacja.Sala_Budynek_idBudynek', '=', 'sala.Budynek_idBudynek');
             })
 
-            ->join('prowadzacy', function ($join) {
+            ->leftJoin('prowadzacy', function ($join) {
                 $join->on('rezerwacja.Prowadzacy_idProwadzacy', '=', 'prowadzacy.idProwadzacy');
             })
             ->leftJoin('przedmiot', 'zajęcie.Przedmiot_idPrzedmiot', '=', 'przedmiot.idPrzedmiot')
             ->leftJoin('user', 'prowadzacy.User_idUser', '=', 'user.idUser')
 
             ->where([['rezerwacja.Zajęcie_PlanZajec_idPlanZajec', $planzajec->idPlanZajec], ['rezerwacja.typWydarzenia', 'Zajęcia']])
+            ->whereIn('rezerwacja.statusRezerwacji', ['Zaakceptowana', 'Zatwierdzona'])
             ->get();
+        }
 
         $gotowyplan = $rezerwacje->map(function ($item) {
-            $dniMapowania = [
-                'Poniedziałek' => 1,
-                'Wtorek' => 2,
-                'Środa' => 3,
-                'Czwartek' => 4,
-                'Piątek' => 5,
-                'Sobota' => 6,
-                'Niedziela' => 7,
-            ];
-
-            $numerDnia = $dniMapowania[$item->DzienTygodnia] ?? 1;
-
-            // $dataZajec = Carbon::now()->startOfWeek()->addDays($numerDnia - 1)->format('Y-m-d');
-            // dd($dataZajec); 
             return [
                 'id' => $item->idRezerwacja,
                 'start' => $item->data . 'T' . $item->GodzinaRozpoczecia,
@@ -253,7 +232,7 @@ class UserController extends Controller
                     'typ' => $item->TypZajec,
                     'parzystosc' => $item->Parzystosc,
                     'numersali' => $item->numerSali,
-                    'imie' => substr($item->name, 0, 1),
+                    'imie' => $item->name ? substr($item->name, 0, 1) : '',
                     'nazwisko' => $item->surname,
                     'tytulNaukowy' => $item->TytulNaukowy,
                     'dzientygodnia' => $item->DzienTygodnia
@@ -263,7 +242,6 @@ class UserController extends Controller
         })->values()->toArray();
 
 
-        // dd($gotowyplan);
 
         $listaKierunkow = Kierunek::get()->values()->toArray();
         $listaGrup = Grupastudenta::where('typGrupy', 'Laboratoryjna')->get()->values()->toArray();
@@ -287,8 +265,6 @@ class UserController extends Controller
             ]);
         }
 
-        // dd($listaGrup);
-        // dd($listaKierunkow);
         return Inertia::render('PlanZajec', [
             'rol' => $role,
             'plan' => $gotowyplan,
@@ -309,10 +285,13 @@ class UserController extends Controller
         if ($user->isStudent()) {
             $role = 'Student';
             $student = Student::with('grupastudenta')->where('User_idUser', $user->idUser)->first();
-            $grupa = $student->grupastudenta()->first();
-            $planzajec = Planzajec::where('GrupaStudenta_idGrupaStudenta', $grupa->idGrupaStudenta)->first();
+            $grupa = $student?->grupastudenta()->first();
+            $planzajec = $grupa
+                ? Planzajec::where('GrupaStudenta_idGrupaStudenta', $grupa->idGrupaStudenta)->first()
+                : null;
             
-            $rezerwacje = Rezerwacja::select(
+            if ($planzajec) {
+                $rezerwacje = Rezerwacja::select(
                 'rezerwacja.*',
                 'zajęcie.DzienTygodnia',
                 'zajęcie.TypZajec',
@@ -332,13 +311,17 @@ class UserController extends Controller
                     $join->on('rezerwacja.Zajęcie_idZajęcie', '=', 'zajęcie.idZajęcie')
                         ->on('rezerwacja.Zajęcie_PlanZajec_idPlanZajec', '=', 'zajęcie.PlanZajec_idPlanZajec');
                 })
-                ->leftJoin('sala', 'rezerwacja.Sala_idSala', '=', 'sala.idSala')
+                ->leftJoin('sala', function ($join) {
+                    $join->on('rezerwacja.Sala_idSala', '=', 'sala.idSala')
+                        ->on('rezerwacja.Sala_Budynek_idBudynek', '=', 'sala.Budynek_idBudynek');
+                })
                 ->leftJoin('budynek', 'sala.Budynek_idBudynek', '=', 'budynek.idBudynek')
                 ->leftJoin('prowadzacy', 'rezerwacja.Prowadzacy_idProwadzacy', '=', 'prowadzacy.idProwadzacy')
                 ->leftJoin('przedmiot', 'zajęcie.Przedmiot_idPrzedmiot', '=', 'przedmiot.idPrzedmiot')
                 ->leftJoin('user', 'prowadzacy.User_idUser', '=', 'user.idUser')
                 ->where('rezerwacja.Zajęcie_PlanZajec_idPlanZajec', $planzajec->idPlanZajec)
                 ->whereIn('rezerwacja.typWydarzenia', ['Zajęcia', 'Godziny dziekańskie', 'Godziny rektorskie'])
+                ->whereIn('rezerwacja.statusRezerwacji', ['Zaakceptowana', 'Zatwierdzona'])
                 ->get();
 
             $gotowyplan = $rezerwacje->map(function ($item) {
@@ -371,7 +354,8 @@ class UserController extends Controller
                         'dzientygodnia' => $item->DzienTygodnia ?? ''
                     ]
                 ];
-            })->values()->toArray();    
+            })->values()->toArray();
+            }
         }
         if ($user->isProwadzacy()) {
             $role = 'Prowadzący';
@@ -380,7 +364,6 @@ class UserController extends Controller
             $role = 'Pracownik Dziekanatu';
         }
 
-        // dd($gotowyplan);
 
         $listaKierunkow = Kierunek::get()->values()->toArray();
         $listaGrup = Grupastudenta::where('typGrupy', 'Laboratoryjna')->get()->values()->toArray();
@@ -393,8 +376,6 @@ class UserController extends Controller
             ]);
         }
 
-        // dd($listaGrup);
-        // dd($listaKierunkow);
         return Inertia::render('PlanZajec', [
             'rol' => $role,
             'plan' => $gotowyplan ?? null,
@@ -415,13 +396,16 @@ class UserController extends Controller
             $role = 'Student';
 
             $student = Student::with('grupastudenta')->where('User_idUser', $user->idUser)->first();
-            // dd($student->grupastudenta->toArray());
 
 
             if ($student && $student->grupastudenta) {
 
                 $id_nadgrupy_lab = $student->grupastudenta->where('typGrupy', 'Laboratoryjna')->value('id_nadgrupy');
-                $id_nadgrupy_cw = Grupastudenta::where('typGrupy', 'Cwiczeniowa')->value('id_nadgrupy');
+                $id_nadgrupy_cw = $id_nadgrupy_lab
+                    ? Grupastudenta::where('typGrupy', 'Cwiczeniowa')
+                        ->where('idGrupaStudenta', $id_nadgrupy_lab)
+                        ->value('id_nadgrupy')
+                    : null;
 
 
                 $grupalaboratoryjna = $student->grupastudenta()
@@ -442,14 +426,14 @@ class UserController extends Controller
             }
 
             $polaroli = [
-                'index' => $user->student->index,
-                'semester' => $user->student->semester,
-                'stopien' => $user->student->stopien,
-                'trybStudiow' => $user->student->trybStudiow,
-                'rok' => $user->student->rok,
-                'Specjalnosc' => $user->student->Specjalnosc ?? null,
-                'kierunek' => $user->student->kierunek->nazwa,
-                'wydzial' => $user->student->kierunek->wydzial->nazwa,
+                'index' => $user->student?->index,
+                'semester' => $user->student?->semester,
+                'stopien' => $user->student?->stopien,
+                'trybStudiow' => $user->student?->trybStudiow,
+                'rok' => $user->student?->rok,
+                'Specjalnosc' => $user->student?->Specjalnosc,
+                'kierunek' => $user->student?->kierunek?->nazwa,
+                'wydzial' => $user->student?->kierunek?->wydzial?->nazwa,
                 'grupaLaboratoryjna' => $grupalaboratoryjna ?? null,
                 'grupaCwiczeniowa' => $grupacwiczeniowa ?? null,
                 'grupaWykladowa' => $grupawykladowa ?? null,
@@ -459,8 +443,8 @@ class UserController extends Controller
         if ($user->isProwadzacy()) {
             $role = 'Prowadzący';
             $polaroli = [
-                'TytulNaukowy' => $user->prowadzacy->TytulNaukowy,
-                'katedra' => $user->prowadzacy->katedra,
+                'TytulNaukowy' => $user->prowadzacy?->TytulNaukowy,
+                'katedra' => $user->prowadzacy?->katedra,
             ];
         }
         if ($user->isPracownikDziekanatu()) {
@@ -469,7 +453,6 @@ class UserController extends Controller
                 'Odpowiedzialnosc' => $user->pracownikdziekanatu->Odpowiedzialnosc ?? null,
             ];
         }
-        //czesc dla wyciagniecia zdjecia z bazy
         $base64data = $user->photo;
         $photourl = $base64data ? 'data:image/jpeg;base64,' . $base64data : null;
 

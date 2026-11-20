@@ -56,6 +56,13 @@ class ProwadzacyController extends Controller
         ->toArray();
         // dd($zajecia);
         
+        if ($request->expectsJson()) {
+            return response()->json([
+            'kursy' => $listakursow,
+            'zajecia'=> $zajecia
+        ]);
+        }
+
         return Inertia::render('Prowadzacy/StronaGlowna',[
             'kursy' => $listakursow,
             'zajecia'=> $zajecia
@@ -114,6 +121,15 @@ class ProwadzacyController extends Controller
         $kierunki = Kierunek::get()->toArray();
         $kursy = Kurs::where('Prowadzacy_idProwadzacy', $prowadzacy->idProwadzacy)->get()->toArray();
         $grupy = Grupastudenta::get()->toArray();
+        if ($request->expectsJson()) {
+            return response()->json([
+            'kierunki' => $kierunki,
+            'kursy' => $kursy,
+            'grupy' => $grupy
+
+        ]);
+        }
+
         return Inertia::render('Prowadzacy/Komunikatform',[
             'kierunki' => $kierunki,
             'kursy' => $kursy,
@@ -158,6 +174,13 @@ class ProwadzacyController extends Controller
 
         // dump($przedmioty);
         // dd($kierunki);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+            'przedmioty' => $przedmioty,
+            'kierunki' => $kierunki
+        ]);
+        }
 
         return Inertia::render('Prowadzacy/TworzenieKursu', [
             'przedmioty' => $przedmioty,
@@ -207,6 +230,17 @@ class ProwadzacyController extends Controller
                 ->toArray();
         }
         // dd($wybranystudent, $idZadanie, $pliks);
+        if ($request->expectsJson()) {
+            return response()->json([
+            'studenci' => $studenci,
+            'idZadanie' => $idZadanie,
+            'student_id' => $wybranystudent,  
+            'pliks' => $pliks,
+            'terminOddania' => $zadanie->TerminOddania
+
+        ]);
+        }
+
         return Inertia::render('Prowadzacy/SprawdzenieZadania',[
             'studenci' => $studenci,
             'idZadanie' => $idZadanie,
@@ -321,6 +355,18 @@ class ProwadzacyController extends Controller
         $studenci = $kurs->student()->with('user')->orderby('index', 'asc')->get()->toArray();
         //dd($studenci);
         // dd($oceny);
+        if ($request->expectsJson()) {
+            return response()->json([
+            'kurs' => $kurs,
+            'materialy' => $materialy,
+            'przedmiot' => $przedmiot,
+            'sylabus' => $sylabus,
+            'literatura' => $literatura,
+            'zadania' => $zadania,
+            'studenci' => $studenci
+        ]);
+        }
+
         return Inertia::render('Prowadzacy/Kurs', [
             'kurs' => $kurs,
             'materialy' => $materialy,
