@@ -61,6 +61,11 @@ export default function MenuStudenta() {
             label: "Ogłoszenia i ankiety",
             icon: Bell,
         },
+        {
+            href: "/student/rezerwowanesale",
+            label: "Zarezerwowane sale",
+            icon: Chat,
+        },
     ];
 
     const naukaItems = [

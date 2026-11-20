@@ -20,10 +20,66 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Ocena;
 use App\Models\Przedmiot;
 use App\Models\Sylabus;
-
+use App\Models\Sala;
+use App\Models\Budynek;
 class StudentController extends Controller
 {
 
+    public function podgladRezerwacji(Request $request)
+    {
+        $user = $request->user();
+        $rol = 'Student';
+
+        if ($user->isProwadzacy()) {
+            $rol = 'Prowadzący';
+        }
+
+        if ($user->isPracownikDziekanatu()) {
+            $rol = 'Pracownik Dziekanatu';
+        }
+
+        $rezerwacje = Rezerwacja::select(
+            'rezerwacja.idRezerwacja',
+            'rezerwacja.data',
+            'rezerwacja.GodzinaRozpoczecia',
+            'rezerwacja.GodzinaZakonczenia',
+            'rezerwacja.typWydarzenia',
+            'rezerwacja.Sala_idSala',
+            'rezerwacja.Sala_Budynek_idBudynek',
+            'sala.numerSali',
+            'budynek.nazwa as nazwaBudynku'
+        )
+            ->leftJoin('sala', function ($join) {
+                $join->on('rezerwacja.Sala_idSala', '=', 'sala.idSala')
+                    ->on('rezerwacja.Sala_Budynek_idBudynek', '=', 'sala.Budynek_idBudynek');
+            })
+            ->leftJoin('budynek', 'rezerwacja.Sala_Budynek_idBudynek', '=', 'budynek.idBudynek')
+            ->whereIn('rezerwacja.statusRezerwacji', ['Zaakceptowana', 'Zatwierdzona'])
+            ->whereNotIn('rezerwacja.typWydarzenia', [
+                'Zajęcia',
+                'Godziny dziekańskie',
+                'Godziny rektorskie',
+            ])
+            ->orderBy('rezerwacja.data')
+            ->orderBy('rezerwacja.GodzinaRozpoczecia')
+            ->get();
+
+        $sale = Sala::select('idSala', 'numerSali', 'Budynek_idBudynek')->get();
+        $budynki = Budynek::select('idBudynek', 'nazwa')->get();
+
+        $props = [
+            'rol' => $rol,
+            'rezerwacje' => $rezerwacje,
+            'sale' => $sale,
+            'budynki' => $budynki,
+        ];
+
+        if ($request->expectsJson()) {
+            return response()->json($props);
+        }
+
+        return Inertia::render('Student/Rezerwacje', $props);
+    }
 
     public function stronaglowna(Request $request)
     {
@@ -308,7 +364,8 @@ class StudentController extends Controller
         return redirect('/student/edziekanat');
     }
 
-    public function zlozpodanie(){
+    public function zlozpodanie()
+    {
         return Inertia::render('Student/Podanieform');
     }
 
@@ -416,5 +473,4 @@ class StudentController extends Controller
             'najblizszytermin' => $najblizszytermin?->termin ? substr($najblizszytermin->termin, 0, 16) : null
         ]);
     }
-
 }
