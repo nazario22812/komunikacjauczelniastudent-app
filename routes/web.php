@@ -130,5 +130,6 @@ Route::middleware(['auth', 'role:pracownikdziekanatu'])->group(function (){
     Route::post('/dziekanat/sylabusy/{przedmiot_id}/{sylabus_id}/aktualizacjasylabusa',[DziekanatController::class, 'aktualizacjasylabusa']);
     Route::post('/dziekanat/sylabusy/{przedmiot_id}/{sylabus_id}/dodanieliteratury',[DziekanatController::class, 'dodanieliteratury']);
     Route::post('/dziekanat/sylabusy/{przedmiot_id}/{sylabus_id}/{literatura_id}/usuniecieliteratury',[DziekanatController::class, 'usuniecieliteratury']);
-    Route::get('/dziekanat/rezerwacje', [DziekanatController::class, 'rezerwacje']);
+
+
 });
