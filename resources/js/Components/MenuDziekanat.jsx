@@ -50,8 +50,8 @@ export default function MenuDziekanat() {
             icon: Wallet,
         },
         {
-            href: "",
-            label: "Rezerwacji",
+            href: "/dziekanat/rezerwacje",
+            label: "Rezerwacje",
             icon: List,
         },
     ];

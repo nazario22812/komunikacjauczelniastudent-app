@@ -459,7 +459,7 @@ class ProwadzacyController extends Controller
                     'GodzinaRozpoczecia' => $request->godpocz,
                     'GodzinaZakonczenia' => $request->godkon,
                     'typWydarzenia' => $request->typ,
-                    'statusRezerwacji' => 'Wysłana',
+                    'statusRezerwacji' => 'Oczekująca',
                     'Zajęcie_idZajęcie' => $znalezionezjecie->idZajęcie,
                     'Zajęcie_PlanZajec_idPlanZajec' => $znalezionezjecie->PlanZajec_idPlanZajec,
                     'Prowadzacy_idProwadzacy' => $prowadzacy->idProwadzacy,

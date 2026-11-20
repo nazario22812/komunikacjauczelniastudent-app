@@ -12,16 +12,16 @@ use App\Models\User;
 
 
 Route::get('/', function () {
-    if(Auth::check()){
+    if (Auth::check()) {
         /** @var User $user */
         $user = Auth::user();
-        if($user->isStudent()){
+        if ($user->isStudent()) {
             return redirect()->route('stronaglownastudent');
         }
-        if($user->isProwadzacy()){
+        if ($user->isProwadzacy()) {
             return redirect()->route('stronaglownaprowadzacy');
         }
-        if($user->isPracownikDziekanatu()){
+        if ($user->isPracownikDziekanatu()) {
             return redirect()->route('stronaglownapracownikdziekanatu');
         }
         // return redirect()->route('strona-glowna');
@@ -32,12 +32,12 @@ Route::get('/', function () {
 
 
 
-Route::middleware('guest')->group(function() {
+Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'create'])->name('login');
     Route::post('/login', [LoginController::class, 'store']);
 });
 
-Route::middleware(['auth'])->group(function(){
+Route::middleware(['auth'])->group(function () {
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
     Route::post('/ustawienia/haslo', [UserController::class, 'ustawieniaHaslo'])->name('ustawienia.haslo');
     Route::get('/mojedane', [UserController::class, 'mojedane']);
@@ -51,7 +51,7 @@ Route::middleware(['auth'])->group(function(){
 });
 
 //trasy dla studenta 
-Route::middleware(['auth', 'role:student'])->group(function (){
+Route::middleware(['auth', 'role:student'])->group(function () {
     Route::get('/stronaglowna/student', [StudentController::class, 'stronaglowna'])->name('stronaglownastudent');
 
     Route::get('/student/mojefinanse', [StudentController::class, 'finanse']);
@@ -75,15 +75,15 @@ Route::middleware(['auth', 'role:student'])->group(function (){
 
 
 //trasy dla prowadzacego 
-Route::middleware(['auth', 'role:prowadzacy'])->group(function (){
+Route::middleware(['auth', 'role:prowadzacy'])->group(function () {
     Route::get('/stronaglowna/prowadzacy', [ProwadzacyController::class, 'stronaglowna'])->name('stronaglownaprowadzacy');
 
 
     Route::get('/prowadzacy/konsultacje', [ProwadzacyController::class, 'mojekonsultacje']);
-    Route::post('/prowadzacy/konsultacja/usun/{idRezerwacja}',[ProwadzacyController::class, 'usuniecieKonsultacji']);
+    Route::post('/prowadzacy/konsultacja/usun/{idRezerwacja}', [ProwadzacyController::class, 'usuniecieKonsultacji']);
     Route::get('/prowadzacy/stworzkonsultacje', [ProwadzacyController::class, 'konsultacjaform']);
     Route::post('/prowadzacy/tworzeniekonsultacji', [ProwadzacyController::class, 'stworzkonsultacje']);
-    
+
     Route::get('/prowadzacy/rezerwacje', [ProwadzacyController::class, 'mojerezerwacje']);
     Route::post('/prowadzacy/rezerwacja/usun/{idRezerwacja}', [ProwadzacyController::class, 'usuniecieRezerwacji']);
     Route::get('/prowadzacy/zarezerwujsale', [ProwadzacyController::class, 'rezerwacjeform']);
@@ -92,7 +92,7 @@ Route::middleware(['auth', 'role:prowadzacy'])->group(function (){
     Route::post('/prowadzacy/ocenekoncowe/wystawienieoceny/{wybranyprzedmiot}/{idStudent}/{wybranaocena}', [ProwadzacyController::class, 'wystawienieoceny']);
     Route::get('/prowadzacy/mojekursy', [ProwadzacyController::class, 'mojekursy']);
     Route::get('/prowadzacy/mojekursy/{nazwa}/{idkurs}', [ProwadzacyController::class, 'kurs'])->name('prowadzacy.kurs');
-    Route::post('/prowadzacy/usunstudentazkursu/{idStudent}/{idKurs}', [ProwadzacyController::class, 'usunstudentazkursu']);   
+    Route::post('/prowadzacy/usunstudentazkursu/{idStudent}/{idKurs}', [ProwadzacyController::class, 'usunstudentazkursu']);
     Route::post('/prowadzacy/usunmaterialy/{idKurs}/{idPlik}', [ProwadzacyController::class, 'usunmaterial']);
     Route::post('/prowadzacy/dodajmaterialy/{idKurs}', [ProwadzacyController::class, 'dodajmaterialy']);
     Route::post('/prowadzacy/usunzadanie/{kursId}/{idZadanie}', [ProwadzacyController::class, 'usunzadanie']);
@@ -109,7 +109,7 @@ Route::middleware(['auth', 'role:prowadzacy'])->group(function (){
 
 
 // trasy dla pracownika dziekanatu 
-Route::middleware(['auth', 'role:pracownikdziekanatu'])->group(function (){
+Route::middleware(['auth', 'role:pracownikdziekanatu'])->group(function () {
     Route::get('/stronaglowna/pracownikdziekanatu', function () {
         return Inertia::render('PracownikDziekanatu/StronaGlowna');
     })->name('stronaglownapracownikdziekanatu');
@@ -118,18 +118,20 @@ Route::middleware(['auth', 'role:pracownikdziekanatu'])->group(function (){
     Route::get('/dziekanat/szczegolypodania/{podanie}', [DziekanatController::class, 'szczegolypodania']);
     Route::post('/dziekanat/szczegolypodania/{podanie}', [DziekanatController::class, 'szczegolypodaniapost']);
     Route::get('/dziekanat/ogloszeniaankiety', [DziekanatController::class, 'ogloszenia']);
-    Route::post('/dziekanat/ogloszenia',[DziekanatController::class, 'storeOgloszenie']);
-    Route::post('/dziekanat/ankiety',[DziekanatController::class, 'storeAnkieta']);
+    Route::post('/dziekanat/ogloszenia', [DziekanatController::class, 'storeOgloszenie']);
+    Route::post('/dziekanat/ankiety', [DziekanatController::class, 'storeAnkieta']);
     Route::get('/dziekanat/finansestudentow', [DziekanatController::class, 'finansestudentow']);
     Route::post('/dziekanat/platnosci/{student_id}/dodajPlatnosc', [DziekanatController::class, 'dodanieplatnosci']);
     Route::post('/dziekanat/platnosci/{student_id}/{platnosc_id}/zmienStatus', [DziekanatController::class, 'zmianastatusuplatnosci']);
     Route::post('/dziekanat/platnosci/{student_id}/{platnosc_id}/usunPlatnosc', [DziekanatController::class, 'usuniecieplatnosci']);
     Route::get('/dziekanat/sylabusy', [DziekanatController::class, 'sylabusy']);
-    Route::get('/dziekanat/sylabusy',[DziekanatController::class, 'sylabusy']);
-    Route::post('/dziekanat/sylabusy/{przedmiot_id}/dodaniesylabusa',[DziekanatController::class, 'dodaniesylabusa']);
-    Route::post('/dziekanat/sylabusy/{przedmiot_id}/{sylabus_id}/aktualizacjasylabusa',[DziekanatController::class, 'aktualizacjasylabusa']);
-    Route::post('/dziekanat/sylabusy/{przedmiot_id}/{sylabus_id}/dodanieliteratury',[DziekanatController::class, 'dodanieliteratury']);
-    Route::post('/dziekanat/sylabusy/{przedmiot_id}/{sylabus_id}/{literatura_id}/usuniecieliteratury',[DziekanatController::class, 'usuniecieliteratury']);
-
-
+    Route::get('/dziekanat/sylabusy', [DziekanatController::class, 'sylabusy']);
+    Route::post('/dziekanat/sylabusy/{przedmiot_id}/dodaniesylabusa', [DziekanatController::class, 'dodaniesylabusa']);
+    Route::post('/dziekanat/sylabusy/{przedmiot_id}/{sylabus_id}/aktualizacjasylabusa', [DziekanatController::class, 'aktualizacjasylabusa']);
+    Route::post('/dziekanat/sylabusy/{przedmiot_id}/{sylabus_id}/dodanieliteratury', [DziekanatController::class, 'dodanieliteratury']);
+    Route::post('/dziekanat/sylabusy/{przedmiot_id}/{sylabus_id}/{literatura_id}/usuniecieliteratury', [DziekanatController::class, 'usuniecieliteratury']);
+    Route::get('/dziekanat/rezerwacje', [DziekanatController::class, 'rezerwacje']);
+    Route::post('/dziekanat/rezerwacje/dodanie',[DziekanatController::class, 'dodanieRezerwacji']);
+    Route::post('/dziekanat/rezerwacje/{id}/zatwierdzenie',[DziekanatController::class, 'zatwierdzenierezerwacji']);
+    Route::post('/dziekanat/rezerwacje/{id}/odrzucenie',[DziekanatController::class, 'odrzucenierezerwacji']);
 });

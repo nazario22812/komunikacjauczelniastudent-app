@@ -13,6 +13,7 @@ use App\Models\Zadanie;
 use Illuminate\Http\RedirectResponse;
 use App\Models\Podanie;
 use App\Models\Plik;
+use App\Models\Sala;
 use App\Models\Platnosc;
 use App\Models\Rezerwacja;
 use App\Models\Student;
@@ -30,9 +31,160 @@ class DziekanatController extends Controller
 {
     //
 
-    public function rezerwacje(Request $request){
-        $rezerwacje = Rezerwacja::where('statusRezerwacji', 'Oczekująca')->get()->toArray();
-        return Inertia::render('PracownikDziekanatu/Rezerwacje');
+    public function dodanieRezerwacji(Request $request)
+    {
+        $validated = $request->validate([
+            'Sala_idSala' => 'required|integer',
+            'Sala_Budynek_idBudynek' => 'required|integer',
+            'data' => 'required|date|after_or_equal:today',
+            'GodzinaRozpoczecia' => 'required|date_format:H:i',
+            'GodzinaZakonczenia' => 'required|date_format:H:i|after:GodzinaRozpoczecia',
+            'typWydarzenia' => 'required|string|max:45',
+        ]);
+
+        $konflikt = Rezerwacja::where(
+            'Sala_idSala',
+            $validated['Sala_idSala']
+        )
+            ->where(
+                'Sala_Budynek_idBudynek',
+                $validated['Sala_Budynek_idBudynek']
+            )
+            ->where('data', $validated['data'])
+            ->where('statusRezerwacji', 'Zaakceptowana')
+            ->where(
+                'GodzinaRozpoczecia',
+                '<',
+                $validated['GodzinaZakonczenia']
+            )
+            ->where(
+                'GodzinaZakonczenia',
+                '>',
+                $validated['GodzinaRozpoczecia']
+            )
+            ->exists();
+
+        if ($konflikt) {
+            return back()->withErrors([
+                'rezerwacja' => 'Sala jest już zarezerwowana w wybranym terminie.'
+            ]);
+        }
+
+        Rezerwacja::create([
+            'data' => $validated['data'],
+            'GodzinaRozpoczecia' => $validated['GodzinaRozpoczecia'],
+            'GodzinaZakonczenia' => $validated['GodzinaZakonczenia'],
+            'typWydarzenia' => $validated['typWydarzenia'],
+            'statusRezerwacji' => 'Zaakceptowana',
+            'Zajecie_idZajecie' => null,
+            'Zajecie_PlanZajec_idPlanZajec' => null,
+            'Prowadzacy_idProwadzacy' => null,
+            'Sala_idSala' => $validated['Sala_idSala'],
+            'Sala_Budynek_idBudynek' => $validated['Sala_Budynek_idBudynek'],
+        ]);
+
+        return back()->with(
+            'status',
+            'Sala została pomyślnie zarezerwowana.'
+        );
+    }
+
+    public function zatwierdzenierezerwacji($id)
+    {
+        return DB::transaction(function () use ($id) {
+
+            $rezerwacja = Rezerwacja::findOrFail($id);
+
+            if ($rezerwacja->statusRezerwacji !== 'Oczekująca') {
+                return back()->withErrors([
+                    'rezerwacja' => 'Ta rezerwacja została już rozpatrzona.'
+                ]);
+            }
+
+            $sala = Sala::where('idSala', $rezerwacja->Sala_idSala)
+                ->where('Budynek_idBudynek', $rezerwacja->Sala_Budynek_idBudynek)
+                ->lockForUpdate()
+                ->firstOrFail();
+
+            $konflikt = Rezerwacja::where(
+                'Sala_idSala',
+                $rezerwacja->Sala_idSala
+            )
+                ->where(
+                    'Sala_Budynek_idBudynek',
+                    $rezerwacja->Sala_Budynek_idBudynek
+                )
+                ->where('data', $rezerwacja->data)
+                ->where('statusRezerwacji', 'Zaakceptowana')
+                ->where('idRezerwacja', '!=', $rezerwacja->idRezerwacja)
+                ->where(
+                    'GodzinaRozpoczecia',
+                    '<',
+                    $rezerwacja->GodzinaZakonczenia
+                )
+                ->where(
+                    'GodzinaZakonczenia',
+                    '>',
+                    $rezerwacja->GodzinaRozpoczecia
+                )
+                ->exists();
+
+            if ($konflikt) {
+                return back()->withErrors([
+                    'rezerwacja' => 'Sala jest już zarezerwowana w wybranym terminie.'
+                ]);
+            }
+
+            $rezerwacja->statusRezerwacji = 'Zaakceptowana';
+            $rezerwacja->save();
+
+            return back()->with(
+                'status',
+                'Rezerwacja została zatwierdzona.'
+            );
+        });
+    }
+
+    public function odrzucenierezerwacji($id)
+    {
+        $rezerwacja = Rezerwacja::findOrFail($id);
+
+        if ($rezerwacja->statusRezerwacji !== 'Oczekująca') {
+            return back()->withErrors([
+                'rezerwacja' => 'Ta rezerwacja została już rozpatrzona.'
+            ]);
+        }
+
+        $rezerwacja->statusRezerwacji = 'Odrzucona';
+        $rezerwacja->save();
+
+        return back()->with(
+            'status',
+            'Rezerwacja została odrzucona.'
+        );
+    }
+
+    public function rezerwacje(Request $request)
+    {
+        $rezerwacje = Rezerwacja::with([
+            'prowadzacy.user',
+            'sala'
+        ])
+            ->where('statusRezerwacji', 'Oczekująca')
+            ->whereNotNull('Prowadzacy_idProwadzacy')
+            ->orderBy('data', 'asc')
+            ->orderBy('GodzinaRozpoczecia', 'asc')
+            ->get();
+
+        $sale = Sala::all();
+
+        return Inertia::render(
+            'PracownikDziekanatu/Rezerwacje',
+            [
+                'rezerwacje' => $rezerwacje,
+                'sale' => $sale,
+            ]
+        );
     }
     public function dodaniesylabusa(Request $request, $przedmiot_id)
     {
