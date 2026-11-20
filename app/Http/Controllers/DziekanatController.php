@@ -30,7 +30,10 @@ class DziekanatController extends Controller
 {
     //
 
-
+    public function rezerwacje(Request $request){
+        $rezerwacje = Rezerwacja::where('statusRezerwacji', 'Oczekująca')->get()->toArray();
+        return Inertia::render('PracownikDziekanatu/Rezerwacje');
+    }
     public function dodaniesylabusa(Request $request, $przedmiot_id)
     {
         $validated = $request->validate([
