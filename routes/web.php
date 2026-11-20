@@ -110,9 +110,7 @@ Route::middleware(['auth', 'role:prowadzacy'])->group(function () {
 
 // trasy dla pracownika dziekanatu 
 Route::middleware(['auth', 'role:pracownikdziekanatu'])->group(function () {
-    Route::get('/stronaglowna/pracownikdziekanatu', function () {
-        return Inertia::render('PracownikDziekanatu/StronaGlowna');
-    })->name('stronaglownapracownikdziekanatu');
+    Route::get('/stronaglowna/pracownikdziekanatu',[DziekanatController::class, 'stronaGlowna'])->name('stronaglownapracownikdziekanatu');
 
     Route::get('/dziekanat/podania', [DziekanatController::class, 'podania']);
     Route::get('/dziekanat/szczegolypodania/{podanie}', [DziekanatController::class, 'szczegolypodania']);

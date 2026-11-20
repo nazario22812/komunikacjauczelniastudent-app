@@ -33,6 +33,31 @@ use Carbon\Carbon;
 
 class DziekanatController extends Controller
 {
+    public function stronaGlowna()
+    {
+        $podania = Podanie::latest('idPodanie')->limit(3)->get();
+
+        $rezerwacje = Rezerwacja::where(
+            'statusRezerwacji',
+            'Oczekująca'
+        )->orderBy('data')->limit(3)->get();
+
+        return Inertia::render(
+            'PracownikDziekanatu/StronaGlowna',
+            [
+                'podania' => $podania,
+                'rezerwacje' => $rezerwacje,
+                'statystyki' => [
+                    'podaniaOczekujace' => Podanie::count(),
+                    'rezerwacjeOczekujace' => Rezerwacja::where(
+                        'statusRezerwacji',
+                        'Oczekująca'
+                    )->count(),
+                    'plany' => Planzajec::count(),
+                ],
+            ]
+        );
+    }
 
     public function planyZajec(Request $request)
     {
