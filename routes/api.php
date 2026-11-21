@@ -20,10 +20,7 @@ Route::get('/', function () {
         if($user->isProwadzacy()){
             return redirect()->route('stronaglownaprowadzacy_mob');
         }
-        if($user->isPracownikDziekanatu()){
-            return redirect()->route('stronaglownapracownikdziekanatu_mob');
-        }
-        // return redirect()->route('strona-glowna');
+        
     }
 
     return Inertia::render('Login');
@@ -72,22 +69,35 @@ Route::middleware(['auth:sanctum', 'role:student'])->group(function (){
 
 //trasy dla prowadzacego 
 Route::middleware(['auth:sanctum', 'role:prowadzacy'])->group(function (){
-    Route::get('/stronaglowna/prowadzacy', function () {
-        return Inertia::render('Prowadzacy/StronaGlowna');
-    })->name('stronaglownaprowadzacy_mob');
+    Route::get('/stronaglowna/prowadzacy', [ProwadzacyController::class, 'stronaglowna'])->name('stronaglownaprowadzacy_mob');
+
 
     Route::get('/prowadzacy/konsultacje', [ProwadzacyController::class, 'mojekonsultacje']);
-    Route::post('/prowadzacy/konsultacja/usun/{idRezerwacja}',[ProwadzacyController::class, 'usuniecieKonsultacji']);
+    Route::post('/prowadzacy/konsultacja/usun/{idRezerwacja}', [ProwadzacyController::class, 'usuniecieKonsultacji']);
     Route::get('/prowadzacy/stworzkonsultacje', [ProwadzacyController::class, 'konsultacjaform']);
     Route::post('/prowadzacy/tworzeniekonsultacji', [ProwadzacyController::class, 'stworzkonsultacje']);
+
+    Route::get('/prowadzacy/rezerwacje', [ProwadzacyController::class, 'mojerezerwacje']);
+    Route::post('/prowadzacy/rezerwacja/usun/{idRezerwacja}', [ProwadzacyController::class, 'usuniecieRezerwacji']);
+    Route::get('/prowadzacy/zarezerwujsale', [ProwadzacyController::class, 'rezerwacjeform']);
+    Route::post('/prowadzacy/tworzenierezerwacji', [ProwadzacyController::class, 'stworzrezerwacje']);
+    Route::get('/prowadzacy/wystawienieocen', [ProwadzacyController::class, 'wystawienieocen']);
+    Route::post('/prowadzacy/ocenekoncowe/wystawienieoceny/{wybranyprzedmiot}/{idStudent}/{wybranaocena}', [ProwadzacyController::class, 'wystawienieoceny']);
+    Route::get('/prowadzacy/mojekursy', [ProwadzacyController::class, 'mojekursy']);
+    Route::get('/prowadzacy/mojekursy/{nazwa}/{idkurs}', [ProwadzacyController::class, 'kurs'])->name('prowadzacy.kurs');
+    Route::post('/prowadzacy/usunstudentazkursu/{idStudent}/{idKurs}', [ProwadzacyController::class, 'usunstudentazkursu']);
+    Route::post('/prowadzacy/usunmaterialy/{idKurs}/{idPlik}', [ProwadzacyController::class, 'usunmaterial']);
+    Route::post('/prowadzacy/dodajmaterialy/{idKurs}', [ProwadzacyController::class, 'dodajmaterialy']);
+    Route::post('/prowadzacy/usunzadanie/{kursId}/{idZadanie}', [ProwadzacyController::class, 'usunzadanie']);
+    Route::post('/prowadzacy/dodajzadanie/{kursId}', [ProwadzacyController::class, 'dodajzadanie']);
+    Route::get('/prowadzacy/otworzzadanie/{idZadanie}', [ProwadzacyController::class, 'otworzzadanie']);
+    Route::post('/prowadzacy/ocenieniezadania/{idZadanie}/{student_id}/{wybranaocena}', [ProwadzacyController::class, 'ocenieniezadania']);
+    Route::get('/prowadzacy/tworzeniekursu', [ProwadzacyController::class, 'tworzeniekursu']);
+    Route::post('/prowadzacy/tworzeniekursu', [ProwadzacyController::class, 'stworzKurs']);
+    Route::get('/prowadzacy/komunikaty', [ProwadzacyController::class, 'komunikaty']);
+    Route::post('/prowadzacy/komunikaty', [ProwadzacyController::class, 'komunikatypost']);
 });
 
 
 
 
-// trasy dla pracownika dziekanatu 
-Route::middleware(['auth:sanctum', 'role:pracownikdziekanatu'])->group(function (){
-    Route::get('/stronaglowna/pracownikdziekanatu', function () {
-        return Inertia::render('PracownikDziekanatu/StronaGlowna');
-    })->name('stronaglownapracownikdziekanatu_mob');
-});
