@@ -1,9 +1,7 @@
-
 import React, { useState } from "react";
 import MenuStudenta from "../../Components/MenuStudenta";
 import BackButton from "../../Components/BackButton";
 import { Head, useForm } from "@inertiajs/react";
-import Form from "react-bootstrap/Form";
 import { useDropzone } from "react-dropzone";
 
 function Content() {
@@ -28,14 +26,7 @@ function Content() {
     ];
 
     const [files, setFiles] = useState([]);
-
-    const {
-        data,
-        setData,
-        post,
-        processing,
-        errors,
-    } = useForm({
+    const { data, setData, post, processing, errors } = useForm({
         temat: "",
         tresc: "",
         files: [],
@@ -52,20 +43,13 @@ function Content() {
                             file.lastModified === newFile.lastModified
                     )
             );
-
             const updatedFiles = [...previousFiles, ...newFiles];
-
             setData("files", updatedFiles);
-
             return updatedFiles;
         });
     };
 
-    const {
-        getRootProps,
-        getInputProps,
-        isDragActive,
-    } = useDropzone({
+    const { getRootProps, getInputProps, isDragActive, fileRejections } = useDropzone({
         onDrop,
         multiple: true,
         accept: {
@@ -73,229 +57,189 @@ function Content() {
             "image/png": [".png"],
             "application/pdf": [".pdf"],
             "application/zip": [".zip"],
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [
-                ".docx",
-            ],
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],
             "application/msword": [".doc"],
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [
-                ".xlsx",
-            ],
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [".xlsx"],
             "application/vnd.ms-excel": [".xls"],
         },
     });
 
     const removeFile = (indexToRemove) => {
-        const updatedFiles = files.filter(
-            (_, index) => index !== indexToRemove
-        );
-
+        const updatedFiles = files.filter((_, index) => index !== indexToRemove);
         setFiles(updatedFiles);
         setData("files", updatedFiles);
     };
 
     const wyslijpodanie = (e) => {
         e.preventDefault();
-
-        post("/student/zlozpodanie", {
-            forceFormData: true,
-        });
+        post("/student/zlozpodanie", { forceFormData: true });
     };
 
+    const inputStyle =
+        "block w-full min-w-0 rounded-xl border border-theme-muted bg-theme-slate px-4 py-3 text-sm text-theme-text outline-none transition-colors placeholder:text-theme-muted focus:border-theme-orange focus:ring-1 focus:ring-theme-orange sm:text-base";
+
     return (
-        <div className="bg-theme-page flex h-dvh min-h-0 min-w-0 w-full flex-1 flex-col overflow-hidden box-border p-2 sm:p-[10px]">
-            <div className="bg-theme-page mx-auto flex h-[40px] w-full shrink-0 items-center rounded-t-[10px] border-b-[0.3px] border-theme-muted px-2 sm:px-[10px]">
-                <div className="flex w-[42px] shrink-0 items-center justify-start">
+        <div className="box-border flex h-dvh min-h-0 min-w-0 w-full flex-1 flex-col overflow-hidden bg-theme-page p-2 sm:p-[10px]">
+            <div className="flex h-[42px] w-full shrink-0 items-center border-b border-theme-muted bg-theme-page px-2 sm:px-3">
+                <div className="flex w-[65px] shrink-0 items-center justify-start">
                     <BackButton back={() => window.history.back()} />
                 </div>
-
-                <span className="min-w-0 flex-1 text-center text-[16px] font-bold text-theme-text">
-                    E-Podanie
+                <span className="min-w-0 flex-1 truncate text-center text-sm font-bold text-theme-text sm:text-base">
+                    E-Dziekanat
                 </span>
-
-                <div className="w-[42px] shrink-0" />
+                <div className="w-[65px] shrink-0" />
             </div>
 
-            <div className="relative flex min-h-0 min-w-0 w-full flex-1 flex-col overflow-hidden rounded-b-[10px] px-0 pb-2 pt-3 sm:px-1">
-                <div className="bg-theme-slate custom-scrollbar mx-auto h-full min-h-0 min-w-0 w-full flex-1 overflow-x-hidden overflow-y-auto rounded-[15px] px-3 pb-5 pt-5 sm:px-6 sm:pt-7 md:px-10 lg:px-[75px] lg:pt-[35px]">
-                    <div className="w-full min-w-0 text-center font-bold text-theme-text">
-                        <h1 className="break-words text-[clamp(1.8rem,4vw,3.87rem)]">
+            <div className="custom-scrollbar min-h-0 min-w-0 w-full flex-1 overflow-x-hidden overflow-y-auto pb-4 pt-3">
+                <div className="mx-auto w-full max-w-[1100px] space-y-3 sm:space-y-4">
+                    <div className="flex min-w-0 flex-col gap-2 rounded-2xl bg-theme-surface px-4 py-5 sm:px-6 sm:py-6 md:px-8">
+                        <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-theme-muted">
+                            <span className="rounded-lg bg-theme-slate px-2.5 py-1.5">E-Dziekanat</span>
+                            <span>/</span>
+                            <span>Nowe podanie</span>
+                        </div>
+                        <h1 className="break-words text-2xl font-bold tracking-tight text-theme-text sm:text-3xl lg:text-4xl">
                             Nowe podanie
                         </h1>
+                        <p className="max-w-[720px] text-sm leading-relaxed text-theme-muted sm:text-base">
+                            Wybierz typ podania, wpisz jego treść i opcjonalnie dodaj załączniki.
+                        </p>
                     </div>
 
-                    <form
-                        onSubmit={wyslijpodanie}
-                        className="mx-auto w-full min-w-0"
-                    >
-                        <div className="w-full min-w-0 px-0 py-4 sm:px-4 md:px-6 lg:px-[40px]">
-                            <label
-                                htmlFor="temat"
-                                className="mx-auto mb-2 block w-full text-left text-lg text-theme-text sm:text-xl md:w-[80%] md:text-[24px] lg:w-[60%]"
-                            >
-                                Typ podania
-                            </label>
-
-                            <Form.Select
-                                id="temat"
-                                className="mx-auto block h-[50px] w-full min-w-0 max-w-full rounded-[15px] border border-theme-muted bg-theme-surface px-3 text-[16px] text-theme-muted md:w-[80%] lg:w-[60%]"
-                                value={data.temat}
-                                onChange={(e) =>
-                                    setData("temat", e.target.value)
-                                }
-                            >
-                                <option value="">
-                                    wybierz typ podania
-                                </option>
-
-                                {tematy.map((temat) => (
-                                    <option
-                                        key={temat}
-                                        value={temat}
-                                    >
-                                        {temat}
-                                    </option>
-                                ))}
-                            </Form.Select>
-
-                            {errors.temat && (
-                                <p className="mx-auto mt-2 w-full text-center text-xs text-red-400 md:w-[80%] lg:w-[60%]">
-                                    {errors.temat}
-                                </p>
-                            )}
-                        </div>
-
-                        <div className="mt-1 w-full min-w-0 px-0 py-4 sm:px-4 md:px-6 lg:px-[40px]">
-                            <label
-                                htmlFor="tresc"
-                                className="mx-auto mb-2 block w-full text-left text-lg text-theme-text sm:text-xl md:w-[80%] md:text-[24px] lg:w-[60%]"
-                            >
-                                Treść podania
-                            </label>
-
-                            <textarea
-                                id="tresc"
-                                className="mx-auto block h-[220px] w-full min-w-0 max-w-full resize-y rounded-[15px] border border-theme-muted bg-theme-surface px-3 py-2 text-[16px] text-theme-muted outline-none sm:h-[260px] md:h-[300px] md:w-[80%] lg:w-[60%]"
-                                placeholder="podaj treść podania"
-                                value={data.tresc}
-                                onChange={(e) =>
-                                    setData("tresc", e.target.value)
-                                }
-                            />
-
-                            {errors.tresc && (
-                                <p className="mx-auto mt-2 w-full text-center text-xs text-red-400 md:w-[80%] lg:w-[60%]">
-                                    {errors.tresc}
-                                </p>
-                            )}
-                        </div>
-
-                        <div className="mt-1 w-full min-w-0 px-0 py-4 sm:px-4 md:px-6 lg:px-[40px]">
-                            <div className="mx-auto w-full min-w-0 md:w-[80%] lg:w-[60%]">
-                                <h2 className="mb-3 text-left text-lg text-theme-text sm:text-xl md:text-[24px]">
-                                    Załączniki
-                                </h2>
-
-                                <section className="mx-auto flex min-w-0 w-full flex-col gap-4">
-                                    <div
-                                        {...getRootProps({
-                                            className: `
-                                                dropzone
-                                                flex min-h-[150px] min-w-0 w-full
-                                                cursor-pointer flex-col
-                                                items-center justify-center gap-3
-                                                rounded-[15px] border-2 border-dashed
-                                                border-theme-muted bg-theme-surface
-                                                p-3 text-center text-theme-text
-                                                transition-all duration-200
-                                                hover:border-orange-500
-                                                hover:bg-theme-accent-ink-2
-                                                focus:outline-none
-                                                sm:min-h-[180px] sm:p-6
-                                                ${
-                                                    isDragActive
-                                                        ? "border-orange-500 bg-theme-accent-ink scale-[1.01]"
-                                                        : ""
-                                                }
-                                            `,
-                                        })}
-                                    >
-                                        <input {...getInputProps()} />
-
-                                        <div className="text-3xl sm:text-4xl">
-                                            📂
-                                        </div>
-
-                                        {isDragActive ? (
-                                            <p className="break-words text-base font-semibold text-orange-400 sm:text-lg">
-                                                Upuść pliki tutaj...
-                                            </p>
-                                        ) : (
-                                            <>
-                                                <p className="break-words text-base font-semibold sm:text-lg">
-                                                    Przeciągnij i upuść pliki
-                                                </p>
-
-                                                <p className="break-words text-sm text-theme-light">
-                                                    lub kliknij, aby wybrać z komputera
-                                                </p>
-                                            </>
-                                        )}
-                                    </div>
-
-                                    {files.length > 0 && (
-                                        <aside className="w-full min-w-0">
-                                            <h4 className="mb-3 break-words text-base font-semibold text-theme-text sm:text-lg">
-                                                Wybrane pliki ({files.length})
-                                            </h4>
-
-                                            <ul className="flex min-w-0 flex-col gap-2">
-                                                {files.map((file, index) => (
-                                                    <li
-                                                        key={`${file.name}-${file.lastModified}-${index}`}
-                                                        className="bg-theme-surface flex min-w-0 flex-wrap items-center gap-2 rounded-xl border border-white/20 p-3 text-theme-light sm:flex-nowrap sm:gap-3"
-                                                    >
-                                                        <span className="shrink-0 text-xl">
-                                                            📎
-                                                        </span>
-
-                                                        <div className="min-w-0 flex-1">
-                                                            <p className="break-words [overflow-wrap:anywhere] text-sm">
-                                                                {file.name}
-                                                            </p>
-
-                                                            <p className="text-xs text-theme-muted">
-                                                                {(
-                                                                    file.size / 1024
-                                                                ).toFixed(1)}{" "}
-                                                                KB
-                                                            </p>
-                                                        </div>
-
-                                                        <button
-                                                            type="button"
-                                                            onClick={() =>
-                                                                removeFile(index)
-                                                            }
-                                                            className="shrink-0 text-sm text-red-400 hover:text-red-300"
-                                                        >
-                                                            Usuń
-                                                        </button>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </aside>
-                                    )}
-                                </section>
+                    <form onSubmit={wyslijpodanie} className="min-w-0 space-y-3 sm:space-y-4">
+                        <section className="min-w-0 rounded-2xl bg-theme-surface p-4 sm:p-6 md:p-8">
+                            <div className="mb-6 flex items-center gap-3 border-b border-theme-muted pb-4">
+                                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-theme-slate text-sm font-bold text-theme-orange">01</span>
+                                <div className="min-w-0">
+                                    <h2 className="text-base font-bold text-theme-text sm:text-lg">Informacje o podaniu</h2>
+                                    <p className="text-xs text-theme-muted sm:text-sm">Uzupełnij wymagane pola.</p>
+                                </div>
                             </div>
-                        </div>
 
-                        <div className="w-full min-w-0 px-0 py-4 sm:px-4 md:px-6 lg:px-[40px]">
-                            <button
-                                disabled={processing}
-                                type="submit"
-                                className="mx-auto block h-[50px] w-full rounded-[15px] bg-theme-orange px-4 text-xl font-semibold text-theme-text hover:cursor-pointer active:bg-theme-orange disabled:cursor-not-allowed disabled:opacity-60 sm:w-[240px] md:h-[60px] md:text-[32px]"
+                            <div className="space-y-5">
+                                <div className="space-y-2">
+                                    <label htmlFor="temat" className="block text-sm font-semibold text-theme-text">
+                                        Typ podania <span className="text-theme-orange">*</span>
+                                    </label>
+                                    <select
+                                        id="temat"
+                                        value={data.temat}
+                                        onChange={(e) => setData("temat", e.target.value)}
+                                        className={inputStyle}
+                                        aria-invalid={Boolean(errors.temat)}
+                                        required
+                                    >
+                                        <option value="">Wybierz typ podania</option>
+                                        {tematy.map((temat) => (
+                                            <option key={temat} value={temat}>{temat}</option>
+                                        ))}
+                                    </select>
+                                    {errors.temat && <p className="text-xs text-red-400">{errors.temat}</p>}
+                                </div>
+
+                                <div className="space-y-2">
+                                    <div className="flex flex-wrap items-center justify-between gap-2">
+                                        <label htmlFor="tresc" className="block text-sm font-semibold text-theme-text">
+                                            Treść podania <span className="text-theme-orange">*</span>
+                                        </label>
+                                        <span className="text-xs text-theme-muted">{data.tresc.length} znaków</span>
+                                    </div>
+                                    <textarea
+                                        id="tresc"
+                                        value={data.tresc}
+                                        onChange={(e) => setData("tresc", e.target.value)}
+                                        placeholder="Opisz swoją sprawę..."
+                                        rows={8}
+                                        className={`${inputStyle} min-h-[180px] resize-y leading-relaxed sm:min-h-[230px]`}
+                                        aria-invalid={Boolean(errors.tresc)}
+                                        required
+                                    />
+                                    {errors.tresc && <p className="text-xs text-red-400">{errors.tresc}</p>}
+                                </div>
+                            </div>
+                        </section>
+
+                        <section className="min-w-0 rounded-2xl bg-theme-surface p-4 sm:p-6 md:p-8">
+                            <div className="mb-5 flex items-center gap-3 border-b border-theme-muted pb-4">
+                                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-theme-slate text-sm font-bold text-theme-orange">02</span>
+                                <div className="min-w-0">
+                                    <h2 className="text-base font-bold text-theme-text sm:text-lg">Załączniki</h2>
+                                    <p className="text-xs text-theme-muted sm:text-sm">Opcjonalnie dołącz dokumenty do podania.</p>
+                                </div>
+                            </div>
+
+                            <div
+                                {...getRootProps({
+                                    className: `flex min-h-[145px] w-full min-w-0 cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed p-4 text-center transition-colors focus:outline-none focus:ring-2 focus:ring-theme-orange sm:min-h-[175px] sm:p-6 ${
+                                        isDragActive
+                                            ? "border-theme-orange bg-theme-slate"
+                                            : "border-theme-muted bg-theme-slate hover:border-theme-orange"
+                                    }`,
+                                })}
                             >
-                                {processing ? "Wysyłanie..." : "Wyślij"}
+                                <input {...getInputProps()} />
+                                <span aria-hidden="true" className="text-3xl">📎</span>
+                                <span className="break-words text-sm font-bold text-theme-text sm:text-base">
+                                    {isDragActive ? "Upuść pliki tutaj" : "Przeciągnij pliki lub kliknij, aby je wybrać"}
+                                </span>
+                                <span className="break-words text-xs text-theme-muted sm:text-sm">
+                                    PDF, DOC, DOCX, XLS, XLSX, JPG, PNG, ZIP
+                                </span>
+                            </div>
+
+                            {fileRejections.length > 0 && (
+                                <p className="mt-3 text-sm text-red-400">Niektóre pliki mają nieobsługiwany format.</p>
+                            )}
+                            {errors.files && <p className="mt-3 text-sm text-red-400">{errors.files}</p>}
+
+                            {files.length > 0 && (
+                                <div className="mt-5 min-w-0 space-y-3">
+                                    <div className="flex flex-wrap items-center justify-between gap-2">
+                                        <h3 className="text-sm font-semibold text-theme-text">Wybrane pliki ({files.length})</h3>
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setFiles([]);
+                                                setData("files", []);
+                                            }}
+                                            className="text-xs font-semibold text-theme-muted transition-colors hover:text-theme-text"
+                                        >
+                                            Wyczyść listę
+                                        </button>
+                                    </div>
+                                    <ul className="min-w-0 space-y-2">
+                                        {files.map((file, index) => (
+                                            <li key={`${file.name}-${file.lastModified}-${index}`} className="flex min-w-0 items-center gap-3 rounded-xl border border-theme-muted bg-theme-slate p-3">
+                                                <span className="shrink-0 text-xl" aria-hidden="true">📄</span>
+                                                <div className="min-w-0 flex-1">
+                                                    <p className="break-words text-sm font-medium text-theme-text [overflow-wrap:anywhere]">{file.name}</p>
+                                                    <p className="mt-1 text-xs text-theme-muted">{(file.size / 1024).toFixed(1)} KB</p>
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => removeFile(index)}
+                                                    className="shrink-0 rounded-lg border border-theme-muted px-3 py-2 text-xs font-semibold text-red-400 transition-colors hover:bg-theme-surface"
+                                                    aria-label={`Usuń plik ${file.name}`}
+                                                >
+                                                    Usuń
+                                                </button>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+                        </section>
+
+                        <div className="flex min-w-0 flex-col items-stretch justify-between gap-4 rounded-2xl bg-theme-surface p-4 sm:flex-row sm:items-center sm:p-6 md:px-8">
+                            <p className="max-w-[600px] text-xs leading-relaxed text-theme-muted sm:text-sm">
+                                Sprawdź treść i załączniki przed wysłaniem podania do dziekanatu.
+                            </p>
+                            <button
+                                type="submit"
+                                disabled={processing || !data.temat || !data.tresc.trim()}
+                                className="inline-flex min-h-[46px] w-full shrink-0 items-center justify-center rounded-xl bg-theme-orange px-7 py-3 text-sm font-bold text-theme-text transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto sm:min-w-[180px]"
+                            >
+                                {processing ? "Wysyłanie..." : "Wyślij podanie"}
                             </button>
                         </div>
                     </form>
@@ -308,10 +252,8 @@ function Content() {
 export default function Podanieform({ auth }) {
     return (
         <div className="flex h-dvh min-h-0 min-w-0 w-full overflow-hidden">
-            <Head title="E-Dziekanat" />
-
+            <Head title="E-Podanie" />
             <MenuStudenta />
-
             <Content />
         </div>
     );

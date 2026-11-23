@@ -1,10 +1,8 @@
-
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Head, router, usePage } from "@inertiajs/react";
 import BackButton from "../../Components/BackButton";
 import MenuProwadzacy from "../../Components/MenuProwadzacy";
 import { ToastContainer, toast } from "react-toastify";
-import Form from "react-bootstrap/Form";
 
 const opcjeOcen = [
     "Niedostatecznie",
@@ -15,248 +13,250 @@ const opcjeOcen = [
     "Bardzo dobrze",
 ];
 
-function Content({
-    studenci = [],
-    idZadanie,
-    student_id,
-    pliks = [],
-    terminOddania,
-}) {
-    const [wybranaocena, setwybranaocena] = useState("Niedostatecznie");
+const normalize = (value) => String(value ?? "").toLocaleLowerCase("pl").trim();
+
+function Content({ studenci = [], idZadanie, student_id, pliks = [], terminOddania }) {
+    const [szukaj, setSzukaj] = useState("");
+    const [wybranaocena, setWybranaocena] = useState("Niedostatecznie");
     const [loading, setLoading] = useState(false);
+    const [changingStudent, setChangingStudent] = useState(false);
+
+    const przefiltrowaniStudenci = useMemo(() => {
+        const query = normalize(szukaj);
+        if (!query) return studenci ?? [];
+        return (studenci ?? []).filter((student) =>
+            normalize(`${student.index ?? ""} ${student.user?.name ?? ""} ${student.user?.surname ?? ""}`).includes(query),
+        );
+    }, [studenci, szukaj]);
+
+    const wybranyStudent = (studenci ?? []).find(
+        (student) => String(student.idStudent) === String(student_id),
+    );
 
     const handleZadanieClick = (studentId) => {
+        if (changingStudent || String(studentId) === String(student_id)) return;
+        setChangingStudent(true);
         router.get(
             `/prowadzacy/otworzzadanie/${idZadanie}`,
             { student_id: studentId },
-            {
-                preserveState: true,
-                preserveScroll: true,
-            }
+            { preserveState: true, preserveScroll: true, onFinish: () => setChangingStudent(false) },
         );
     };
 
     const handleZapiszOcene = () => {
         if (loading || !student_id) return;
-
         setLoading(true);
-
         router.post(
             `/prowadzacy/ocenieniezadania/${idZadanie}/${student_id}/${encodeURIComponent(wybranaocena)}`,
             {},
-            {
-                preserveScroll: true,
-                onFinish: () => setLoading(false),
-            }
+            { preserveScroll: true, onFinish: () => setLoading(false) },
         );
     };
 
     return (
-        <div className="bg-theme-page flex h-dvh min-h-0 min-w-0 w-full flex-1 flex-col overflow-hidden box-border p-2 sm:p-[10px]">
-            <div className="bg-theme-page mx-auto flex h-[40px] w-full shrink-0 items-center rounded-t-[10px] border-b-[0.3px] border-theme-muted px-2 sm:px-[10px]">
-                <div className="flex w-[65px] shrink-0 items-center justify-start">
+        <main className="box-border flex h-dvh min-h-0 min-w-0 w-full flex-1 flex-col overflow-hidden bg-theme-page p-2 sm:p-[10px]">
+            <div className="mx-auto flex h-[42px] w-full shrink-0 items-center rounded-t-[10px] border-b border-theme-muted bg-theme-page px-2 sm:px-[10px]">
+                <div className="flex w-[46px] shrink-0 justify-start">
                     <BackButton back={() => window.history.back()} />
                 </div>
-
-                <span className="min-w-0 flex-1 text-center text-[14px] font-bold text-theme-text sm:text-[16px]">
+                <span className="min-w-0 flex-1 truncate text-center text-[15px] font-bold text-theme-text sm:text-[16px]">
                     Sprawdzenie zadania
                 </span>
-
-                <div className="w-[65px] shrink-0" />
+                <div className="w-[46px] shrink-0" />
             </div>
 
-            <div className="relative flex min-h-0 min-w-0 w-full flex-1 flex-col rounded-b-[10px] px-0 pb-2 pt-3 sm:px-1">
-                <div className="bg-theme-slate custom-scrollbar flex min-h-0 min-w-0 w-full flex-1 flex-col overflow-x-hidden overflow-y-auto rounded-[15px] p-2 sm:p-3 md:p-5 lg:overflow-hidden">
-                    <div className="bg-theme-surface flex min-h-0 min-w-0 w-full flex-1 flex-col rounded-[15px] p-3 sm:p-4 md:px-[37px] md:py-[22px]">
-                        <h1 className="mb-4 shrink-0 break-words text-2xl font-bold text-theme-text sm:text-3xl lg:text-[40px]">
-                            Lista studentów
-                        </h1>
-
-                        <div className="grid min-h-0 min-w-0 w-full flex-1 grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-3">
-                            <div className="custom-scrollbar min-h-[180px] min-w-0 overflow-x-hidden overflow-y-auto rounded-[10px] border border-gray-700/60 lg:min-h-0">
-                                {studenci && studenci.length > 0 ? (
-                                    <div className="divide-y divide-gray-700/50">
-                                        {studenci.map((student) => (
-                                            <button
-                                                key={student.idStudent}
-                                                type="button"
-                                                onClick={() =>
-                                                    handleZadanieClick(
-                                                        student.idStudent
-                                                    )
-                                                }
-                                                className={`flex min-w-0 w-full cursor-pointer items-center gap-3 px-3 py-4 text-left text-theme-text transition-colors sm:px-4 ${
-                                                    String(student_id) ===
-                                                    String(student.idStudent)
-                                                        ? "bg-theme-slate"
-                                                        : "hover:bg-theme-slate"
-                                                }`}
-                                            >
-                                                <span className="w-[75px] shrink-0 break-words text-sm font-medium sm:w-[90px] sm:text-base">
-                                                    {student.index}
-                                                </span>
-
-                                                <span className="min-w-0 flex-1 break-words [overflow-wrap:anywhere] text-sm font-medium sm:text-base lg:text-lg">
-                                                    {student.user?.name}{" "}
-                                                    {student.user?.surname}
-                                                </span>
-                                            </button>
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <div className="p-4 text-center text-theme-muted">
-                                        Brak studentów
-                                    </div>
-                                )}
-                            </div>
-
-                            <div className="flex min-h-[220px] min-w-0 flex-col overflow-hidden rounded-[10px] border border-gray-700/60 lg:min-h-0">
-                                {student_id ? (
-                                    <>
-                                        <div className="flex min-w-0 shrink-0 flex-col gap-3 border-b border-gray-700/60 p-3 sm:p-4">
-                                            <h2 className="break-words text-lg font-medium text-theme-text sm:text-[22px]">
-                                                Termin oddania:{" "}
-                                                {terminOddania || "Brak"}
-                                            </h2>
-
-                                            <label
-                                                htmlFor="ocena-zadania"
-                                                className="text-sm text-theme-text sm:text-base"
-                                            >
-                                                Wybierz ocenę
-                                            </label>
-
-                                            <Form.Select
-                                                id="ocena-zadania"
-                                                value={wybranaocena}
-                                                onChange={(e) =>
-                                                    setwybranaocena(
-                                                        e.target.value
-                                                    )
-                                                }
-                                                disabled={loading}
-                                                className="h-[46px] w-full min-w-0 rounded-[15px] border border-theme-muted bg-theme-surface px-3 text-sm text-theme-text sm:text-base"
-                                            >
-                                                {opcjeOcen.map((ocena) => (
-                                                    <option
-                                                        key={ocena}
-                                                        value={ocena}
-                                                    >
-                                                        {ocena}
-                                                    </option>
-                                                ))}
-                                            </Form.Select>
-
-                                            <button
-                                                type="button"
-                                                disabled={loading}
-                                                onClick={handleZapiszOcene}
-                                                className="bg-theme-orange mx-auto mt-1 min-h-[46px] w-full max-w-[300px] cursor-pointer rounded-[10px] px-3 py-2 text-base font-bold text-theme-text transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50 sm:text-lg"
-                                            >
-                                                {loading
-                                                    ? "Zapisywanie..."
-                                                    : "Zapisz ocenę"}
-                                            </button>
-                                        </div>
-
-                                        <div className="custom-scrollbar min-h-[180px] min-w-0 flex-1 overflow-x-hidden overflow-y-auto p-3 sm:p-4 lg:min-h-0">
-                                            {pliks && pliks.length > 0 ? (
-                                                <ul className="flex min-w-0 flex-col gap-2">
-                                                    {pliks.map(
-                                                        (file, index) => {
-                                                            const fileName =
-                                                                file?.nazwa
-                                                                    ?.split("/")
-                                                                    .pop() ||
-                                                                file?.name ||
-                                                                "Brak nazwy";
-
-                                                            return (
-                                                                <li
-                                                                    key={`${file.nazwa}-${index}`}
-                                                                    className="bg-theme-surface flex min-w-0 items-center gap-3 rounded-xl border border-white/20 p-3 text-theme-text"
-                                                                >
-                                                                    <span className="shrink-0 text-xl">
-                                                                        📎
-                                                                    </span>
-
-                                                                    <div className="min-w-0 flex-1">
-                                                                        <a
-                                                                            href={`/storage/${file.nazwa}`}
-                                                                            target="_blank"
-                                                                            rel="noopener noreferrer"
-                                                                            className="block break-words [overflow-wrap:anywhere] text-sm text-theme-text hover:underline sm:text-base"
-                                                                        >
-                                                                            {fileName}
-                                                                        </a>
-
-                                                                        {file.size != null && (
-                                                                            <p className="mt-1 text-xs text-theme-muted">
-                                                                                {(
-                                                                                    file.size /
-                                                                                    1024
-                                                                                ).toFixed(
-                                                                                    1
-                                                                                )}{" "}
-                                                                                KB
-                                                                            </p>
-                                                                        )}
-                                                                    </div>
-                                                                </li>
-                                                            );
-                                                        }
-                                                    )}
-                                                </ul>
-                                            ) : (
-                                                <div className="mt-10 w-full text-center text-xl text-theme-muted sm:text-[24px]">
-                                                    Brak plików
-                                                </div>
-                                            )}
-                                        </div>
-                                    </>
-                                ) : (
-                                    <div className="flex h-full min-h-[180px] w-full items-center justify-center p-4 text-center text-xl text-theme-muted sm:text-[24px]">
-                                        Wybierz studenta
-                                    </div>
-                                )}
-                            </div>
+            <div className="flex min-h-0 min-w-0 w-full flex-1 flex-col px-0 pb-2 pt-3 sm:px-2 md:px-4">
+                <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-[16px] bg-theme-slate p-3 sm:p-4 lg:p-5">
+                    <header className="mb-4 flex min-w-0 shrink-0 flex-wrap items-center justify-between gap-3 rounded-[14px] bg-theme-surface p-4 sm:p-5">
+                        <div className="min-w-0">
+                            <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-theme-muted">
+                                Zarządzanie zadaniem
+                            </p>
+                            <h1 className="break-words text-2xl font-bold text-theme-text sm:text-3xl">
+                                Sprawdzenie zadania
+                            </h1>
+                            <p className="mt-1 text-sm text-theme-muted">
+                                Wybierz studenta, sprawdź przesłane materiały i wystaw ocenę.
+                            </p>
                         </div>
+                        <div className="rounded-[12px] border border-theme-muted bg-theme-slate px-4 py-3 text-center">
+                            <span className="block text-2xl font-bold text-theme-text">{(studenci ?? []).length}</span>
+                            <span className="block text-xs text-theme-muted">Studentów</span>
+                        </div>
+                    </header>
+
+                    <div className="grid min-h-0 min-w-0 flex-1 grid-cols-1 gap-4 lg:grid-cols-[minmax(250px,0.88fr)_minmax(0,1.12fr)]">
+                        <section className="flex min-h-[230px] min-w-0 flex-col overflow-hidden rounded-[14px] bg-theme-surface lg:min-h-0">
+                            <div className="shrink-0 border-b border-theme-muted p-3 sm:p-4">
+                                <div className="mb-3 flex items-center justify-between gap-2">
+                                    <h2 className="text-lg font-bold text-theme-text sm:text-xl">Lista studentów</h2>
+                                    <span className="text-xs text-theme-muted">
+                                        {przefiltrowaniStudenci.length} z {(studenci ?? []).length}
+                                    </span>
+                                </div>
+                                <input
+                                    type="search"
+                                    aria-label="Szukaj studenta"
+                                    placeholder="Szukaj po nazwisku lub indeksie..."
+                                    value={szukaj}
+                                    onChange={(event) => setSzukaj(event.target.value)}
+                                    className="h-[44px] w-full min-w-0 rounded-[10px] border border-theme-muted bg-theme-slate px-3 text-sm text-theme-text placeholder:text-theme-muted focus:border-theme-orange focus:outline-none"
+                                />
+                            </div>
+
+                            <div className="custom-scrollbar min-h-0 min-w-0 flex-1 overflow-y-auto p-2 sm:p-3">
+                                {przefiltrowaniStudenci.length > 0 ? (
+                                    <div className="flex flex-col gap-2">
+                                        {przefiltrowaniStudenci.map((student) => {
+                                            const selected = String(student.idStudent) === String(student_id);
+                                            return (
+                                                <button
+                                                    key={student.idStudent}
+                                                    type="button"
+                                                    disabled={changingStudent}
+                                                    onClick={() => handleZadanieClick(student.idStudent)}
+                                                    aria-pressed={selected}
+                                                    className={`flex min-w-0 w-full items-center justify-between gap-3 rounded-[11px] border p-3 text-left transition-colors disabled:cursor-wait ${
+                                                        selected
+                                                            ? "border-theme-orange bg-theme-slate"
+                                                            : "border-theme-muted bg-theme-slate hover:border-theme-orange"
+                                                    }`}
+                                                >
+                                                    <div className="min-w-0">
+                                                        <span className="block break-words text-sm font-semibold text-theme-text sm:text-base">
+                                                            {student.user?.name || "—"} {student.user?.surname || ""}
+                                                        </span>
+                                                        <span className="mt-1 block break-words text-xs text-theme-muted">
+                                                            Indeks: {student.index ?? "—"}
+                                                        </span>
+                                                    </div>
+                                                    <span className="shrink-0 text-sm font-semibold text-theme-text">
+                                                        {selected ? "Wybrano" : "›"}
+                                                    </span>
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                ) : (
+                                    <div className="flex min-h-[140px] items-center justify-center p-4 text-center text-sm text-theme-muted">
+                                        {(studenci ?? []).length ? "Nie znaleziono studentów" : "Brak studentów"}
+                                    </div>
+                                )}
+                            </div>
+                        </section>
+
+                        <section className="custom-scrollbar min-h-[270px] min-w-0 overflow-y-auto rounded-[14px] bg-theme-surface p-3 sm:p-4 lg:min-h-0">
+                            {student_id ? (
+                                <div className="flex min-w-0 flex-col gap-4">
+                                    <div className="rounded-[12px] bg-theme-slate p-4">
+                                        <span className="block text-xs font-semibold uppercase tracking-wide text-theme-muted">
+                                            Wybrany student
+                                        </span>
+                                        <h2 className="mt-1 break-words text-lg font-bold text-theme-text sm:text-xl">
+                                            {wybranyStudent
+                                                ? `${wybranyStudent.user?.name ?? ""} ${wybranyStudent.user?.surname ?? ""}`.trim() || "Student"
+                                                : "Student"}
+                                        </h2>
+                                        {wybranyStudent?.index != null && (
+                                            <p className="mt-1 text-sm text-theme-muted">Indeks: {wybranyStudent.index}</p>
+                                        )}
+                                        <p className="mt-2 break-words text-sm text-theme-muted">
+                                            Termin oddania: <span className="font-semibold text-theme-text">{terminOddania || "Brak"}</span>
+                                        </p>
+                                    </div>
+
+                                    <div className="rounded-[12px] border border-theme-muted bg-theme-slate p-4">
+                                        <h3 className="text-base font-bold text-theme-text sm:text-lg">Wystaw ocenę</h3>
+                                        <label htmlFor="ocena-zadania" className="mb-2 mt-3 block text-sm font-medium text-theme-muted">
+                                            Wybierz ocenę
+                                        </label>
+                                        <select
+                                            id="ocena-zadania"
+                                            value={wybranaocena}
+                                            onChange={(event) => setWybranaocena(event.target.value)}
+                                            disabled={loading}
+                                            className="h-[46px] w-full min-w-0 rounded-[10px] border border-theme-muted bg-theme-surface px-3 text-sm text-theme-text focus:border-theme-orange focus:outline-none sm:text-base"
+                                        >
+                                            {opcjeOcen.map((ocena) => (
+                                                <option key={ocena} value={ocena}>{ocena}</option>
+                                            ))}
+                                        </select>
+                                        <button
+                                            type="button"
+                                            onClick={handleZapiszOcene}
+                                            disabled={loading}
+                                            className="mt-3 min-h-[44px] w-full cursor-pointer rounded-[10px] bg-theme-orange px-4 py-2 text-sm font-bold text-theme-text transition-[filter] hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto sm:min-w-[180px]"
+                                        >
+                                            {loading ? "Zapisywanie..." : "Zapisz ocenę"}
+                                        </button>
+                                    </div>
+
+                                    <div className="rounded-[12px] border border-theme-muted bg-theme-slate p-4">
+                                        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                                            <h3 className="text-base font-bold text-theme-text sm:text-lg">Przesłane pliki</h3>
+                                            <span className="text-xs text-theme-muted">{(pliks ?? []).length} plików</span>
+                                        </div>
+                                        {(pliks ?? []).length > 0 ? (
+                                            <ul className="flex min-w-0 flex-col gap-2">
+                                                {pliks.map((file, index) => {
+                                                    const fileName = file?.nazwa?.split("/").pop() || file?.name || "Plik";
+                                                    return (
+                                                        <li key={`${file?.nazwa ?? file?.name ?? "plik"}-${index}`}>
+                                                            <a
+                                                                href={`/storage/${file.nazwa}`}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="flex min-w-0 items-center justify-between gap-3 rounded-[10px] border border-theme-muted bg-theme-surface p-3 transition-colors hover:border-theme-orange"
+                                                            >
+                                                                <span className="flex min-w-0 items-center gap-3">
+                                                                    <span className="shrink-0 text-xl" aria-hidden="true">📎</span>
+                                                                    <span className="min-w-0 break-words text-sm font-medium text-theme-text [overflow-wrap:anywhere]">
+                                                                        {fileName}
+                                                                        {file.size != null && (
+                                                                            <span className="mt-1 block text-xs font-normal text-theme-muted">
+                                                                                {(Number(file.size) / 1024).toFixed(1)} KB
+                                                                            </span>
+                                                                        )}
+                                                                    </span>
+                                                                </span>
+                                                                <span className="shrink-0 text-xs font-semibold text-theme-text">Otwórz ›</span>
+                                                            </a>
+                                                        </li>
+                                                    );
+                                                })}
+                                            </ul>
+                                        ) : (
+                                            <div className="rounded-[10px] bg-theme-surface px-4 py-8 text-center text-sm text-theme-muted">
+                                                Brak przesłanych plików
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="flex h-full min-h-[240px] flex-col items-center justify-center gap-3 p-5 text-center">
+                                    <span className="text-4xl" aria-hidden="true">📋</span>
+                                    <h2 className="text-lg font-bold text-theme-text">Wybierz studenta</h2>
+                                    <p className="max-w-[340px] text-sm text-theme-muted">
+                                        Wybierz osobę z listy, aby sprawdzić pliki i wystawić ocenę.
+                                    </p>
+                                </div>
+                            )}
+                        </section>
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
     );
 }
 
-export default function SprawdzenieZadania({
-    auth,
-    studenci,
-    idZadanie,
-    student_id,
-    pliks,
-    terminOddania,
-}) {
+export default function SprawdzenieZadania({ auth, studenci, idZadanie, student_id, pliks, terminOddania }) {
     const props = usePage().props;
-
     const message = props.flash?.status || props.status;
     const error = props.flash?.error || props.error;
 
     useEffect(() => {
-        if (message) {
-            toast.info(message, {
-                position: "bottom-right",
-                autoClose: 5000,
-                theme: "dark",
-            });
-        }
-
-        if (error) {
-            toast.error(error, {
-                position: "bottom-right",
-                autoClose: 5000,
-                theme: "dark",
-            });
-        }
+        if (message) toast.info(message, { position: "bottom-right", autoClose: 5000, theme: "dark" });
+        if (error) toast.error(error, { position: "bottom-right", autoClose: 5000, theme: "dark" });
     }, [message, error]);
 
     return (
@@ -273,11 +273,8 @@ export default function SprawdzenieZadania({
                 pauseOnHover
                 theme="dark"
             />
-
             <Head title="Sprawdzenie zadania" />
-
             <MenuProwadzacy />
-
             <Content
                 studenci={studenci}
                 idZadanie={idZadanie}

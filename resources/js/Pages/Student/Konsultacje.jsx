@@ -1,26 +1,29 @@
 import React, { useMemo, useState } from "react";
 import MenuStudenta from "../../Components/MenuStudenta";
-import { Head } from "@inertiajs/react";
 import BackButton from "../../Components/BackButton";
-import { Search, X } from "lucide-react";
+import { Head } from "@inertiajs/react";
 
 function Konsultacjerow({ konsultacja }) {
     return (
-        <tr className="text-left text-[clamp(0.85rem,1vw+0.5rem,1.2rem)] font-bold text-theme-text transition-colors hover:bg-theme-slate">
-            <td className="break-words whitespace-normal py-5 pr-3 align-top">
-                {konsultacja.TytulNaukowy} {konsultacja.name} {konsultacja.surname}
+        <tr className="border-b border-theme-muted/40 text-left text-sm text-theme-text transition-colors last:border-b-0 hover:bg-theme-panel">
+            <td className="break-words px-4 py-4 align-middle font-semibold [overflow-wrap:anywhere]">
+                {[konsultacja.TytulNaukowy, konsultacja.name, konsultacja.surname]
+                    .filter(Boolean)
+                    .join(" ") || "—"}
             </td>
-            <td className="break-words whitespace-normal py-5 pr-3 align-top">
-                {konsultacja.GodzinaRozpoczecia}-{konsultacja.GodzinaZakonczenia}
+            <td className="px-4 py-4 align-middle font-medium">
+                <span className="inline-block rounded-lg bg-theme-surface px-2.5 py-1.5 whitespace-nowrap">
+                    {konsultacja.GodzinaRozpoczecia || "—"} – {konsultacja.GodzinaZakonczenia || "—"}
+                </span>
             </td>
-            <td className="break-words whitespace-normal py-5 pr-3 align-top">
-                {konsultacja.nazwa}
+            <td className="break-words px-4 py-4 align-middle [overflow-wrap:anywhere]">
+                {konsultacja.nazwa || "—"}
             </td>
-            <td className="break-words whitespace-normal py-5 pr-3 align-top">
-                {konsultacja.numerSali}
+            <td className="px-4 py-4 align-middle font-semibold">
+                {konsultacja.numerSali || "—"}
             </td>
-            <td className="break-words whitespace-normal py-5 align-top">
-                {konsultacja.data}
+            <td className="px-4 py-4 align-middle whitespace-nowrap text-theme-muted">
+                {konsultacja.data || "—"}
             </td>
         </tr>
     );
@@ -28,59 +31,59 @@ function Konsultacjerow({ konsultacja }) {
 
 function KonsultacjaMobile({ konsultacja }) {
     return (
-        <div className="min-w-0 rounded-[15px] border border-theme-muted bg-theme-slate p-3 text-theme-text sm:p-4">
-            <div className="min-w-0 border-b border-theme-muted pb-3">
-                <span className="block text-xs font-medium text-theme-muted">Prowadzący</span>
-                <span className="mt-1 block break-words [overflow-wrap:anywhere] text-base font-bold text-theme-text">
-                    {konsultacja.TytulNaukowy} {konsultacja.name} {konsultacja.surname}
-                </span>
+        <article className="min-w-0 rounded-2xl border border-theme-muted/60 bg-theme-surface p-4 text-theme-text transition-colors hover:border-theme-orange/50 sm:p-5">
+            <div className="flex min-w-0 flex-col gap-2 border-b border-theme-muted/50 pb-3">
+                <span className="text-xs font-medium uppercase tracking-wide text-theme-muted">Prowadzący</span>
+                <h3 className="break-words text-base font-bold leading-snug [overflow-wrap:anywhere]">
+                    {[konsultacja.TytulNaukowy, konsultacja.name, konsultacja.surname]
+                        .filter(Boolean)
+                        .join(" ") || "—"}
+                </h3>
             </div>
-            <div className="mt-3 grid min-w-0 grid-cols-2 gap-3">
+            <dl className="mt-3 grid min-w-0 grid-cols-2 gap-x-4 gap-y-4 text-sm">
                 <div className="min-w-0">
-                    <span className="block text-xs text-theme-muted">Czas</span>
-                    <span className="mt-1 block break-words text-sm font-semibold text-theme-text">
-                        {konsultacja.GodzinaRozpoczecia}-{konsultacja.GodzinaZakonczenia}
-                    </span>
+                    <dt className="text-xs text-theme-muted">Data</dt>
+                    <dd className="mt-1 break-words font-semibold">{konsultacja.data || "—"}</dd>
                 </div>
                 <div className="min-w-0">
-                    <span className="block text-xs text-theme-muted">Data</span>
-                    <span className="mt-1 block break-words text-sm font-semibold text-theme-text">{konsultacja.data}</span>
+                    <dt className="text-xs text-theme-muted">Godziny</dt>
+                    <dd className="mt-1 break-words font-semibold">
+                        {konsultacja.GodzinaRozpoczecia || "—"} – {konsultacja.GodzinaZakonczenia || "—"}
+                    </dd>
                 </div>
                 <div className="min-w-0">
-                    <span className="block text-xs text-theme-muted">Budynek</span>
-                    <span className="mt-1 block break-words [overflow-wrap:anywhere] text-sm font-semibold text-theme-text">
-                        {konsultacja.nazwa}
-                    </span>
+                    <dt className="text-xs text-theme-muted">Budynek</dt>
+                    <dd className="mt-1 break-words font-semibold [overflow-wrap:anywhere]">{konsultacja.nazwa || "—"}</dd>
                 </div>
                 <div className="min-w-0">
-                    <span className="block text-xs text-theme-muted">Sala</span>
-                    <span className="mt-1 block break-words text-sm font-semibold text-theme-text">{konsultacja.numerSali}</span>
+                    <dt className="text-xs text-theme-muted">Sala</dt>
+                    <dd className="mt-1 break-words font-semibold">{konsultacja.numerSali || "—"}</dd>
                 </div>
-            </div>
-        </div>
+            </dl>
+        </article>
     );
 }
 
 function Content({ konsultacje = [] }) {
     const [szukaj, setSzukaj] = useState("");
+    const listaKonsultacji = Array.isArray(konsultacje) ? konsultacje : [];
 
     const filtrowaneKonsultacje = useMemo(() => {
         const tekst = szukaj.trim().toLocaleLowerCase("pl-PL");
-        if (!tekst) return konsultacje ?? [];
+        if (!tekst) return listaKonsultacji;
 
-        return (konsultacje ?? []).filter((konsultacja) => {
+        return listaKonsultacji.filter((konsultacja) => {
             const pola = [
                 konsultacja.TytulNaukowy,
                 konsultacja.name,
                 konsultacja.surname,
-                `${konsultacja.name ?? ""} ${konsultacja.surname ?? ""}`,
+                `${konsultacja.TytulNaukowy ?? ""} ${konsultacja.name ?? ""} ${konsultacja.surname ?? ""}`,
                 konsultacja.GodzinaRozpoczecia,
                 konsultacja.GodzinaZakonczenia,
                 konsultacja.nazwa,
                 konsultacja.numerSali,
                 konsultacja.data,
             ];
-
             return pola.some((pole) =>
                 String(pole ?? "").toLocaleLowerCase("pl-PL").includes(tekst)
             );
@@ -88,93 +91,130 @@ function Content({ konsultacje = [] }) {
     }, [konsultacje, szukaj]);
 
     return (
-        <div className="bg-theme-page flex h-dvh min-h-0 min-w-0 w-full flex-1 flex-col overflow-hidden box-border p-2 sm:p-[10px]">
-            <div className="bg-theme-page mx-auto flex h-[40px] w-full shrink-0 items-center rounded-t-[10px] border-b-[0.3px] border-theme-muted px-2 sm:px-[10px]">
+        <main className="box-border flex h-dvh min-h-0 min-w-0 w-full flex-1 flex-col overflow-hidden bg-theme-page p-2 sm:p-[10px]">
+            <div className="flex h-[44px] w-full shrink-0 items-center rounded-t-[10px] border-b border-theme-muted/60 bg-theme-page px-2 sm:px-3">
                 <div className="flex w-[42px] shrink-0 items-center justify-start">
                     <BackButton back={() => window.history.back()} />
                 </div>
-                <span className="min-w-0 flex-1 text-center text-[16px] font-bold text-theme-text">
+                <span className="min-w-0 flex-1 text-center text-[15px] font-bold text-theme-text sm:text-base">
                     Konsultacje
                 </span>
                 <div className="w-[42px] shrink-0" />
             </div>
 
-            <div className="relative flex min-h-0 min-w-0 w-full flex-1 flex-col rounded-b-[10px] px-0 pb-2 pt-3 sm:px-2 md:px-4">
-                <div className="bg-theme-surface flex min-w-0 w-full shrink-0 flex-col gap-4 rounded-t-[15px] px-3 py-4 sm:px-4 md:flex-row md:items-center md:justify-between">
-                    <h1 className="break-words text-xl font-bold text-theme-text sm:text-2xl lg:text-[36px]">
-                        Lista dostępnych konsultacji
-                    </h1>
-                    <div className="relative w-full min-w-0 md:max-w-[340px]">
-                        <Search size={18} aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-theme-muted" />
-                        <input
-                            type="search"
-                            value={szukaj}
-                            onChange={(e) => setSzukaj(e.target.value)}
-                            placeholder="Szukaj konsultacji..."
-                            aria-label="Szukaj konsultacji"
-                            className="h-[42px] w-full min-w-0 rounded-[12px] border border-theme-muted bg-theme-slate pl-10 pr-10 text-sm text-theme-text outline-none placeholder:text-theme-muted focus:border-theme-orange"
-                        />
-                        {szukaj && (
-                            <button
-                                type="button"
-                                onClick={() => setSzukaj("")}
-                                aria-label="Wyczyść wyszukiwanie"
-                                className="absolute right-3 top-1/2 -translate-y-1/2 text-theme-muted hover:text-theme-text"
-                            >
-                                <X size={18} />
-                            </button>
+            <div className="flex min-h-0 min-w-0 w-full flex-1 flex-col gap-3 rounded-b-[10px] pt-3 sm:px-1 sm:pb-2 md:px-3">
+                <section className="flex min-h-0 min-w-0 w-full flex-1 flex-col overflow-hidden rounded-2xl border border-theme-muted/50 bg-theme-slate">
+                    <header className="shrink-0 border-b border-theme-muted/50 bg-theme-surface px-4 py-5 sm:px-6 sm:py-6">
+                        <div className="flex min-w-0 flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+                            <div className="min-w-0">
+                                <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-theme-muted">MojaUczelnia · Student</p>
+                                <h1 className="break-words text-2xl font-bold tracking-tight text-theme-text sm:text-3xl lg:text-[34px]">
+                                    Dostępne konsultacje
+                                </h1>
+                                <p className="mt-2 text-sm text-theme-muted">
+                                    Sprawdź terminy konsultacji, prowadzących i dostępne sale.
+                                </p>
+                            </div>
+                            <div className="w-full min-w-0 lg:max-w-[360px]">
+                                <label htmlFor="konsultacje-szukaj" className="mb-1.5 block text-xs font-semibold text-theme-muted">
+                                    Wyszukaj konsultację
+                                </label>
+                                <div className="flex min-w-0 items-center gap-2 rounded-xl border border-theme-muted bg-theme-slate px-3 focus-within:border-theme-orange">
+                                    <span className="shrink-0 text-base text-theme-muted" aria-hidden="true">⌕</span>
+                                    <input
+                                        id="konsultacje-szukaj"
+                                        type="search"
+                                        value={szukaj}
+                                        onChange={(e) => setSzukaj(e.target.value)}
+                                        placeholder="Prowadzący, sala, data..."
+                                        className="h-11 min-w-0 w-full flex-1 bg-transparent text-sm text-theme-text outline-none placeholder:text-theme-muted"
+                                    />
+                                    {szukaj && (
+                                        <button
+                                            type="button"
+                                            onClick={() => setSzukaj("")}
+                                            aria-label="Wyczyść wyszukiwanie"
+                                            className="shrink-0 rounded-lg px-2 py-1 text-sm font-semibold text-theme-muted transition-colors hover:bg-theme-panel hover:text-theme-text"
+                                        >
+                                            Wyczyść
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+
+                    <div className="flex shrink-0 flex-wrap items-center justify-between gap-2 px-4 py-3 sm:px-6">
+                        <h2 className="text-sm font-semibold text-theme-text">Lista konsultacji</h2>
+                        <span className="rounded-lg border border-theme-muted/60 bg-theme-surface px-3 py-1 text-xs font-medium text-theme-muted">
+                            {szukaj.trim()
+                                ? `Znaleziono: ${filtrowaneKonsultacje.length} z ${listaKonsultacji.length}`
+                                : `Łącznie: ${listaKonsultacji.length}`}
+                        </span>
+                    </div>
+
+                    <div className="custom-scrollbar min-h-0 min-w-0 w-full flex-1 overflow-x-hidden overflow-y-auto px-3 pb-4 sm:px-5 sm:pb-5">
+                        {filtrowaneKonsultacje.length > 0 ? (
+                            <>
+                                <div className="hidden min-w-0 overflow-hidden rounded-xl border border-theme-muted/50 bg-theme-surface lg:block">
+                                    <table className="w-full table-fixed border-collapse">
+                                        <colgroup>
+                                            <col style={{ width: "29%" }} />
+                                            <col style={{ width: "22%" }} />
+                                            <col style={{ width: "20%" }} />
+                                            <col style={{ width: "10%" }} />
+                                            <col style={{ width: "19%" }} />
+                                        </colgroup>
+                                        <thead className="bg-theme-panel">
+                                            <tr className="text-left text-xs font-semibold uppercase tracking-wide text-theme-muted">
+                                                <th className="px-4 py-4">Prowadzący</th>
+                                                <th className="px-4 py-4">Czas</th>
+                                                <th className="px-4 py-4">Budynek</th>
+                                                <th className="px-4 py-4">Sala</th>
+                                                <th className="px-4 py-4">Data</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {filtrowaneKonsultacje.map((konsultacja, index) => (
+                                                <Konsultacjerow
+                                                    key={konsultacja.idRezerwacja ?? index}
+                                                    konsultacja={konsultacja}
+                                                />
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div className="flex min-w-0 flex-col gap-3 lg:hidden">
+                                    {filtrowaneKonsultacje.map((konsultacja, index) => (
+                                        <KonsultacjaMobile
+                                            key={konsultacja.idRezerwacja ?? index}
+                                            konsultacja={konsultacja}
+                                        />
+                                    ))}
+                                </div>
+                            </>
+                        ) : (
+                            <div className="flex min-h-[260px] flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-theme-muted/60 bg-theme-surface px-4 text-center">
+                                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-theme-slate text-2xl" aria-hidden="true">{szukaj.trim() ? "⌕" : "—"}</div>
+                                <h3 className="text-base font-bold text-theme-text">
+                                    {szukaj.trim() ? "Nie znaleziono konsultacji" : "Brak konsultacji"}
+                                </h3>
+                                <p className="max-w-[340px] text-sm text-theme-muted">
+                                    {szukaj.trim()
+                                        ? "Spróbuj zmienić wyszukiwaną frazę lub wyczyścić pole."
+                                        : "Aktualnie nie ma dostępnych terminów konsultacji."}
+                                </p>
+                                {szukaj.trim() && (
+                                    <button type="button" onClick={() => setSzukaj("")} className="mt-1 rounded-xl bg-theme-orange px-4 py-2 text-sm font-semibold text-theme-text">
+                                        Wyczyść wyszukiwanie
+                                    </button>
+                                )}
+                            </div>
                         )}
                     </div>
-                </div>
-
-                <div className="bg-theme-slate custom-scrollbar min-h-0 min-w-0 w-full flex-1 overflow-x-hidden overflow-y-auto rounded-b-[15px] p-3 sm:p-4 md:p-5">
-                    {filtrowaneKonsultacje.length > 0 ? (
-                        <>
-                            <div className="hidden min-w-0 w-full lg:block">
-                                <table className="w-full table-fixed border-collapse">
-                                    <colgroup>
-                                        <col style={{ width: "30%" }} />
-                                        <col style={{ width: "20%" }} />
-                                        <col style={{ width: "20%" }} />
-                                        <col style={{ width: "12%" }} />
-                                        <col style={{ width: "18%" }} />
-                                    </colgroup>
-                                    <thead>
-                                        <tr className="h-[52px] border-b border-theme-muted text-left text-[clamp(0.9rem,1vw+0.5rem,1.3rem)] text-theme-muted">
-                                            <th className="py-[10px] pr-3">Prowadzący</th>
-                                            <th className="py-[10px] pr-3">Czas</th>
-                                            <th className="py-[10px] pr-3">Budynek</th>
-                                            <th className="py-[10px] pr-3">Sala</th>
-                                            <th className="py-[10px]">Data</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-theme-muted">
-                                        {filtrowaneKonsultacje.map((konsultacja, index) => (
-                                            <Konsultacjerow
-                                                key={konsultacja.idRezerwacja ?? index}
-                                                konsultacja={konsultacja}
-                                            />
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div className="flex min-w-0 w-full flex-col gap-3 lg:hidden">
-                                {filtrowaneKonsultacje.map((konsultacja, index) => (
-                                    <KonsultacjaMobile
-                                        key={konsultacja.idRezerwacja ?? index}
-                                        konsultacja={konsultacja}
-                                    />
-                                ))}
-                            </div>
-                        </>
-                    ) : (
-                        <div className="mx-auto mt-10 w-full text-center text-[20px] text-theme-muted sm:text-[24px]">
-                            {szukaj.trim() ? "Nie znaleziono konsultacji" : "Brak konsultacji"}
-                        </div>
-                    )}
-                </div>
+                </section>
             </div>
-        </div>
+        </main>
     );
 }
 
