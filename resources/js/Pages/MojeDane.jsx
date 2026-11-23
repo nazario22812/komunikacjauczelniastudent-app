@@ -1,25 +1,82 @@
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import MenuStudenta from "../Components/MenuStudenta";
 import MenuProwadzacy from "../Components/MenuProwadzacy";
 import MenuDziekanat from "../Components/MenuDziekanat";
 import BackButton from "../Components/BackButton";
-import { Head } from "@inertiajs/react";
+import { Head, useForm } from "@inertiajs/react";
 
 function UserAvatar({ photo, name, surname }) {
+    const inputRef = useRef(null);
     const [imageError, setImageError] = useState(false);
+    const [preview, setPreview] = useState(null);
+    const [clientError, setClientError] = useState("");
+    const [success, setSuccess] = useState("");
+    const { data, setData, post, processing, errors, reset } = useForm({
+        avatar: null,
+    });
 
     const initials =
         String(name || "?").charAt(0).toUpperCase() +
         String(surname || "?").charAt(0).toUpperCase();
 
+    useEffect(() => {
+        if (!data.avatar) {
+            setPreview(null);
+            return;
+        }
+        const url = URL.createObjectURL(data.avatar);
+        setPreview(url);
+        return () => URL.revokeObjectURL(url);
+    }, [data.avatar]);
+
+    useEffect(() => {
+        setImageError(false);
+    }, [photo, preview]);
+
+    const handleFileChange = (event) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+
+        setClientError("");
+        setSuccess("");
+        if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+            setClientError("Wybierz zdjęcie JPG, PNG lub WEBP.");
+            event.target.value = "";
+            return;
+        }
+        if (file.size > 2 * 1024 * 1024) {
+            setClientError("Zdjęcie może mieć maksymalnie 2 MB.");
+            event.target.value = "";
+            return;
+        }
+        setData("avatar", file);
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        if (!data.avatar || processing) return;
+        setSuccess("");
+        post("/mojedane/avatar", {
+            forceFormData: true,
+            preserveScroll: true,
+            onSuccess: () => {
+                reset("avatar");
+                if (inputRef.current) inputRef.current.value = "";
+                setSuccess("Zdjęcie profilowe zostało zaktualizowane.");
+            },
+        });
+    };
+
+    const currentPhoto = preview || photo;
+
     return (
-        <div className="flex min-h-[160px] min-w-0 items-center justify-center rounded-[14px] border border-[#304266] bg-[#101d43] p-4 sm:p-5">
+        <div className="flex min-h-[200px] min-w-0 flex-col items-center justify-center gap-4 rounded-[14px] border border-[#304266] bg-[#101d43] p-4 sm:p-5">
             <div className="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-full border border-[#7da5ff] bg-[#1a2d56] text-3xl font-bold text-white sm:h-28 sm:w-28">
-                {photo && !imageError ? (
+                {currentPhoto && !imageError ? (
                     <img
-                        src={photo}
-                        alt="Zdjęcie użytkownika"
+                        src={currentPhoto}
+                        alt="Zdjęcie profilowe"
                         onError={() => setImageError(true)}
                         className="!absolute !inset-0 !h-full !w-full !max-w-none rounded-full object-cover"
                     />
@@ -27,6 +84,63 @@ function UserAvatar({ photo, name, surname }) {
                     <span>{initials}</span>
                 )}
             </div>
+
+            <form onSubmit={handleSubmit} className="flex w-full max-w-[260px] flex-col items-center gap-2">
+                <input
+                    ref={inputRef}
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    onChange={handleFileChange}
+                    className="hidden"
+                    aria-label="Wybierz zdjęcie profilowe"
+                />
+                <button
+                    type="button"
+                    onClick={() => inputRef.current?.click()}
+                    disabled={processing}
+                    className="min-h-[40px] w-full cursor-pointer rounded-[10px] border border-[#526b9f] bg-[#21375f] px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#304b7b] disabled:opacity-50"
+                >
+                    {photo ? "Zmień zdjęcie" : "Dodaj zdjęcie"}
+                </button>
+                {data.avatar && (
+                    <div className="flex w-full gap-2">
+                        <button
+                            type="submit"
+                            disabled={processing}
+                            className="min-h-[40px] flex-1 cursor-pointer rounded-[10px] bg-theme-orange px-3 py-2 text-sm font-semibold text-theme-text disabled:opacity-50"
+                        >
+                            {processing ? "Zapisywanie..." : "Zapisz zdjęcie"}
+                        </button>
+                        <button
+                            type="button"
+                            disabled={processing}
+                            onClick={() => {
+                                reset("avatar");
+                                if (inputRef.current) inputRef.current.value = "";
+                            }}
+                            className="min-h-[40px] cursor-pointer rounded-[10px] border border-[#526b9f] px-3 py-2 text-sm text-white"
+                        >
+                            Anuluj
+                        </button>
+                    </div>
+                )}
+                {data.avatar && (
+                    <p className="max-w-full break-all text-center text-xs text-[#c6d5f1]">
+                        {data.avatar.name}
+                    </p>
+                )}
+                {(clientError || errors.avatar) && (
+                    <p role="alert" className="text-center text-sm text-red-400">
+                        {clientError || errors.avatar}
+                    </p>
+                )}
+                {success && (
+                    <p role="status" className="text-center text-sm text-green-400">
+                        {success}
+                    </p>
+                )}
+                <p className="text-center text-xs text-[#c6d5f1]">JPG, PNG lub WEBP · maks. 2 MB</p>
+            </form>
         </div>
     );
 }

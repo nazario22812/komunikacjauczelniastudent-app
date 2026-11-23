@@ -384,6 +384,27 @@ class UserController extends Controller
         ]);
     }
 
+   
+    public function aktualizujAvatar(Request $request)
+    {
+        $validated = $request->validate([
+            'avatar' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+        ]);
+
+        $uploaded = $validated['avatar'];
+        $binary = file_get_contents($uploaded->getRealPath());
+
+        if ($binary === false || getimagesizefromstring($binary) === false) {
+            return back()->withErrors(['avatar' => 'Nieprawidłowy plik graficzny.']);
+        }
+
+        $user = $request->user();
+        $user->photo = base64_encode($binary);
+        $user->save();
+
+        return back()->with('status', 'Zdjęcie profilowe zostało zmienione.');
+    }
+
     public function mojedane(Request $request)
     {
         $user = $request->user();
@@ -454,7 +475,16 @@ class UserController extends Controller
             ];
         }
         $base64data = $user->photo;
-        $photourl = $base64data ? 'data:image/jpeg;base64,' . $base64data : null;
+        $photourl = null;
+        if ($base64data) {
+            $binaryPhoto = base64_decode($base64data, true);
+            if ($binaryPhoto !== false) {
+                $imageInfo = @getimagesizefromstring($binaryPhoto);
+                if ($imageInfo && in_array($imageInfo['mime'], ['image/jpeg', 'image/png', 'image/webp'], true)) {
+                    $photourl = 'data:' . $imageInfo['mime'] . ';base64,' . $base64data;
+                }
+            }
+        }
 
         if ($request->expectsJson()) {
             return response()->json(array_merge([

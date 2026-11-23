@@ -36,6 +36,7 @@ Route::middleware('guest')->group(function() {
 Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/logout', [LoginController::class, 'destroy']);
     Route::get('/mojedane', [UserController::class, 'mojedane']);
+    Route::post('/mojedane/avatar', [UserController::class, 'aktualizujAvatar']);
     Route::get('/planzajec', [UserController::class, 'planzajec']);
     Route::get('/planzajec/{grupa}', [UserController::class, 'planzajecpost']);
     Route::get('/mapa', [UserController::class, 'mapaKampusu']);
