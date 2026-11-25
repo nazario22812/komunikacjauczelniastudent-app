@@ -25,13 +25,11 @@ trait UsesIsolatedMojaDatabase
             $this->markTestSkipped('Tylko MySQL/MariaDB; aktualnie: '.config('database.default'));
         }
 
-        // Inspect configured database name BEFORE opening transaction.
         $database = config('database.connections.mysql.database');
         if (!is_string($database) || !preg_match('/_test$/', $database)) {
             throw new \RuntimeException('ODMOWA: nazwa bazy musi kończyć się na _test.');
         }
 
-        // Explicit connection check; no schema migrations and no DDL.
         DB::connection('mysql')->getPdo();
         DB::connection('mysql')->beginTransaction();
         $this->mojaTransactionStarted = true;

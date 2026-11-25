@@ -689,7 +689,9 @@ class DziekanatController extends Controller
 
         $nowyStatus = $validated['czyOplacone'];
 
-        $platnosc = Platnosc::where('idPlatnosc', $platnosc_id)->first();
+        $platnosc = Platnosc::where('idPlatnosc', $platnosc_id)
+            ->where('Student_idStudent', $student_id)
+            ->firstOrFail();
         $platnosc->czyOplacone = $nowyStatus;
         $platnosc->save();
 
@@ -698,7 +700,9 @@ class DziekanatController extends Controller
 
     public function usuniecieplatnosci(Request $request, $student_id, $platnosc_id)
     {
-        $znalezionaplatnosc = Platnosc::where('idPlatnosc', $platnosc_id)->first();
+        $znalezionaplatnosc = Platnosc::where('idPlatnosc', $platnosc_id)
+            ->where('Student_idStudent', $student_id)
+            ->firstOrFail();
 
         if ($znalezionaplatnosc) {
             $znalezionaplatnosc->delete();

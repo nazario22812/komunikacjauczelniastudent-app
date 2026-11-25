@@ -92,7 +92,6 @@ class DatabaseWorkflowsTest extends TestCase
 
     public function test_student_petition_post_creates_record(): void
     {
-        // Tests controller + database; role middleware is not under test here.
         $user = $this->createTestUser();
         $this->withoutMiddleware();
         $this->actingAs($user);

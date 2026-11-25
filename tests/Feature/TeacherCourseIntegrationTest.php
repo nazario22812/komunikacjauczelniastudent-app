@@ -41,7 +41,7 @@ class TeacherCourseIntegrationTest extends TestCase
         $this->from('/prowadzacy/tworzeniekursu')
             ->post('/prowadzacy/tworzeniekursu', [
                 'nazwa' => $name,
-                'kod' => strtoupper(bin2hex(random_bytes(4))),
+                'kod' => strtoupper(bin2hex(random_bytes(3))),
                 'semester' => $sample->Semester,
                 'przedmiot' => $sample->Przedmiot_idPrzedmiot,
                 'kierunek' => $sample->Kierunek_idKierunek,

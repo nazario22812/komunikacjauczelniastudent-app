@@ -74,11 +74,6 @@ class ProwadzacyController extends Controller
         $targetId = $request->input('target_id');
         $students = collect();
 
-        $komunikat = Komunikat::create([
-            'temat' => $request->input('tytul'),
-            'tresc' => $request->input('tresc'),
-            'czyOgloszenie' => 0
-        ]);
     
         if ($targetType === 'kierunek') {
             $students = Student::where('Kierunek_idKierunek', $targetId)->get();
@@ -104,7 +99,12 @@ class ProwadzacyController extends Controller
                 return redirect()->back()->with('error', 'Nie znaleziono studenta');
             }
         }
-        
+        $komunikat = Komunikat::create([
+            'temat' => $request->input('tytul'),
+            'tresc' => $request->input('tresc'),
+            'czyOgloszenie' => 0
+        ]);
+
         foreach ($students as $student) {
             if ($student->User_idUser) {
                 $komunikat->user()->attach($student->User_idUser);
@@ -495,8 +495,18 @@ class ProwadzacyController extends Controller
     public function stworzrezerwacje(Request $request){
         $user = $request->user();
         $prowadzacy = Prowadzacy::where('User_idUser', $user->idUser)->first();
-        $rezerwacja = Rezerwacja::where([['data', $request->data], ['GodzinaRozpoczecia', $request->godpocz], ['GodzinaZakonczenia', $request->godkon], ['Sala_idSala', $request->sala], ['Sala_Budynek_idBudynek', $request->budynek]])->exists();
-        $listastudentow = Student::get();
+        $rezerwacja = Rezerwacja::where('data', $request->data)
+            ->where('Sala_idSala', $request->sala)
+            ->where('Sala_Budynek_idBudynek', $request->budynek)
+            ->whereIn('statusRezerwacji', [
+                'Wysłana',
+                'Oczekująca',
+                'Zaakceptowana',
+                'Zatwierdzona',
+            ])
+            ->where('GodzinaRozpoczecia', '<', $request->godkon)
+            ->where('GodzinaZakonczenia', '>', $request->godpocz)
+            ->exists();        $listastudentow = Student::get();
         if(!$rezerwacja){
             if($request->zajecie != null){
                 $znalezionezjecie = Zajecie::where('idZajęcie', $request->zajecie)->first();
