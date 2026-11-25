@@ -131,7 +131,7 @@ function Content({ kursy = [], zajecia = [] }) {
                                 <p className="mt-1 text-xs text-theme-muted sm:text-sm">Najczęściej używane funkcje.</p>
                             </div>
                             <div className="flex min-w-0 flex-1 flex-col justify-center gap-3">
-                                <QuickAction symbol="▦" title="Rezerwacja sali" description="Wybierz salę na zajęcia lub spotkanie." onClick={() => router.get("/prowadzacy/zarezerwujsale")} />
+                                <QuickAction symbol="+" title="Rezerwacja sali" description="Wybierz salę na zajęcia lub spotkanie." onClick={() => router.get("/prowadzacy/zarezerwujsale")} />
                                 <QuickAction symbol="+" title="Tworzenie konsultacji" description="Dodaj termin konsultacji dla studentów." onClick={() => router.get("/prowadzacy/stworzkonsultacje")} />
                             </div>
                         </section>

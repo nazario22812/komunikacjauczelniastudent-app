@@ -15,8 +15,8 @@ import MenuDziekanat from "../../Components/MenuDziekanat";
 
 const domyslneLinki = {
     rezerwacje: "/dziekanat/rezerwacje",
-    plany: "/dziekanat/plany-zajec",
-    sylabusy: "/dziekanat/sylabusy",
+    podania: "/dziekanat/podania",
+    ogloszenia: "/dziekanat/ogloszeniaankiety",
 };
 
 function liczbaLubKreska(wartosc) {
@@ -169,11 +169,8 @@ function Zawartosc({ podania = [], rezerwacje = [], statystyki = {}, linki = {} 
                             <span className="text-[12px] text-theme-muted">Najczęściej używane funkcje</span>
                         </div>
                         <div className="grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
-                            <Kafelek href={adresy.plany} ikona={CalendarDays} tytul="Plany zajęć" opis="Tworzenie i edycja rozkładów oraz zajęć" liczba={statystyki.plany} />
                             <Kafelek href={adresy.rezerwacje} ikona={CalendarClock} tytul="Rezerwacje sal" opis="Zatwierdzanie wniosków i rezerwacja sal" liczba={statystyki.rezerwacjeOczekujace} />
                             <Kafelek href={adresy.podania} ikona={FileText} tytul="Podania" opis="Rozpatrywanie podań studentów" liczba={statystyki.podaniaOczekujace} />
-                            <Kafelek href={adresy.finanse} ikona={Wallet} tytul="Finanse studentów" opis="Płatności i zaległe opłaty" liczba={statystyki.nieoplaconePlatnosci} />
-                            <Kafelek href={adresy.sylabusy} ikona={BookOpen} tytul="Sylabusy" opis="Zarządzanie opisami przedmiotów i literaturą" />
                             <Kafelek href={adresy.ogloszenia} ikona={Megaphone} tytul="Ogłoszenia i ankiety" opis="Komunikaty i informacje dla studentów" />
                         </div>
                     </section>
